@@ -7,8 +7,6 @@
 #
 # After the install, it re-invokes find_package to load the locally built ADIOS2.
 
-# prevent searching in system directories by using NO_DEFAULT_PATH
-
 if(DEFINED _ADIOS2_FIND_GUARD)
   return()
 endif()
