@@ -43,20 +43,20 @@ program test_adios2
     count_dims = [inx, iny]
 
     ! write data
-    call writer%init_adios2(MPI_COMM_WORLD, "test_io_write")
-    call writer%open_adios2("test_output.bp", adios2_mode_write)
-    call writer%begin_step_adios2()
+    call writer%init(MPI_COMM_WORLD, "test_io_write")
+    call writer%open("test_output.bp", adios2_mode_write)
+    call writer%begin_step()
     call writer%write_data("data2D", data_write, shape_dims, start_dims, count_dims)
-    call writer%end_step_adios2()
-    call writer%close_adios2()
+    call writer%end_step()
+    call writer%close()
 
     if (allocated(data_write)) deallocate(data_write)
 
     ! read data (rank 0 only)
     if (irank == 0) then
-        call reader%init_adios2(MPI_COMM_SELF, "test_io_read")
-        call reader%open_adios2("test_output.bp", adios2_mode_read)
-        call reader%begin_step_adios2()
+        call reader%init(MPI_COMM_SELF, "test_io_read")
+        call reader%open("test_output.bp", adios2_mode_read)
+        call reader%begin_step()
 
         sel_start = [0, 0]
         sel_count = [shape_dims(1), shape_dims(2)]
@@ -78,8 +78,8 @@ program test_adios2
             end do
         end do
 
-        call reader%end_step_adios2()
-        call reader%close_adios2()
+        call reader%end_step()
+        call reader%close()
 
         if (allocated(data_read)) deallocate(data_read)
     end if

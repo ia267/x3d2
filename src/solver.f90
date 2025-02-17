@@ -12,6 +12,9 @@ module m_solver
   use m_tdsops, only: tdsops_t, dirps_t
   use m_time_integrator, only: time_intg_t
   use m_vector_calculus, only: vector_calculus_t
+  use m_base_adios2
+  use m_adios2_writer
+  use m_adios2_reader
   use m_mesh, only: mesh_t
 
   implicit none
@@ -56,6 +59,7 @@ module m_solver
     type(allocator_t), pointer :: host_allocator
     type(dirps_t), pointer :: xdirps, ydirps, zdirps
     type(vector_calculus_t) :: vector_calculus
+    type(adios2_writer_t) :: writer
     procedure(poisson_solver), pointer :: poisson => null()
   contains
     procedure :: transeq
@@ -153,6 +157,9 @@ contains
     case default
       error stop 'poisson_solver_type is not valid. Use "FFT" or "CG".'
     end select
+
+    ! initialise ADIOS2 writer
+    call solver%writer%init(MPI_COMM_WORLD, "x3d2_writer")
 
   end function init
 
