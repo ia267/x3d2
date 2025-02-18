@@ -10,11 +10,14 @@ module m_base_case
   use m_field, only: field_t
   use m_mesh, only: mesh_t
   use m_solver, only: solver_t, init
+  use m_adios2_io, only: adios2_writer_t, adios2_mode_write
+  use iso_fortran_env, only: real32, real64, int64
 
   implicit none
 
   type, abstract :: base_case_t
     class(solver_t), allocatable :: solver
+    type(adios2_writer_t) :: adios2_writer
   contains
     procedure(boundary_conditions), deferred :: boundary_conditions
     procedure(initial_conditions), deferred :: initial_conditions
@@ -25,6 +28,7 @@ module m_base_case
     procedure :: run
     procedure :: print_enstrophy
     procedure :: print_div_max_mean
+    procedure :: write_velocity_fields
   end type base_case_t
 
   abstract interface
@@ -202,6 +206,39 @@ contains
 
   end subroutine print_div_max_mean
 
+  subroutine write_velocity_fields(self, timestep)
+      class(base_case_t), intent(inout) :: self
+      integer, intent(in) :: timestep
+      class(field_t), pointer :: u_out, v_out, w_out
+      integer(kind=int64), dimension(3) :: shape_dims, & 
+                                           start_dims, & 
+                                           count_dims
+      
+      u_out => self%solver%host_allocator%get_block(DIR_C)
+      v_out => self%solver%host_allocator%get_block(DIR_C)
+      w_out => self%solver%host_allocator%get_block(DIR_C)
+      
+      call self%solver%backend%get_field_data(u_out%data, self%solver%u)
+      call self%solver%backend%get_field_data(v_out%data, self%solver%v)
+      call self%solver%backend%get_field_data(w_out%data, self%solver%w)
+
+      ! Convert dimensions to int64
+      shape_dims = int(self%solver%mesh%get_global_dims(DIR_X), kind=int64)
+      start_dims = int(self%solver%mesh%par%n_offset, kind=int64)
+      count_dims = int(self%solver%mesh%get_dims(DIR_X), kind=int64)
+      
+      call self%adios2_writer%write_fields(&
+          timestep, &        
+          reshape([u_out%data, v_out%data, w_out%data], &
+                [3, size(u_out%data,1), size(u_out%data,2), size(u_out%data,3)]), &
+          ["u", "v", "w"], &
+          shape_dims, start_dims, count_dims)
+      
+      call self%solver%host_allocator%release_block(u_out)
+      call self%solver%host_allocator%release_block(v_out)
+      call self%solver%host_allocator%release_block(w_out)
+  end subroutine write_velocity_fields
+
   subroutine run(self)
     !! Runs the solver forwards in time from t=t_0 to t=T, performing
     !! postprocessing/IO and reporting diagnostics.
@@ -210,7 +247,6 @@ contains
     class(base_case_t), intent(inout) :: self
 
     class(field_t), pointer :: du, dv, dw
-    class(field_t), pointer :: u_out, v_out, w_out
 
     real(dp) :: t
     integer :: i, j
@@ -218,6 +254,8 @@ contains
     if (self%solver%mesh%par%is_root()) print *, 'initial conditions'
     t = 0._dp
     call self%postprocess(0, t)
+
+    call self%write_velocity_fields(0)
 
     if (self%solver%mesh%par%is_root()) print *, 'start run'
 
@@ -252,29 +290,14 @@ contains
 
       if (mod(i, self%solver%n_output) == 0) then
         t = i*self%solver%dt
+
+        call self%write_velocity_fields(i)
+
         call self%postprocess(i, t)
       end if
     end do
 
     if (self%solver%mesh%par%is_root()) print *, 'run end'
-
-    ! Below is for demonstrating purpuses only, to be removed when we have
-    ! proper I/O in place.
-    u_out => self%solver%host_allocator%get_block(DIR_C)
-    v_out => self%solver%host_allocator%get_block(DIR_C)
-    w_out => self%solver%host_allocator%get_block(DIR_C)
-
-    call self%solver%backend%get_field_data(u_out%data, self%solver%u)
-    call self%solver%backend%get_field_data(v_out%data, self%solver%v)
-    call self%solver%backend%get_field_data(w_out%data, self%solver%w)
-
-    if (self%solver%mesh%par%is_root()) then
-      print *, 'norms', norm2(u_out%data), norm2(v_out%data), norm2(w_out%data)
-    end if
-
-    call self%solver%host_allocator%release_block(u_out)
-    call self%solver%host_allocator%release_block(v_out)
-    call self%solver%host_allocator%release_block(w_out)
 
   end subroutine run
 

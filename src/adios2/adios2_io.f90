@@ -10,6 +10,7 @@ module m_adios2_io
     use adios2
     use iso_fortran_env, only: real32, real64, int64
     use m_allocator, only: field_t
+    use m_common, only: DIR_C
     implicit none
 
     private
@@ -61,7 +62,7 @@ module m_adios2_io
 
         procedure, private :: write_scalar_real    !! Writes scalar real data
         procedure, private :: write_array_2d_real  !! Writes 2d array real data
-        procedure, private :: writer_array3d_real  !! Writes 3d array real data
+        procedure, private :: write_array_3d_real  !! Writes 3d array real data
     end type adios2_writer_t
 
     !> ADIOS2 reader type
@@ -221,7 +222,7 @@ contains
     end subroutine write_array_2d_real
 
     !> Write 3d array real data
-    subroutine writer_array3d_real(self, name, data, shape_dims, start_dims, count_dims)
+    subroutine write_array_3d_real(self, name, data, shape_dims, start_dims, count_dims)
         class(adios2_writer_t), intent(inout) :: self
         character(len=*), intent(in) :: name
         real(kind=real64), dimension(:,:,:), intent(in) :: data
@@ -237,13 +238,13 @@ contains
 
         call adios2_put(self%engine, var, data, adios2_mode_deferred, self%ierr)
         call self%handle_error(self%ierr, "Error writing ADIOS2 3D array single precision real data")
-    end subroutine writer_array3d_real
+    end subroutine write_array_3d_real
 
     !> Write field data
-    subroutine write_fields(self, timestep, fields, names, shape_dims, start_dims, count_dims)
+    subroutine write_fields(self, timestep, field_data, names, shape_dims, start_dims, count_dims)
         class(adios2_writer_t), intent(inout) :: self
         integer, intent(in) :: timestep
-        type(field_t), intent(in) :: fields(:)             !! Array of fields to write
+        real(kind=real64), dimension(:,:,:,:), intent(in) :: field_data !! Array of fields to write
         character(len=*), intent(in) :: names(:)           !! Corresponding names for each field
         integer(kind=int64), dimension(ndims_3d), intent(in) :: shape_dims, &
                                                        start_dims, count_dims
@@ -252,12 +253,11 @@ contains
 
         ! create filename with timestep
         write(filename, '(A,I6.6,".bp")') "output_", timestep
-
         call self%open(filename, adios2_mode_write)
         call self%begin_step()
 
-        do i = 1, size(fields)
-            call self%writer_array3d_real(names(i), fields(i)%data, &
+        do i = 1, size(names)
+            call self%write_array_3d_real(names(i), field_data(i,:,:,:), &
                                          shape_dims, start_dims, count_dims)
         end do
 
