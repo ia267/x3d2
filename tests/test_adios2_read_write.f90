@@ -1,15 +1,14 @@
 program test_adios2
     use mpi
-    use m_base_adios2
-    use m_adios2_writer
-    use m_adios2_reader
+    use m_adios2_io, only : adios2_writer_t, adios2_reader_t, &
+                            adios2_mode_write, adios2_mode_read
     use m_common, only: dp
     use iso_fortran_env, only: int64, real64, stderr => error_unit
     implicit none
 
     ! ADIOS2 handlers
-    type(adios2_writer_t) :: writer
-    type(adios2_reader_t) :: reader
+    type(adios2_writer_t) :: adios2_writer
+    type(adios2_reader_t) :: adios2_reader
 
     ! MPI variables
     integer :: ierr, irank, isize
@@ -43,27 +42,27 @@ program test_adios2
     count_dims = [inx, iny]
 
     ! write data
-    call writer%init(MPI_COMM_WORLD, "test_io_write")
-    call writer%open("test_output.bp", adios2_mode_write)
-    call writer%begin_step()
-    call writer%write_data("data2D", data_write, shape_dims, start_dims, count_dims)
-    call writer%end_step()
-    call writer%close()
+    call adios2_writer%init(MPI_COMM_WORLD, "test_io_write")
+    call adios2_writer%open("test_output.bp", adios2_mode_write)
+    call adios2_writer%begin_step()
+    call adios2_writer%write_data("data2D", data_write, shape_dims, start_dims, count_dims)
+    call adios2_writer%end_step()
+    call adios2_writer%close()
 
     if (allocated(data_write)) deallocate(data_write)
 
     ! read data (rank 0 only)
     if (irank == 0) then
-        call reader%init(MPI_COMM_SELF, "test_io_read")
-        call reader%open("test_output.bp", adios2_mode_read)
-        call reader%begin_step()
+        call adios2_reader%init(MPI_COMM_SELF, "test_io_read")
+        call adios2_reader%open("test_output.bp", adios2_mode_read)
+        call adios2_reader%begin_step()
 
         sel_start = [0, 0]
         sel_count = [shape_dims(1), shape_dims(2)]
 
         ! read entire dataset
         allocate(data_read(sel_count(1), sel_count(2)))
-        call reader%read_data("data2D", data_read, sel_start, sel_count)
+        call adios2_reader%read_data("data2D", data_read, sel_start, sel_count)
 
         ! verify data
         do j = 1, sel_count(2)
@@ -78,8 +77,8 @@ program test_adios2
             end do
         end do
 
-        call reader%end_step()
-        call reader%close()
+        call adios2_reader%end_step()
+        call adios2_reader%close()
 
         if (allocated(data_read)) deallocate(data_read)
     end if
