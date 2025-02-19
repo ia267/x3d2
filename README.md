@@ -1,50 +1,34 @@
-x3d2: Next-Generation High-Fidelity CFD Solver
-==============================================
+# x3d2: Next-Generation High-Fidelity CFD Solver
 
-x3d2 is an advanced open-source Computational Fluid Dynamics (CFD) solver, designed as the next-generation evolution of Xcompact3d. x3d2 is built to fully leverage GPU acceleration while maintaining the high-order finite-difference methods and spectral-like accuracy of Xcompact3d.
+x3d2 is an open-source Computational Fluid Dynamics (CFD) solver, designed as the next-generation evolution of Xcompact3d.  It leverages GPU acceleration while maintaining the high-order finite-difference methods and spectral-like accuracy of its predecessor. x3d2 is optimised for High-Performance Computing (HPC) environments and supports both CPU and GPU parallelisation.
 
-The solver is optimized for High-Performance Computing (HPC) environments and supports two parallelization backends:
+## Key Features
+* **High-Order Finite-Difference Methods:** Compact finite-difference schemes delivering spectral-like accuracy on a monobloc Cartesian mesh, ensuring high-fidelity simulations.
+* **Dual Parallelisation Backends:**
+    * **OpenMP:** Optimised for multi-core CPU execution.
+    * **CUDA:** Designed for GPU acceleration on NVIDIA hardware.
+* **Scalable Parallel Computing:** Efficient MPI-based parallelisation for large-scale Direct Numerical Simulation (DNS) of turbulent flows, allowing for simulations on hundreds of thousands of cores and multiple GPUs.
+* **Incompressible & Low-Mach Variable Density Flows:** Solves the Navier-Stokes equations with fractional time-stepping and spectral Poisson solvers.
+* **Modern Software Engineering:** x3d2 is being actively developed with a focus on maintainability, extensibility, and code quality.
 
-OpenMP Backend – Optimized for multi-core CPU execution.
-CUDA Backend – Designed for GPU acceleration on NVIDIA hardware.
+## Performance and Scalability
 
+x3d2 is built for high-performance computing and is designed to scale efficiently on modern HPC architectures.  Its performance is enhanced by:
 
-🔥 Key Features
+* **DistD2-TDS:** A novel algorithm for solving tridiagonal systems with improved data locality and minimal data movement. This algorithm is specifically optimised for both CPUs (using vectorisation) and GPUs (using thread-level parallelism) and significantly reduces inter-process communication.
+* **2D Domain Decomposition for FFT:** x3d2 utilises 2D domain decomposition for Fast Fourier Transforms (FFTs), enabling greater scalability and allows for efficient parallelisation of the Poisson solver, especially for large simulations. x3d2 uses optimised FFT implementations (cuFFT for GPUs and 2DECOMP&FFT for CPUs) to accelerate the solution of the Poisson equation.
 
-- High-Order Finite-Difference Methods: Compact finite-difference schemes delivering spectral-like accuracy on a monobloc Cartesian mesh.
-- Dual Parallelization Backends:
-    - OpenMP for multi-threaded execution on CPUs.
-    - CUDA for GPU-accelerated computations.
-- Scalable Parallel Computing: Efficient MPI-based parallelization for large-scale Direct Numerical Simulation (DNS) of turbulent flows.
-- Enhanced Immersed Boundary Method (IBM): Improved treatment of complex geometries with moving boundary capabilities.
-- Incompressible & Low-Mach Variable Density Flows: Solves the Navier-Stokes equations with fractional time-stepping and spectral Poisson solvers.
-- Backward Compatibility: Designed to facilitate a transition from Xcompact3d while introducing modern performance enhancements.
+## Installation
+See [Getting Started](https://x3d2.readthedocs.io/en/latest/getting_started.html) for installation instructions for Linux and macOS platforms.
 
-🚀 Parallel Execution & Performance
-x3d2 is built for high-performance computing, supporting:
+## Documentation
+Comprehensive user and developer documentation is available at [Read the Docs](https://x3d2.readthedocs.io/en/latest/index.html).
 
-- OpenMP Backend: Multi-threaded CPU execution.
-- CUDA Backend: Full GPU acceleration with CUDA kernels.
-- MPI + OpenMP or MPI + CUDA: Efficient parallelization across multiple nodes, enabling large-scale simulations on HPC clusters.
+## Contributing
+We welcome contributions from the CFD community! Please check out [Contributing to x3d2](https://x3d2.readthedocs.io/en/latest/developer/index.html) for guidelines on submitting Pull Requests and reporting issues.
 
-With optimized Fast Fourier Transforms (FFTs) and an enhanced 2D domain decomposition, the solver efficiently scales across thousands of CPU cores and multiple GPUs.
-
-🛠 Getting Started
-See <<LINK>> for installation instructions for Linux and macOS platforms.
-
-📖 Documentation
-Online hosted docs: Read The Docs
-
-🏗 Roadmap
-🔹 Optimized CUDA backend for large-scale GPU simulations.
-🔹 Improved load balancing for heterogeneous architectures.
-🔹 Enhanced parallel I/O for large-scale simulations.
-
-👥 Contributing
-We welcome contributions from the CFD community! Please check out the CONTRIBUTING.md file for guidelines on submitting patches, reporting issues, and joining discussions.
-
-🏛 Acknowledgments
+## Acknowledgments
 x3d2 builds upon Xcompact3d and benefits from contributions across multiple institutions. We acknowledge funding support and contributions from the Imperial College London Department of Aeronautics.
 
-📜 License
-<<LINK TO LICENSE>>
+## Current Status and Roadmap
+x3d2 is under active development. We are actively working on implementing new features and adding more canonical test cases.
