@@ -127,6 +127,11 @@ contains
 
     end if
 
+    ! Close the IBM file
+    if (.false.) then
+    call reader%close(file)
+    end if
+
   end function init
 
   subroutine body(self, u, v, w)
