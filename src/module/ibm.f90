@@ -127,9 +127,8 @@ contains
 
     end if
 
-    ! Close the IBM file
-    if (.false.) then
-    call reader%close(file)
+      call reader%close(file)
+
     end if
 
   end function init
