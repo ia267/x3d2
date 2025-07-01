@@ -125,6 +125,8 @@ contains
     ! Closing the session handles all file and reader finalisation
     call reader_session%close()
 
+    end if
+
   end function init
 
   subroutine body(self, u, v, w)
