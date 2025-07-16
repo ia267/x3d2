@@ -1,0 +1,35 @@
+&domain_settings
+! Flow case
+flow_case_name = 'foil'
+
+! Global domain length
+L_global = 60.11421911_d0, 161.97202797_d0,  37.0_d0
+
+! Global number of cells in each direction
+dims_global = 697, 1878, 429
+
+! Domain decomposition in each direction
+nproc_dir = 1, 1, 1
+
+! BC options are 'periodic' | 'neumann' | 'dirichlet'
+BC_x = 'periodic', 'periodic'
+BC_y = 'periodic', 'periodic'
+BC_z = 'periodic', 'periodic'
+
+! Stretching options: 'uniform' (default) | 'centred' | 'top-bottom' | 'bottom'
+stretching(2) = 'uniform'
+beta(2) = 1.0d0
+/End
+
+&solver_params
+Re = 12615582d0
+time_intg = 'RK3' ! 'AB[1-4]' | 'RK[1-4]'
+dt = 0.001d0
+n_iters = 10000
+n_output = 1000
+poisson_solver_type = 'FFT' ! 'FFT' | 'CG'
+der1st_scheme = 'compact6'
+der2nd_scheme = 'compact6' ! 'compact6' | 'compact6-hyperviscous'
+interpl_scheme = 'classic' ! 'classic' | 'optimised' | 'aggressive'
+stagder_scheme = 'compact6'
+/End

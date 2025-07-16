@@ -7,6 +7,7 @@ program xcompact
   use m_common, only: pi, get_argument, VERT
   use m_config, only: domain_config_t, solver_config_t
   use m_mesh
+  use m_case_foil, only: case_foil_t
   use m_case_channel, only: case_channel_t
   use m_case_cylinder, only: case_cylinder_t
   use m_case_generic, only: case_generic_t
@@ -123,6 +124,9 @@ program xcompact
   case ('tgv')
     allocate (case_tgv_t :: flow_case)
     flow_case = case_tgv_t(backend, mesh, host_allocator)
+  case ('foil')
+    allocate (case_foil_t :: flow_case)
+    flow_case = case_foil_t(backend, mesh, host_allocator)
   case default
     error stop 'Undefined flow_case.'
   end select
