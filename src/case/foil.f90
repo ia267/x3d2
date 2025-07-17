@@ -47,7 +47,7 @@ contains
     type(field_t), pointer :: ramp_dev
 
     ! Number of cells used in the damping region
-    damping_layer_size = 15
+    damping_layer_size = 50
 
     dims = mesh%get_dims(VERT)
     ramp => self%solver%host_allocator%get_block(DIR_C)
