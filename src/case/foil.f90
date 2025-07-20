@@ -5,7 +5,7 @@ module m_case_foil
   use m_allocator, only: allocator_t, field_t
   use m_base_backend, only: base_backend_t
   use m_base_case, only: base_case_t
-  use m_common, only: dp, pi, get_argument, DIR_C, VERT, CELL, Y_FACE
+  use m_common, only: dp, pi, get_argument, DIR_C, DIR_X, VERT, CELL, Y_FACE
   use m_mesh, only: mesh_t
   use m_solver, only: init
 
@@ -15,6 +15,8 @@ module m_case_foil
   contains
     procedure :: boundary_conditions => boundary_conditions_foil
     procedure :: initial_conditions => initial_conditions_foil
+    procedure :: forcings => forcings_foil
+    procedure :: pre_correction => pre_correction_foil
     procedure :: postprocess => postprocess_foil
   end type case_foil_t
 
@@ -46,24 +48,27 @@ contains
     class(field_t), pointer :: ramp
     type(field_t), pointer :: ramp_dev
 
+    integer :: j, l
+
     ! Number of cells used in the damping region
     damping_layer_size = 50
 
-    dims = mesh%get_dims(VERT)
+    dims = self%solver%mesh%get_dims(VERT)
     ramp => self%solver%host_allocator%get_block(DIR_C)
 
-    do j = dims(2) - damping_layer_size
+    do j = 1, dims(2) - damping_layer_size
       ramp%data(:, j, :) = 1.0_dp
     end do
 
     do l = 1, damping_layer_size
-      ramp%data(:, dims(2) - damping_layer_size + j, :) = cos(pi*l/(damping_layer_size*2))
+      j = dims(2) - damping_layer_size + l
+      ramp%data(:, j, :) = cos(pi*l/(damping_layer_size*2.0_dp))
     end do
 
-    ramp_dev => self%backend%allocator%get_block(DIR_X)
+    ramp_dev => self%solver%host_allocator%get_block(DIR_X)
     call self%solver%backend%set_field_data(ramp_dev, ramp%data)
 
-    call self%host_allocator%release_block(ramp)
+    call self%solver%host_allocator%release_block(ramp)
 
 
     ! Gradially dampen velocity
@@ -78,7 +83,7 @@ contains
     call self%solver%backend%field_scale(ramp_dev, 14.5_dp)
     call self%solver%backend%vecmult(self%solver%v, ramp_dev)
 
-    call self%solver%backend%allocator%release_block(ramp_dev)
+    call self%solver%host_allocator%release_block(ramp_dev)
 
 
   end subroutine boundary_conditions_foil
@@ -111,6 +116,25 @@ contains
     call self%solver%w%set_data_loc(VERT)
 
   end subroutine initial_conditions_foil
+
+  subroutine forcings_foil(self, du, dv, dw, iter)
+    implicit none
+
+    class(case_foil_t) :: self
+    class(field_t), intent(inout) :: du, dv, dw
+    integer, intent(in) :: iter
+
+    ! do nothing for foil case
+  end subroutine forcings_foil
+
+  subroutine pre_correction_foil(self, u, v, w)
+    implicit none
+
+    class(case_foil_t) :: self
+    class(field_t), intent(inout) :: u, v, w
+
+    ! do nothing for foil case
+  end subroutine pre_correction_foil
 
   subroutine postprocess_foil(self, iter, t)
     implicit none
