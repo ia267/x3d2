@@ -3,10 +3,11 @@
 flow_case_name = 'foil'
 
 ! Global domain length
-L_global = 60.11421911_d0, 161.97202797_d0,  37.0_d0
+L_global = 60.11421911d0, 161.97202797d0,  37.0d0
 
 ! Global number of cells in each direction
-dims_global = 697, 1878, 429
+! dims_global = 697, 1878, 429
+dims_global = 350, 950, 215
 
 ! Domain decomposition in each direction
 nproc_dir = 1, 1, 1
@@ -25,8 +26,9 @@ beta(2) = 1.0d0
 Re = 12615582d0
 time_intg = 'RK3' ! 'AB[1-4]' | 'RK[1-4]'
 dt = 0.001d0
-n_iters = 10000
-n_output = 1000
+!n_iters = 10000
+n_iters = 3
+n_output = 1
 poisson_solver_type = 'FFT' ! 'FFT' | 'CG'
 der1st_scheme = 'compact6'
 der2nd_scheme = 'compact6' ! 'compact6' | 'compact6-hyperviscous'
@@ -34,3 +36,16 @@ interpl_scheme = 'classic' ! 'classic' | 'optimised' | 'aggressive'
 stagder_scheme = 'compact6'
 ibm_on = .true.
 /End
+
+!&checkpoint_params
+!checkpoint_freq = 1
+!snapshot_freq = 1
+!keep_checkpoint = .false.
+!checkpoint_prefix = "checkpoint"
+!snapshot_prefix = "snapshot"
+!restart_from_checkpoint = .false.
+!restart_file = "checkpoint_000003.bp"
+!output_stride = 2, 2, 2
+!snapshot_single_precision = .true.
+/End
+
