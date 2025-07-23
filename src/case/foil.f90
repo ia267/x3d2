@@ -94,22 +94,9 @@ contains
     class(case_foil_t) :: self
 
     class(field_t), pointer :: u_init, v_init, w_init
-
-    u_init => self%solver%host_allocator%get_block(DIR_C)
-    v_init => self%solver%host_allocator%get_block(DIR_C)
-    w_init => self%solver%host_allocator%get_block(DIR_C)
-
-    u_init%data(:, :, :) = 0.0_dp
-    v_init%data(:, :, :) = 14.5_dp
-    w_init%data(:, :, :) = 0.0_dp
-
-    call self%solver%backend%set_field_data(self%solver%u, u_init%data)
-    call self%solver%backend%set_field_data(self%solver%v, v_init%data)
-    call self%solver%backend%set_field_data(self%solver%w, w_init%data)
-
-    call self%solver%host_allocator%release_block(u_init)
-    call self%solver%host_allocator%release_block(v_init)
-    call self%solver%host_allocator%release_block(w_init)
+    call self%solver%u%fill(0.0_dp)
+    call self%solver%v%fill(14.5_dp)
+    call self%solver%w%fill(0._dp)
 
     call self%solver%u%set_data_loc(VERT)
     call self%solver%v%set_data_loc(VERT)
