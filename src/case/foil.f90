@@ -2,10 +2,11 @@ module m_case_foil
   use iso_fortran_env, only: stderr => error_unit
   use mpi
 
-  use m_allocator, only: allocator_t, field_t
+  use m_allocator, only: allocator_t
   use m_base_backend, only: base_backend_t
   use m_base_case, only: base_case_t
-  use m_common, only: dp, pi, get_argument, DIR_C, DIR_X, VERT, CELL, Y_FACE
+  use m_common, only: dp, pi, DIR_C, DIR_X, VERT, CELL
+  use m_field, only: field_t
   use m_mesh, only: mesh_t
   use m_solver, only: init
 
@@ -46,7 +47,7 @@ contains
     integer, dimension(3) :: dims
     integer :: damping_layer_size
     class(field_t), pointer :: ramp
-    type(field_t), pointer :: ramp_dev
+    class(field_t), pointer :: ramp_dev
 
     integer :: j, l
 
@@ -54,7 +55,7 @@ contains
     damping_layer_size = 50
 
     dims = self%solver%mesh%get_dims(VERT)
-    ramp => self%solver%host_allocator%get_block(DIR_C)
+    ramp => self%solver%host_allocator%get_block(DIR_C, VERT)
 
     do j = 1, dims(2) - damping_layer_size
       ramp%data(:, j, :) = 1.0_dp
@@ -65,11 +66,10 @@ contains
       ramp%data(:, j, :) = cos(pi*l/(damping_layer_size*2.0_dp))
     end do
 
-    ramp_dev => self%solver%host_allocator%get_block(DIR_X)
+    ramp_dev => self%solver%backend%allocator%get_block(DIR_X, VERT)
     call self%solver%backend%set_field_data(ramp_dev, ramp%data)
 
     call self%solver%host_allocator%release_block(ramp)
-
 
     ! Gradially dampen velocity
     call self%solver%backend%vecmult(self%solver%u, ramp_dev)
@@ -81,10 +81,9 @@ contains
     call self%solver%backend%field_scale(ramp_dev, -1.0_dp)
     call self%solver%backend%field_shift(ramp_dev, 1.0_dp)
     call self%solver%backend%field_scale(ramp_dev, 14.5_dp)
-    call self%solver%backend%vecmult(self%solver%v, ramp_dev)
+    call self%solver%backend%vecadd(1.0_dp, ramp_dev, 1.0_dp, self%solver%v)
 
-    call self%solver%host_allocator%release_block(ramp_dev)
-
+    call self%solver%backend%allocator%release_block(ramp_dev)
 
   end subroutine boundary_conditions_foil
 
@@ -93,7 +92,6 @@ contains
 
     class(case_foil_t) :: self
 
-    class(field_t), pointer :: u_init, v_init, w_init
     call self%solver%u%fill(0.0_dp)
     call self%solver%v%fill(14.5_dp)
     call self%solver%w%fill(0._dp)

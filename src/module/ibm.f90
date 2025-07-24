@@ -29,25 +29,22 @@ module m_ibm
     class(mesh_t), pointer :: mesh => null()
     type(allocator_t), pointer :: host_allocator => null()
     integer :: iibm = 0
-    type(field_t), pointer :: ep1 => null()
+    class(field_t), pointer :: ep1 => null()
   contains
+    procedure :: init => ibm_init
     procedure :: body
   end type ibm_t
 
-  interface ibm_t
-    module procedure init
-  end interface ibm_t
-
 contains
 
-  function init(backend, mesh, host_allocator) result(ibm)
+  subroutine ibm_init(self, backend, mesh, host_allocator) result(ibm)
     !! Initialize the basic IBM
     implicit none
 
+    class(ibm_t), intent(inout) :: self
     class(base_backend_t), target, intent(inout) :: backend
     type(mesh_t), target, intent(inout) :: mesh
     type(allocator_t), target, intent(inout) :: host_allocator
-    type(ibm_t) :: ibm
 
     integer :: i, j, k
     integer :: dims(3)
@@ -57,9 +54,9 @@ contains
     type(adios2_file_t) :: file
     integer(i8) :: start_dims(3), count_dims(3), iibm_i8
 
-    ibm%backend => backend
-    ibm%mesh => mesh
-    ibm%host_allocator => host_allocator
+    self%backend => backend
+    self%mesh => mesh
+    self%host_allocator => host_allocator
 
     ! Open the IBM ADIOS2 object
     call reader%init(MPI_COMM_WORLD, "IBM_reader")
@@ -68,10 +65,10 @@ contains
 
     ! Read the iibm parameter
     call reader%read_data("iibm", iibm_i8, file)
-    ibm%iibm = int(iibm_i8, kind=4)
+    self%iibm = int(iibm_i8, kind=4)
 
     ! Basic IBM only needs ep1 on the vertices
-    if (ibm%iibm == iibm_basic) then
+    if (self%iibm == iibm_basic) then
 
       ! Read the vertex mask ep1 and close
       !
@@ -79,14 +76,14 @@ contains
       ! start_dims and count_dims are thus reversed
       ! The resulting ADIOS2 output is in reversed order
       dims = mesh%get_dims(VERT)
-      start_dims = int(ibm%mesh%par%n_offset(3:1:-1), i8)
+      start_dims = int(self%mesh%par%n_offset(3:1:-1), i8)
       count_dims = int(dims(3:1:-1), i8)
       call reader%read_data("ep1", field_data, file, start_dims, count_dims)
       call reader%close(file)
 
       ! Get and fill a block on the host
       ! The order of the data is corrected in the loop below
-      ep1 => ibm%host_allocator%get_block(DIR_C)
+      ep1 => self%host_allocator%get_block(DIR_C)
       do i = 1, dims(1)
         do j = 1, dims(2)
           do k = 1, dims(3)
@@ -95,12 +92,12 @@ contains
         end do
       end do
 
-      ! Get a block on the device and move the data
-      ibm%ep1 => ibm%backend%allocator%get_block(DIR_X)
-      call ibm%backend%set_field_data(ibm%ep1, ep1%data)
+      ! Get a block on the device and copy the data directly
+      self%ep1 => self%backend%allocator%get_block(DIR_C)
+      call self%backend%set_field_data(self%ep1, ep1%data)
 
       ! Free memory
-      call ibm%host_allocator%release_block(ep1)
+      call self%host_allocator%release_block(ep1)
       deallocate (field_data)
 
     else
@@ -109,7 +106,7 @@ contains
 
     end if
 
-  end function init
+  end subroutine ibm_init
 
   subroutine body(self, u, v, w)
     !! Apply basic IBM before the pressure solver

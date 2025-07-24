@@ -46,6 +46,7 @@ module m_allocator
     ! TODO: Rename first to head
     class(field_t), pointer :: first => null()
   contains
+    procedure :: init => allocator_init_subroutine
     procedure :: get_block
     procedure :: release_block
     procedure :: create_block
@@ -91,6 +92,38 @@ contains
     allocator%dims_padded_dir(:, 4) = [nx_padded, ny_padded, nz_padded]
 
   end function allocator_init
+
+  subroutine allocator_init_subroutine(self, dims, sz)
+    !! Initialize the allocator with proper private component access
+    class(allocator_t), intent(inout) :: self
+    integer, intent(in) :: dims(3), sz
+
+    integer :: nx, ny, nz, nx_padded, ny_padded, nz_padded
+
+    nx = dims(1); ny = dims(2); nz = dims(3)
+
+    ! Apply padding based on sz
+    nx_padded = nx - 1 + mod(-(nx - 1), sz) + sz
+    ny_padded = ny - 1 + mod(-(ny - 1), sz) + sz
+    ! Current reorder functions do not require a padding in z-direction.
+    nz_padded = nz
+
+    self%ngrid = nx_padded*ny_padded*nz_padded
+    self%sz = sz
+
+    self%n_groups_dir(1:3) = [ny_padded*nz_padded/sz, &
+                              nx_padded*nz_padded/sz, &
+                              nx_padded*ny_padded/sz]
+
+    self%dims_padded_dir(:, 1) = [sz, nx_padded, &
+                                  self%n_groups_dir(1)]
+    self%dims_padded_dir(:, 2) = [sz, ny_padded, &
+                                  self%n_groups_dir(2)]
+    self%dims_padded_dir(:, 3) = [sz, nz_padded, &
+                                  self%n_groups_dir(3)]
+    self%dims_padded_dir(:, 4) = [nx_padded, ny_padded, nz_padded]
+
+  end subroutine allocator_init_subroutine
 
   function create_block(self, next) result(ptr)
     !! Allocate memory for a new block and return a pointer to a new
