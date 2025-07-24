@@ -153,7 +153,7 @@ contains
     ! Request all the storage for old timesteps
     do i = 1, init%nvars
       do j = 1, init%nolds
-        init%olds(i, j)%ptr => allocator%get_block(DIR_X)
+        call allocator%get_block(init%olds(i, j)%ptr, DIR_X)
       end do
     end do
 

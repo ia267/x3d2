@@ -35,8 +35,8 @@ program test_allocator
 
   ! Request two blocks and release them in reverse order.  List should
   ! contain two free blocks. (1 -> 2)
-  ptr1 => allocator%get_block(DIR_X)
-  ptr2 => allocator%get_block(DIR_X)
+  call allocator%get_block(ptr1, DIR_X)
+  call allocator%get_block(ptr2, DIR_X)
   call allocator%release_block(ptr2)
   call allocator%release_block(ptr1)
 
@@ -59,13 +59,13 @@ program test_allocator
 
   ! Request a block from a list of three.  This should grab the first
   ! block on top of the pile and reduce the free list to two blocks.
-  ptr1 => allocator%get_block(DIR_X)
-  ptr2 => allocator%get_block(DIR_X)
-  ptr3 => allocator%get_block(DIR_X)
+  call allocator%get_block(ptr1, DIR_X)
+  call allocator%get_block(ptr2, DIR_X)
+  call allocator%get_block(ptr3, DIR_X)
   call allocator%release_block(ptr3)
   call allocator%release_block(ptr2)
   call allocator%release_block(ptr1)
-  ptr1 => allocator%get_block(DIR_X)
+  call allocator%get_block(ptr1, DIR_X)
 
   if (.not. all(allocator%get_block_ids() == [2, 3])) then
     allpass = .false.

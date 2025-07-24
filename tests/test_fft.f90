@@ -117,8 +117,8 @@ program test_fft
   call allocate_tdsops(zdirps, backend, mesh, 'compact6', 'compact6', &
                        'classic', 'compact6')
 
-  input_field => allocator%get_block(DIR_C, CELL)
-  output_field => allocator%get_block(DIR_C, CELL)
+  call allocator%get_block(input_field, DIR_C, CELL)
+  call allocator%get_block(output_field, DIR_C, CELL)
 
   call input_field%fill(0._dp)
   call output_field%fill(0._dp)

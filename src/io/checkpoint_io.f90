@@ -660,17 +660,17 @@ contains
 
       select case (trim(field_names(i)))
       case ("u")
-        host_field => solver%host_allocator%get_block(DIR_C)
+        call solver%host_allocator%get_block(host_field, DIR_C)
         host_field%data(1:dims(1), 1:dims(2), 1:dims(3)) = field_data
         call solver%backend%set_field_data(solver%u, host_field%data)
         call solver%host_allocator%release_block(host_field)
       case ("v")
-        host_field => solver%host_allocator%get_block(DIR_C)
+        call solver%host_allocator%get_block(host_field, DIR_C)
         host_field%data(1:dims(1), 1:dims(2), 1:dims(3)) = field_data
         call solver%backend%set_field_data(solver%v, host_field%data)
         call solver%host_allocator%release_block(host_field)
       case ("w")
-        host_field => solver%host_allocator%get_block(DIR_C)
+        call solver%host_allocator%get_block(host_field, DIR_C)
         host_field%data(1:dims(1), 1:dims(2), 1:dims(3)) = field_data
         call solver%backend%set_field_data(solver%w, host_field%data)
         call solver%host_allocator%release_block(host_field)
@@ -708,8 +708,8 @@ contains
     if (present(use_stride)) apply_stride = use_stride
 
     do i_field = 1, size(field_names)
-      host_field => solver%host_allocator%get_block( &
-                    DIR_C, fields(i_field)%ptr%data_loc &
+      call solver%host_allocator%get_block( &
+                    host_field, DIR_C, fields(i_field)%ptr%data_loc &
                     )
       call solver%backend%get_field_data(host_field%data, fields(i_field)%ptr)
 

@@ -83,7 +83,7 @@ contains
 
       ! Get and fill a block on the host
       ! The order of the data is corrected in the loop below
-      ep1 => self%host_allocator%get_block(DIR_C)
+      call self%host_allocator%get_block(ep1, DIR_C)
       do i = 1, dims(1)
         do j = 1, dims(2)
           do k = 1, dims(3)
@@ -93,7 +93,7 @@ contains
       end do
 
       ! Get a block on the device and copy the data directly
-      self%ep1 => self%backend%allocator%get_block(DIR_C)
+      call self%backend%allocator%get_block(self%ep1, DIR_C)
       call self%backend%set_field_data(self%ep1, ep1%data)
 
       ! Free memory

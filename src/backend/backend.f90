@@ -367,7 +367,7 @@ contains
 
     ! Carry out a reorder if we need, and copy from field to data array
     if (rdr_dir /= 0) then
-      f_temp => self%allocator%get_block(direction)
+      call self%allocator%get_block(f_temp, direction)
       call self%reorder(f_temp, f, rdr_dir)
       call self%copy_f_to_data(data, f_temp)
       call self%allocator%release_block(f_temp)
@@ -399,7 +399,7 @@ contains
 
     ! Carry out a reorder if we need, and copy from data array to field
     if (rdr_dir /= 0) then
-      f_temp => self%allocator%get_block(direction, f%data_loc)
+      call self%allocator%get_block(f_temp, direction, f%data_loc)
       call self%copy_data_to_f(f_temp, data)
       call self%reorder(f, f_temp, rdr_dir)
       call self%allocator%release_block(f_temp)

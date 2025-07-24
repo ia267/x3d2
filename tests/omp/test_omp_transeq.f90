@@ -72,13 +72,13 @@ program test_omp_transeq
 
   nu = 1._dp
 
-  u => allocator%get_block(DIR_X, VERT)
-  v => allocator%get_block(DIR_X, VERT)
-  w => allocator%get_block(DIR_X, VERT)
+  call allocator%get_block(u, DIR_X, VERT)
+  call allocator%get_block(v, DIR_X, VERT)
+  call allocator%get_block(w, DIR_X, VERT)
 
-  du => allocator%get_block(DIR_X, VERT)
-  dv => allocator%get_block(DIR_X, VERT)
-  dw => allocator%get_block(DIR_X, VERT)
+  call allocator%get_block(du, DIR_X, VERT)
+  call allocator%get_block(dv, DIR_X, VERT)
+  call allocator%get_block(dw, DIR_X, VERT)
 
   dx_per = mesh%geo%d(DIR_X)
 

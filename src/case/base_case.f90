@@ -133,7 +133,7 @@ contains
     real(dp) :: coords(3)
 
     dims = self%solver%mesh%get_dims(VERT)
-    field_init => self%solver%host_allocator%get_block(DIR_C)
+    call self%solver%host_allocator%get_block(field_init, DIR_C)
 
     do k = 1, dims(3)
       do j = 1, dims(2)
@@ -160,9 +160,9 @@ contains
     class(field_t), pointer :: du, dv, dw
     real(dp) :: enstrophy
 
-    du => self%solver%backend%allocator%get_block(DIR_X, VERT)
-    dv => self%solver%backend%allocator%get_block(DIR_X, VERT)
-    dw => self%solver%backend%allocator%get_block(DIR_X, VERT)
+    call self%solver%backend%allocator%get_block(du, DIR_X, VERT)
+    call self%solver%backend%allocator%get_block(dv, DIR_X, VERT)
+    call self%solver%backend%allocator%get_block(dw, DIR_X, VERT)
 
     call self%solver%curl(du, dv, dw, u, v, w)
 
@@ -189,7 +189,7 @@ contains
     class(field_t), pointer :: div_u
     real(dp) :: div_u_max, div_u_mean
 
-    div_u => self%solver%backend%allocator%get_block(DIR_Z)
+    call self%solver%backend%allocator%get_block(div_u, DIR_Z)
 
     call self%solver%divergence_v2p(div_u, u, v, w)
 
@@ -247,7 +247,7 @@ contains
         call self%boundary_conditions()
 
         do i = 1, self%solver%nvars
-          deriv(i)%ptr => self%solver%backend%allocator%get_block(DIR_X)
+          call self%solver%backend%allocator%get_block(deriv(i)%ptr, DIR_X)
         end do
 
         call self%solver%transeq(deriv, curr)

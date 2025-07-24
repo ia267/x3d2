@@ -312,8 +312,8 @@ contains
     integer, intent(in) :: dir
     class(field_t), pointer :: d2u, dud
 
-    dud => self%allocator%get_block(dir)
-    d2u => self%allocator%get_block(dir)
+    call self%allocator%get_block(dud, dir)
+    call self%allocator%get_block(d2u, dir)
 
     call exec_dist_transeq_compact( &
       rhs_du%data, dud%data, d2u%data, &
@@ -579,9 +579,9 @@ contains
     end if
 
     ! Reorient data into temporary DIR_C storage
-    x_ => self%allocator%get_block(DIR_C, x%data_loc)
+    call self%allocator%get_block(x_, DIR_C, x%data_loc)
     call self%get_field_data(x_%data, x)
-    y_ => self%allocator%get_block(DIR_C, y%data_loc)
+    call self%allocator%get_block(y_, DIR_C, y%data_loc)
     call self%get_field_data(y_%data, y)
 
     dims = self%mesh%get_dims(x_%data_loc)

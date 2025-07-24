@@ -52,8 +52,8 @@ program test_setget_field
   backend => omp_backend
 #endif
 
-  fld => backend%allocator%get_block(DIR_X, VERT)
-  fld_c => backend%allocator%get_block(DIR_C, VERT)
+  call backend%allocator%get_block(fld, DIR_X, VERT)
+  call backend%allocator%get_block(fld_c, DIR_C, VERT)
   shape_c = fld_c%get_shape()
   allocate (arr(shape_c(1), shape_c(2), shape_c(3)))
   arr = 1.0_dp

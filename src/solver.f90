@@ -125,9 +125,9 @@ contains
 
     solver%vector_calculus = vector_calculus_t(solver%backend)
 
-    solver%u => solver%backend%allocator%get_block(DIR_X)
-    solver%v => solver%backend%allocator%get_block(DIR_X)
-    solver%w => solver%backend%allocator%get_block(DIR_X)
+    call solver%backend%allocator%get_block(solver%u, DIR_X)
+    call solver%backend%allocator%get_block(solver%v, DIR_X)
+    call solver%backend%allocator%get_block(solver%w, DIR_X)
 
     call solver_cfg%read(nml_file=get_argument(1))
 
@@ -144,7 +144,7 @@ contains
       ! Get blocks for the species
       allocate (solver%species(solver%nspecies))
       do i = 1, solver%nspecies
-        solver%species(i)%ptr => solver%backend%allocator%get_block(DIR_X)
+        call solver%backend%allocator%get_block(solver%species(i)%ptr, DIR_X)
       end do
     end if
 
@@ -310,12 +310,12 @@ contains
     call self%backend%transeq_x(du, dv, dw, u, v, w, self%nu, self%xdirps)
 
     ! request fields from the allocator
-    u_y => self%backend%allocator%get_block(DIR_Y)
-    v_y => self%backend%allocator%get_block(DIR_Y)
-    w_y => self%backend%allocator%get_block(DIR_Y)
-    du_y => self%backend%allocator%get_block(DIR_Y)
-    dv_y => self%backend%allocator%get_block(DIR_Y)
-    dw_y => self%backend%allocator%get_block(DIR_Y)
+    call self%backend%allocator%get_block(u_y, DIR_Y)
+    call self%backend%allocator%get_block(v_y, DIR_Y)
+    call self%backend%allocator%get_block(w_y, DIR_Y)
+    call self%backend%allocator%get_block(du_y, DIR_Y)
+    call self%backend%allocator%get_block(dv_y, DIR_Y)
+    call self%backend%allocator%get_block(dw_y, DIR_Y)
 
     ! reorder data from x orientation to y orientation
     call self%backend%reorder(u_y, u, RDR_X2Y)
@@ -343,12 +343,12 @@ contains
     call self%backend%allocator%release_block(dw_y)
 
     ! just like in y direction, get some fields for the z derivatives.
-    u_z => self%backend%allocator%get_block(DIR_Z)
-    v_z => self%backend%allocator%get_block(DIR_Z)
-    w_z => self%backend%allocator%get_block(DIR_Z)
-    du_z => self%backend%allocator%get_block(DIR_Z)
-    dv_z => self%backend%allocator%get_block(DIR_Z)
-    dw_z => self%backend%allocator%get_block(DIR_Z)
+    call self%backend%allocator%get_block(u_z, DIR_Z)
+    call self%backend%allocator%get_block(v_z, DIR_Z)
+    call self%backend%allocator%get_block(w_z, DIR_Z)
+    call self%backend%allocator%get_block(du_z, DIR_Z)
+    call self%backend%allocator%get_block(dv_z, DIR_Z)
+    call self%backend%allocator%get_block(dw_z, DIR_Z)
 
     ! reorder from x to z
     call self%backend%reorder(u_z, u, RDR_X2Z)
@@ -406,9 +406,9 @@ contains
     call self%backend%transeq_x(du, dv, dw, u, v, w, self%nu, self%xdirps)
 
     ! request fields from the allocator
-    u_y => self%backend%allocator%get_block(DIR_Y)
-    v_y => self%backend%allocator%get_block(DIR_Y)
-    w_y => self%backend%allocator%get_block(DIR_Y)
+    call self%backend%allocator%get_block(u_y, DIR_Y)
+    call self%backend%allocator%get_block(v_y, DIR_Y)
+    call self%backend%allocator%get_block(w_y, DIR_Y)
 
     ! reorder data from x orientation to y orientation
     call self%backend%reorder(u_y, u, RDR_X2Y)
@@ -420,9 +420,9 @@ contains
     call self%backend%allocator%release_block(v)
     call self%backend%allocator%release_block(w)
 
-    du_y => self%backend%allocator%get_block(DIR_Y)
-    dv_y => self%backend%allocator%get_block(DIR_Y)
-    dw_y => self%backend%allocator%get_block(DIR_Y)
+    call self%backend%allocator%get_block(du_y, DIR_Y)
+    call self%backend%allocator%get_block(dv_y, DIR_Y)
+    call self%backend%allocator%get_block(dw_y, DIR_Y)
 
     ! similar to the x direction, obtain derivatives in y.
     call self%backend%transeq_y(du_y, dv_y, dw_y, u_y, v_y, w_y, &
@@ -437,9 +437,9 @@ contains
     call self%backend%allocator%release_block(dw_y)
 
     ! just like in y direction, get some fields for the z derivatives.
-    u_z => self%backend%allocator%get_block(DIR_Z)
-    v_z => self%backend%allocator%get_block(DIR_Z)
-    w_z => self%backend%allocator%get_block(DIR_Z)
+    call self%backend%allocator%get_block(u_z, DIR_Z)
+    call self%backend%allocator%get_block(v_z, DIR_Z)
+    call self%backend%allocator%get_block(w_z, DIR_Z)
 
     ! reorder from y to z
     call self%backend%reorder(u_z, u_y, RDR_Y2Z)
@@ -451,9 +451,9 @@ contains
     call self%backend%allocator%release_block(v_y)
     call self%backend%allocator%release_block(w_y)
 
-    du_z => self%backend%allocator%get_block(DIR_Z)
-    dv_z => self%backend%allocator%get_block(DIR_Z)
-    dw_z => self%backend%allocator%get_block(DIR_Z)
+    call self%backend%allocator%get_block(du_z, DIR_Z)
+    call self%backend%allocator%get_block(dv_z, DIR_Z)
+    call self%backend%allocator%get_block(dw_z, DIR_Z)
 
     ! get the derivatives in z
     call self%backend%transeq_z(du_z, dv_z, dw_z, u_z, v_z, w_z, &
@@ -469,9 +469,9 @@ contains
     call self%backend%allocator%release_block(dv_z)
     call self%backend%allocator%release_block(dw_z)
 
-    u => self%backend%allocator%get_block(DIR_X)
-    v => self%backend%allocator%get_block(DIR_X)
-    w => self%backend%allocator%get_block(DIR_X)
+    call self%backend%allocator%get_block(u, DIR_X)
+    call self%backend%allocator%get_block(v, DIR_X)
+    call self%backend%allocator%get_block(w, DIR_X)
 
     ! reorder from z to x
     call self%backend%reorder(u, u_z, RDR_Z2X)
@@ -532,9 +532,9 @@ contains
     end do
 
     ! Request blocks
-    v_y => self%backend%allocator%get_block(DIR_Y)
-    spec_y => self%backend%allocator%get_block(DIR_Y)
-    dspec_y => self%backend%allocator%get_block(DIR_Y)
+    call self%backend%allocator%get_block(v_y, DIR_Y)
+    call self%backend%allocator%get_block(spec_y, DIR_Y)
+    call self%backend%allocator%get_block(dspec_y, DIR_Y)
 
     ! reorder velocity
     call self%backend%reorder(v_y, v, RDR_X2Y)
@@ -562,9 +562,9 @@ contains
     call self%backend%allocator%release_block(dspec_y)
 
     ! Request blocks
-    w_z => self%backend%allocator%get_block(DIR_Z)
-    spec_z => self%backend%allocator%get_block(DIR_Z)
-    dspec_z => self%backend%allocator%get_block(DIR_Z)
+    call self%backend%allocator%get_block(w_z, DIR_Z)
+    call self%backend%allocator%get_block(spec_z, DIR_Z)
+    call self%backend%allocator%get_block(dspec_z, DIR_Z)
 
     ! reorder velocity
     call self%backend%reorder(w_z, w, RDR_X2Z)
@@ -653,10 +653,10 @@ contains
     class(field_t), pointer :: p_temp, temp
 
     ! reorder into 3D Cartesian data structure
-    p_temp => self%backend%allocator%get_block(DIR_C)
+    call self%backend%allocator%get_block(p_temp, DIR_C)
     call self%backend%reorder(p_temp, div_u, RDR_Z2C)
 
-    temp => self%backend%allocator%get_block(DIR_C)
+    call self%backend%allocator%get_block(temp, DIR_C)
 
     ! solve poisson equation with FFT based approach
     call self%backend%poisson_fft%solve_poisson(p_temp, temp)
@@ -691,19 +691,19 @@ contains
 
     class(field_t), pointer :: div_u, pressure, dpdx, dpdy, dpdz
 
-    div_u => self%backend%allocator%get_block(DIR_Z)
+    call self%backend%allocator%get_block(div_u, DIR_Z)
 
     call self%divergence_v2p(div_u, u, v, w)
 
-    pressure => self%backend%allocator%get_block(DIR_Z)
+    call self%backend%allocator%get_block(pressure, DIR_Z)
 
     call self%poisson(pressure, div_u)
 
     call self%backend%allocator%release_block(div_u)
 
-    dpdx => self%backend%allocator%get_block(DIR_X)
-    dpdy => self%backend%allocator%get_block(DIR_X)
-    dpdz => self%backend%allocator%get_block(DIR_X)
+    call self%backend%allocator%get_block(dpdx, DIR_X)
+    call self%backend%allocator%get_block(dpdy, DIR_X)
+    call self%backend%allocator%get_block(dpdz, DIR_X)
 
     call self%gradient_p2v(dpdx, dpdy, dpdz, pressure)
 

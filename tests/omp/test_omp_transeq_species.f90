@@ -72,12 +72,12 @@ program test_omp_transeq_species
 
   nu = 1._dp
 
-  u => allocator%get_block(DIR_X, VERT)
-  v => allocator%get_block(DIR_X, VERT)
-  w => allocator%get_block(DIR_X, VERT)
+  call allocator%get_block(u, DIR_X, VERT)
+  call allocator%get_block(v, DIR_X, VERT)
+  call allocator%get_block(w, DIR_X, VERT)
 
-  spec => allocator%get_block(DIR_X, VERT)
-  dspec => allocator%get_block(DIR_X, VERT)
+  call allocator%get_block(spec, DIR_X, VERT)
+  call allocator%get_block(dspec, DIR_X, VERT)
 
   dx_per = mesh%geo%d(DIR_X)
 

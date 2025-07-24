@@ -73,9 +73,9 @@ contains
     real(dp) :: xloc(3), y, noise, um
 
     dims = self%solver%mesh%get_dims(VERT)
-    u_init => self%solver%host_allocator%get_block(DIR_C)
-    v_init => self%solver%host_allocator%get_block(DIR_C)
-    w_init => self%solver%host_allocator%get_block(DIR_C)
+    call self%solver%host_allocator%get_block(u_init, DIR_C)
+    call self%solver%host_allocator%get_block(v_init, DIR_C)
+    call self%solver%host_allocator%get_block(w_init, DIR_C)
 
     call random_number(u_init%data(1:dims(1), 1:dims(2), 1:dims(3)))
     call random_number(v_init%data(1:dims(1), 1:dims(2), 1:dims(3)))

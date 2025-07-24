@@ -88,9 +88,9 @@ contains
 
     allocator = allocator_t(mesh%get_dims(VERT), 8)
 
-    ptr1 => allocator%get_block(DIR_Z, CELL)
-    ptr2 => allocator%get_block(DIR_Z, VERT)
-    ptr3 => allocator%get_block(DIR_X, Z_FACE)
+    call allocator%get_block(ptr1, DIR_Z, CELL)
+    call allocator%get_block(ptr2, DIR_Z, VERT)
+    call allocator%get_block(ptr3, DIR_X, Z_FACE)
 
     n_cell = mesh%get_n(ptr1)
     n_vert = mesh%get_n(ptr2)

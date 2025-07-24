@@ -87,8 +87,8 @@ contains
       print *, "Test ", test
     end if
 
-    a => backend%allocator%get_block(DIR_X)
-    b => backend%allocator%get_block(dir_from)
+    call backend%allocator%get_block(a, DIR_X)
+    call backend%allocator%get_block(b, dir_from)
 
     dims = backend%allocator%get_padded_dims(DIR_C)
 

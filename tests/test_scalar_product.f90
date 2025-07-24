@@ -95,8 +95,8 @@ contains
       print *, "Testing ", test
     end if
 
-    a => backend%allocator%get_block(dir, VERT)
-    b => backend%allocator%get_block(dir, VERT)
+    call backend%allocator%get_block(a, dir, VERT)
+    call backend%allocator%get_block(b, dir, VERT)
 
     if (nrank == 0) then
       print *, "Simplest check: dot(0, 0) = 0"
@@ -130,9 +130,9 @@ contains
     s = backend%scalar_product(a, a)
 
     ! Determine number of interior points, using a temporary DIR_C field
-    c => backend%allocator%get_block(DIR_C)
+    call backend%allocator%get_block(c, DIR_C)
     call c%set_data_loc(a%data_loc)
-    n = product(mesh%get_dims(c%data_loc))
+    call product(mesh%get_dims(n, c%data_loc))
     call backend%allocator%release_block(c)
 
     expt = n*(nrank + 1)**2

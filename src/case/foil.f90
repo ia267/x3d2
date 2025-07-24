@@ -55,7 +55,7 @@ contains
     damping_layer_size = 50
 
     dims = self%solver%mesh%get_dims(VERT)
-    ramp => self%solver%host_allocator%get_block(DIR_C, VERT)
+    call self%solver%host_allocator%get_block(ramp, DIR_C, VERT)
 
     do j = 1, dims(2) - damping_layer_size
       ramp%data(:, j, :) = 1.0_dp
@@ -66,7 +66,7 @@ contains
       ramp%data(:, j, :) = cos(pi*l/(damping_layer_size*2.0_dp))
     end do
 
-    ramp_dev => self%solver%backend%allocator%get_block(DIR_X, VERT)
+    call self%solver%backend%allocator%get_block(ramp_dev, DIR_X, VERT)
     call self%solver%backend%set_field_data(ramp_dev, ramp%data)
 
     call self%solver%host_allocator%release_block(ramp)

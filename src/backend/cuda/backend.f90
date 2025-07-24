@@ -396,8 +396,8 @@ contains
     real(dp), device, pointer, dimension(:, :, :) :: dud_dev, d2u_dev
 
     ! Get some fields for storing the intermediate results
-    dud => self%allocator%get_block(dir)
-    d2u => self%allocator%get_block(dir)
+    call self%allocator%get_block(dud, dir)
+    call self%allocator%get_block(d2u, dir)
 
     call resolve_field_t(dud_dev, dud)
     call resolve_field_t(d2u_dev, d2u)
@@ -566,7 +566,7 @@ contains
       call reorder_c2x<<<blocks, threads>>>(u_o_d, u_i_d, nz_padded) !&
     case (RDR_C2Y)
       ! First reorder from C to X, then from X to Y
-      u_temp => self%allocator%get_block(DIR_X)
+      call self%allocator%get_block(u_temp, DIR_X)
       call resolve_field_t(u_temp_d, u_temp)
 
       blocks = dim3(nx_padded/SZ, ny_padded/SZ, nz_padded)
@@ -580,7 +580,7 @@ contains
       call self%allocator%release_block(u_temp)
     case (RDR_C2Z)
       ! First reorder from C to X, then from X to Z
-      u_temp => self%allocator%get_block(DIR_X)
+      call self%allocator%get_block(u_temp, DIR_X)
       call resolve_field_t(u_temp_d, u_temp)
 
       blocks = dim3(nx_padded/SZ, ny_padded/SZ, nz_padded)
@@ -598,7 +598,7 @@ contains
       call reorder_x2c<<<blocks, threads>>>(u_o_d, u_i_d, nz_padded) !&
     case (RDR_Y2C)
       ! First reorder from Y to X, then from X to C
-      u_temp => self%allocator%get_block(DIR_X)
+      call self%allocator%get_block(u_temp, DIR_X)
       call resolve_field_t(u_temp_d, u_temp)
 
       blocks = dim3(nx_padded/SZ, ny_padded/SZ, nz_padded)
@@ -610,7 +610,7 @@ contains
       call self%allocator%release_block(u_temp)
     case (RDR_Z2C)
       ! First reorder from Z to X, then from X to C
-      u_temp => self%allocator%get_block(DIR_X)
+      call self%allocator%get_block(u_temp, DIR_X)
       call resolve_field_t(u_temp_d, u_temp)
 
       blocks = dim3(nx_padded, ny_padded/SZ, 1)

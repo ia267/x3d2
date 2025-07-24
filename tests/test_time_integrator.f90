@@ -97,8 +97,8 @@ program test_omp_adamsbashforth
   ! allocate memory
   allocate (sol(1))
   allocate (deriv(1))
-  sol(1)%ptr => allocator%get_block(DIR_X)
-  deriv(1)%ptr => allocator%get_block(DIR_X)
+  call allocator%get_block(sol(1)%ptr, DIR_X)
+  call allocator%get_block(deriv(1)%ptr, DIR_X)
 
   allocate (norm(nrun))
   dims = sol(1)%ptr%get_shape()

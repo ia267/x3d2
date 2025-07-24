@@ -143,7 +143,7 @@ contains
     ptr => newblock
   end function create_block
 
-  function get_block(self, dir, data_loc) result(handle)
+  subroutine get_block(self, handle, dir, data_loc)
     !! Return a pointer to the first available memory block, i.e. the
     !! current head of the block list.  If the list is empty, allocate
     !! a new block with [[m_allocator(module):create_block(function)]]
@@ -151,10 +151,10 @@ contains
     !!
     !! Example
     !! ```
-    !! f%data => get_block()
+    !! call allocator%get_block(f_ptr, DIR_X)
     !! ```
     class(allocator_t), intent(inout) :: self
-    class(field_t), pointer :: handle
+    class(field_t), pointer, intent(out) :: handle
     integer, intent(in) :: dir
     integer, intent(in), optional :: data_loc
     integer :: dims(3)
@@ -182,7 +182,7 @@ contains
 
     ! Apply bounds remapping based on requested direction
     call handle%set_shape(dims)
-  end function get_block
+  end subroutine get_block
 
   subroutine release_block(self, handle)
     !! Release memory block pointed to by HANDLE to the block list.

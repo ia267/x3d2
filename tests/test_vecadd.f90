@@ -116,9 +116,9 @@ contains
 
     print *, dirnames(d), " Testing: a + 0 = a"
 
-    r => allocator%get_block(dirs(d))
-    r_host => host_allocator%get_block(dirs(d))
-    a_host => host_allocator%get_block(dirs(d))
+    call allocator%get_block(r, dirs(d))
+    call host_allocator%get_block(r_host, dirs(d))
+    call host_allocator%get_block(a_host, dirs(d))
 
     call backend%get_field_data(r_host%data, z, dirs(d))
     call backend%set_field_data(r, r_host%data, dirs(d))
@@ -147,9 +147,9 @@ contains
 
     print *, dirnames(d), " Testing: a + a = 2a"
 
-    r => allocator%get_block(dirs(d))
-    r_host => host_allocator%get_block(dirs(d))
-    a_host => host_allocator%get_block(dirs(d))
+    call allocator%get_block(r, dirs(d))
+    call host_allocator%get_block(r_host, dirs(d))
+    call host_allocator%get_block(a_host, dirs(d))
 
     call backend%get_field_data(a_host%data, a, dirs(d))
     r_host%data = a_host%data
@@ -178,9 +178,9 @@ contains
 
     print *, dirnames(d), " Testing: a + (-a) = 0"
 
-    r => allocator%get_block(dirs(d))
-    r_host => host_allocator%get_block(dirs(d))
-    a_host => host_allocator%get_block(dirs(d))
+    call allocator%get_block(r, dirs(d))
+    call host_allocator%get_block(r_host, dirs(d))
+    call host_allocator%get_block(a_host, dirs(d))
 
     call backend%get_field_data(a_host%data, a, dirs(d))
     r_host%data = -a_host%data
@@ -209,10 +209,10 @@ contains
 
     print *, dirnames(d), " Testing: a + b = c"
 
-    r => allocator%get_block(dirs(d))
-    r_host => host_allocator%get_block(dirs(d))
-    b_host => host_allocator%get_block(dirs(d))
-    c_host => host_allocator%get_block(dirs(d))
+    call allocator%get_block(r, dirs(d))
+    call host_allocator%get_block(r_host, dirs(d))
+    call host_allocator%get_block(b_host, dirs(d))
+    call host_allocator%get_block(c_host, dirs(d))
 
     call backend%get_field_data(b_host%data, b, dirs(d))
     r_host%data = b_host%data
@@ -255,15 +255,15 @@ contains
       call allocator%release_block(z)
     end if
 
-    a => allocator%get_block(dirs(d))
-    b => allocator%get_block(dirs(d))
-    c => allocator%get_block(dirs(d))
-    z => allocator%get_block(dirs(d))
+    call allocator%get_block(a, dirs(d))
+    call allocator%get_block(b, dirs(d))
+    call allocator%get_block(c, dirs(d))
+    call allocator%get_block(z, dirs(d))
 
-    a_host => host_allocator%get_block(dirs(d))
-    b_host => host_allocator%get_block(dirs(d))
-    c_host => host_allocator%get_block(dirs(d))
-    z_host => host_allocator%get_block(dirs(d))
+    call host_allocator%get_block(a_host, dirs(d))
+    call host_allocator%get_block(b_host, dirs(d))
+    call host_allocator%get_block(c_host, dirs(d))
+    call host_allocator%get_block(z_host, dirs(d))
 
     ! Initialise values
     call random_number(a_host%data)

@@ -128,10 +128,10 @@ program test_reorder
   allpass = (pass_X .and. pass_Y .and. pass_Z)
 
   ! Test reordering
-  u_x => allocator%get_block(DIR_X)
-  u_y => allocator%get_block(DIR_Y)
-  u_z => allocator%get_block(DIR_Z)
-  u_x_original => allocator%get_block(DIR_X)
+  call allocator%get_block(u_x, DIR_X)
+  call allocator%get_block(u_y, DIR_Y)
+  call allocator%get_block(u_z, DIR_Z)
+  call allocator%get_block(u_x_original, DIR_X)
 
   dims(:) = allocator%get_padded_dims(DIR_X)
   allocate (u_array(dims(1), dims(2), dims(3)))
