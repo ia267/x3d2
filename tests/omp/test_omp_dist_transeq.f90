@@ -87,10 +87,10 @@ program test_transeq
   allocate (d2u_recv_s(SZ, 1, n_block), d2u_recv_e(SZ, 1, n_block))
 
   ! preprocess the operator and coefficient arrays
-  der1st = tdsops_t(n, dx_per, operation='first-deriv', scheme='compact6', &
-                    bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
-  der2nd = tdsops_t(n, dx_per, operation='second-deriv', scheme='compact6', &
-                    bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
+  call der1st%init(n, dx_per, operation='first-deriv', scheme='compact6', &
+                   bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
+  call der2nd%init(n, dx_per, operation='second-deriv', scheme='compact6', &
+                   bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
 
   u_send_s(:, :, :) = u(:, 1:4, :)
   u_send_e(:, :, :) = u(:, n - n_halo + 1:n, :)

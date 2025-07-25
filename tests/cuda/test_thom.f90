@@ -5,7 +5,7 @@ program test_thom
   use m_common, only: dp, pi, BC_PERIODIC, BC_NEUMANN, BC_DIRICHLET, BC_HALO
   use m_cuda_common, only: SZ
   use m_cuda_exec_thom, only: exec_thom_tds_compact
-  use m_cuda_tdsops, only: cuda_tdsops_t, cuda_tdsops_init
+  use m_cuda_tdsops, only: cuda_tdsops_t
 
   implicit none
 
@@ -13,7 +13,7 @@ program test_thom
   real(dp), allocatable, dimension(:, :, :) :: u, du
   real(dp), device, allocatable, dimension(:, :, :) :: u_dev, du_dev
 
-  type(cuda_tdsops_t) :: tdsops
+  type(cuda_tdsops_t) :: tdsops_per, tdsops_der
 
   integer :: n, n_block, i, j, k, n_iters, ndof
   integer :: n_glob
@@ -47,16 +47,16 @@ program test_thom
   u_dev = u
 
   ! preprocess the operator and coefficient arrays
-  tdsops = cuda_tdsops_init(n, dx_per, operation='second-deriv', &
-                            scheme='compact6', &
-                            bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
+  call tdsops_per%init(n, dx_per, operation='second-deriv', &
+                   scheme='compact6', &
+                   bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
 
   blocks = dim3(n_block, 1, 1)
   threads = dim3(SZ, 1, 1)
 
   call cpu_time(tstart)
   do i = 1, n_iters
-    call exec_thom_tds_compact(du_dev, u_dev, tdsops, blocks, threads)
+    call exec_thom_tds_compact(du_dev, u_dev, tdsops_per, blocks, threads)
   end do
   call cpu_time(tend)
   print *, 'Total time', tend - tstart
@@ -91,12 +91,12 @@ program test_thom
   u_dev = u
 
   ! preprocess the operator and coefficient arrays
-  tdsops = cuda_tdsops_init(n, dx, operation='second-deriv', &
-                            scheme='compact6', &
-                            bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET)
+  call tdsops_der%init(n, dx, operation='second-deriv', &
+                   scheme='compact6', &
+                   bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET)
   call cpu_time(tstart)
   do i = 1, n_iters
-    call exec_thom_tds_compact(du_dev, u_dev, tdsops, blocks, threads)
+    call exec_thom_tds_compact(du_dev, u_dev, tdsops_der, blocks, threads)
   end do
   call cpu_time(tend)
   print *, 'Total time', tend - tstart

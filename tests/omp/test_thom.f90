@@ -3,7 +3,7 @@ program test_thom
   use omp_lib
   use m_common, only: dp, pi, BC_PERIODIC, BC_DIRICHLET
   use m_omp_common, only: SZ
-  use m_tdsops, only: tdsops_t, tdsops_init
+  use m_tdsops, only: tdsops_t
   use m_exec_thom, only: exec_thom_tds_compact
   
   implicit none
@@ -17,7 +17,7 @@ program test_thom
 
   integer :: i, j, k
 
-  type(tdsops_t) :: tdsops
+  type(tdsops_t) :: tdsops_per, tdsops_der
 
   real(dp) :: tstart, tend
 
@@ -54,13 +54,13 @@ program test_thom
     end do
   end do
 
-  tdsops = tdsops_init(n, dx_per, &
-                       operation = "second-deriv", scheme = "compact6", &
-                       bc_start = BC_PERIODIC, bc_end = BC_PERIODIC)
+  call tdsops_per%init(n, dx_per, &
+                   operation = "second-deriv", scheme = "compact6", &
+                   bc_start = BC_PERIODIC, bc_end = BC_PERIODIC)
 
   tstart = omp_get_wtime()
   do i = 1, n_iters
-    call exec_thom_tds_compact(du, u, tdsops, n_groups)
+    call exec_thom_tds_compact(du, u, tdsops_per, n_groups)
   end do
   tend = omp_get_wtime()
   print *, "Total time", tend - tstart
@@ -79,13 +79,13 @@ program test_thom
     end do
   end do
 
-  tdsops = tdsops_init(n, dx, &
-                       operation = "second-deriv", scheme = "compact6", &
-                       bc_start = BC_DIRICHLET, bc_end = BC_DIRICHLET)
+  call tdsops_der%init(n, dx, &
+                   operation = "second-deriv", scheme = "compact6", &
+                   bc_start = BC_DIRICHLET, bc_end = BC_DIRICHLET)
 
   tstart = omp_get_wtime()
   do i = 1, n_iters
-    call exec_thom_tds_compact(du, u, tdsops, n_groups)
+    call exec_thom_tds_compact(du, u, tdsops_der, n_groups)
   end do
   tend = omp_get_wtime()
   print *, "Total time", tend - tstart

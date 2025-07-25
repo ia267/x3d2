@@ -10,7 +10,7 @@ program test_omp_tridiag
   use m_omp_exec_dist, only: exec_dist_tds_compact
   use m_field, only: field_t
 
-  use m_tdsops, only: tdsops_t, tdsops_init
+  use m_tdsops, only: tdsops_t
 
   implicit none
 
@@ -30,7 +30,9 @@ program test_omp_tridiag
                                          cos_0_pi, cos_0_pi_stag, &
                                          sin_0_pi, sin_0_pi_stag
 
-  type(tdsops_t) :: tdsops
+  type(tdsops_t) :: tdsops_d2_per, tdsops_d1_per, tdsops_d1_dn, &
+                    tdsops_i_v2p, tdsops_i_p2v, tdsops_s_v2p, &
+                    tdsops_s_p2v, tdsops_d2_hyper
 
   integer :: bc_start, bc_end
 
@@ -95,15 +97,15 @@ program test_omp_tridiag
 
   ! =========================================================================
   ! second derivative with periodic BC
-  tdsops = tdsops_init(n, dx_per, operation='second-deriv', &
-                       scheme='compact6', &
-                       bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
+  call tdsops_d2_per%init(n, dx_per, operation='second-deriv', &
+                   scheme='compact6', &
+                   bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
 
   call set_u(u, sin_0_2pi_per, n, n_groups)
 
   tstart = omp_get_wtime()
 
-  call run_kernel(n_iters, n_groups, u, du, tdsops, n, &
+  call run_kernel(n_iters, n_groups, u, du, tdsops_d2_per, n, &
                   u_recv_s, u_recv_e, u_send_s, u_send_e, &
                   recv_s, recv_e, send_s, send_e, &
                   nproc, pprev, pnext &
@@ -126,12 +128,12 @@ program test_omp_tridiag
 
   ! =========================================================================
   ! first derivative with periodic BC
-  tdsops = tdsops_init(n, dx_per, operation='first-deriv', scheme='compact6', &
-                       bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
+  call tdsops_d1_per%init(n, dx_per, operation='first-deriv', scheme='compact6', &
+                   bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
 
   call set_u(u, sin_0_2pi_per, n, n_groups)
 
-  call run_kernel(n_iters, n_groups, u, du, tdsops, n, &
+  call run_kernel(n_iters, n_groups, u, du, tdsops_d1_per, n, &
                   u_recv_s, u_recv_e, u_send_s, u_send_e, &
                   recv_s, recv_e, send_s, send_e, &
                   nproc, pprev, pnext &
@@ -162,13 +164,13 @@ program test_omp_tridiag
     bc_end = BC_HALO
   end if
 
-  tdsops = tdsops_init(n, dx, operation='first-deriv', scheme='compact6', &
-                       bc_start=bc_start, bc_end=bc_end, &
-                       sym=.false.)
+  call tdsops_d1_dn%init(n, dx, operation='first-deriv', scheme='compact6', &
+                   bc_start=bc_start, bc_end=bc_end, &
+                   sym=.false.)
 
   call set_u(u, sin_0_2pi, n, n_groups)
 
-  call run_kernel(n_iters, n_groups, u, du, tdsops, n, &
+  call run_kernel(n_iters, n_groups, u, du, tdsops_d1_dn, n, &
                   u_recv_s, u_recv_e, u_send_s, u_send_e, &
                   recv_s, recv_e, send_s, send_e, &
                   nproc, pprev, pnext &
@@ -195,15 +197,15 @@ program test_omp_tridiag
   end if
   n_loc = n
   if (nrank == nproc - 1) n_loc = n - 1
-  tdsops = tdsops_init(n_loc, dx_pi, operation='interpolate', &
-                       scheme='classic', &
-                       bc_start=bc_start, bc_end=bc_end, &
-                       from_to='v2p')
+  call tdsops_i_v2p%init(n_loc, dx_pi, operation='interpolate', &
+                   scheme='classic', &
+                   bc_start=bc_start, bc_end=bc_end, &
+                   from_to='v2p')
 
   ! stag-interpolate v2p requires an even, cos-type function
   call set_u(u, cos_0_pi, n, n_groups)
 
-  call run_kernel(n_iters, n_groups, u, du, tdsops, n_loc, &
+  call run_kernel(n_iters, n_groups, u, du, tdsops_i_v2p, n_loc, &
                   u_recv_s, u_recv_e, u_send_s, u_send_e, &
                   recv_s, recv_e, send_s, send_e, &
                   nproc, pprev, pnext &
@@ -226,14 +228,14 @@ program test_omp_tridiag
   ! stag interpolate 'p2v' with neumann sym
   n_loc = n
   if (nrank == nproc - 1) n_loc = n - 1
-  tdsops = tdsops_init(n, dx_pi, operation='interpolate', scheme='classic', &
-                       bc_start=bc_start, bc_end=bc_end, &
-                       from_to='p2v')
+  call tdsops_i_p2v%init(n, dx_pi, operation='interpolate', scheme='classic', &
+                   bc_start=bc_start, bc_end=bc_end, &
+                   from_to='p2v')
 
   ! stag-interpolate p2v requires an even, cos-type function
   call set_u(u, cos_0_pi_stag, n_loc, n_groups)
 
-  call run_kernel(n_iters, n_groups, u, du, tdsops, n, &
+  call run_kernel(n_iters, n_groups, u, du, tdsops_i_p2v, n, &
                   u_recv_s, u_recv_e, u_send_s, u_send_e, &
                   recv_s, recv_e, send_s, send_e, &
                   nproc, pprev, pnext &
@@ -255,15 +257,15 @@ program test_omp_tridiag
   ! stag derivative 'v2p' with neumann anti-sym
   n_loc = n
   if (nrank == nproc - 1) n_loc = n - 1
-  tdsops = tdsops_init(n_loc, dx_pi, operation='stag-deriv', &
-                       scheme='compact6', &
-                       bc_start=bc_start, bc_end=bc_end, &
-                       from_to='v2p')
+  call tdsops_s_v2p%init(n_loc, dx_pi, operation='stag-deriv', &
+                   scheme='compact6', &
+                   bc_start=bc_start, bc_end=bc_end, &
+                   from_to='v2p')
 
   ! stag-derivative v2p requires an odd, sin-type function
   call set_u(u, sin_0_pi, n, n_groups)
 
-  call run_kernel(n_iters, n_groups, u, du, tdsops, n_loc, &
+  call run_kernel(n_iters, n_groups, u, du, tdsops_s_v2p, n_loc, &
                   u_recv_s, u_recv_e, u_send_s, u_send_e, &
                   recv_s, recv_e, send_s, send_e, &
                   nproc, pprev, pnext &
@@ -286,14 +288,14 @@ program test_omp_tridiag
   ! stag derivative 'p2v' with neumann sym
   n_loc = n
   if (nrank == nproc - 1) n_loc = n - 1
-  tdsops = tdsops_init(n, dx_pi, operation='stag-deriv', scheme='compact6', &
-                       bc_start=bc_start, bc_end=bc_end, &
-                       from_to='p2v')
+  call tdsops_s_p2v%init(n, dx_pi, operation='stag-deriv', scheme='compact6', &
+                   bc_start=bc_start, bc_end=bc_end, &
+                   from_to='p2v')
 
   ! stag-derivative p2v requires an even, cos-type function
   call set_u(u, cos_0_pi_stag, n_loc, n_groups)
 
-  call run_kernel(n_iters, n_groups, u, du, tdsops, n, &
+  call run_kernel(n_iters, n_groups, u, du, tdsops_s_p2v, n, &
                   u_recv_s, u_recv_e, u_send_s, u_send_e, &
                   recv_s, recv_e, send_s, send_e, &
                   nproc, pprev, pnext &
@@ -314,14 +316,14 @@ program test_omp_tridiag
   ! =========================================================================
   ! second derivative and hyperviscousity on with dirichlet and neumann
   ! c_nu = 0.22 and nu0_nu = 63 results in alpha = 0.40869111947709036
-  tdsops = tdsops_init(n, dx, operation='second-deriv', &
-                       scheme='compact6-hyperviscous', &
-                       bc_start=bc_start, bc_end=bc_end, &
-                       sym=.false., c_nu=0.22_dp, nu0_nu=63._dp)
+  call tdsops_d2_hyper%init(n, dx, operation='second-deriv', &
+                   scheme='compact6-hyperviscous', &
+                   bc_start=bc_start, bc_end=bc_end, &
+                   sym=.false., c_nu=0.22_dp, nu0_nu=63._dp)
 
   call set_u(u, sin_0_2pi, n, n_groups)
 
-  call run_kernel(n_iters, n_groups, u, du, tdsops, n, &
+  call run_kernel(n_iters, n_groups, u, du, tdsops_d2_hyper, n, &
                   u_recv_s, u_recv_e, u_send_s, u_send_e, &
                   recv_s, recv_e, send_s, send_e, &
                   nproc, pprev, pnext &

@@ -131,9 +131,9 @@ contains
 
     select type (tdsops)
     type is (tdsops_t)
-      tdsops = tdsops_t(n_tds, delta, operation, scheme, bc_start, bc_end, &
-                        stretch, stretch_correct, n_halo, from_to, sym, &
-                        c_nu, nu0_nu)
+      call tdsops%init(n_tds, delta, operation, scheme, bc_start, bc_end, &
+                      stretch, stretch_correct, n_halo, from_to, sym, &
+                      c_nu, nu0_nu)
     end select
 
   end subroutine alloc_omp_tdsops

@@ -158,9 +158,9 @@ contains
 
     select type (tdsops)
     type is (cuda_tdsops_t)
-      tdsops = cuda_tdsops_t(n_tds, delta, operation, scheme, bc_start, &
-                             bc_end, stretch, stretch_correct, n_halo, &
-                             from_to, sym, c_nu, nu0_nu)
+      call tdsops%init(n_tds, delta, operation, scheme, bc_start, &
+                       bc_end, stretch, stretch_correct, n_halo, &
+                       from_to, sym, c_nu, nu0_nu)
     end select
 
   end subroutine alloc_cuda_tdsops
@@ -477,6 +477,19 @@ contains
     type(cuda_tdsops_t), pointer :: tdsops_dev
 
     integer :: n_groups, dir
+
+    print *, '============================================================'
+    print *, '>>>> ENTERING TDS_SOLVE_DIST <<<<'
+    print *, '============================================================'
+    select type (tdsops)
+    type is (cuda_tdsops_t)
+        print *, '--> Type of tdsops is: cuda_tdsops_t. This is CORRECT.'
+    type is (tdsops_t)
+        print *, '--> Type of tdsops is: base tdsops_t. THIS IS THE BUG.'
+    class default
+        print *, '--> Type of tdsops is: UNKNOWN. This is a major problem.'
+    end select
+    print *, '============================================================'
 
     dir = u%dir
     n_groups = self%allocator%get_n_groups(u%dir)

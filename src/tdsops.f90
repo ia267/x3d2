@@ -37,13 +37,10 @@ module m_tdsops
     integer :: move = 0 !! move between vertices and cell centres
     integer :: n_halo !! number of halo points
   contains
+    procedure :: init => tdsops_init
     procedure :: deriv_1st, deriv_2nd, interpl_mid, stagder_1st
     procedure :: preprocess_dist, preprocess_thom
   end type tdsops_t
-
-  interface tdsops_t
-    module procedure tdsops_init
-  end interface tdsops_t
 
   type :: dirps_t
     !! Directional tridiagonal solver container.
@@ -57,10 +54,10 @@ module m_tdsops
 
 contains
 
-  function tdsops_init( &
-    n_tds, delta, operation, scheme, bc_start, bc_end, &
+  subroutine tdsops_init( &
+    self, n_tds, delta, operation, scheme, bc_start, bc_end, &
     stretch, stretch_correct, n_halo, from_to, sym, c_nu, nu0_nu &
-    ) result(tdsops)
+    )
     !! Constructor function for the tdsops_t class.
     !!
     !! 'n_tds', 'delta', 'operation', 'scheme', 'bc_start', and 'bc_end' are
@@ -83,8 +80,7 @@ contains
     !! derivative and scheme is compact6-hyperviscous.
     implicit none
 
-    type(tdsops_t) :: tdsops !! return value of the function
-
+    class(tdsops_t), intent(inout) :: self
     integer, intent(in) :: n_tds !! Tridiagonal system size
     real(dp), intent(in) :: delta !! Grid spacing
     character(*), intent(in) :: operation, scheme
@@ -98,7 +94,7 @@ contains
 
     integer :: n, n_stencil
 
-    tdsops%n_tds = n_tds
+    self%n_tds = n_tds
 
     ! we need special treatment in the right-hand-side build stage for
     ! the very last point in the domain if output length is smaller than
@@ -106,16 +102,16 @@ contains
     if (present(from_to)) then
       if ((bc_end == BC_NEUMANN .or. bc_end == BC_DIRICHLET) &
           .and. from_to == 'v2p') then
-        tdsops%n_rhs = n_tds + 1
+        self%n_rhs = n_tds + 1
       else
-        tdsops%n_rhs = n_tds
+        self%n_rhs = n_tds
       end if
     else
-      tdsops%n_rhs = n_tds
+      self%n_rhs = n_tds
     end if
 
     if (present(n_halo)) then
-      tdsops%n_halo = n_halo
+      self%n_halo = n_halo
       if (n_halo /= 4) then
         write (stderr, '("Warning: n_halo is set to ", i2, "be careful! &
                           &The default is 4 and there are quite a few &
@@ -123,73 +119,73 @@ contains
                           &n_halo is 4.")') n_halo
       end if
     else
-      tdsops%n_halo = 4
+      self%n_halo = 4
     end if
 
     ! n_rhs >= n_tds, n is used when its better to allocate a larger size
-    n = tdsops%n_rhs
+    n = self%n_rhs
 
     ! preprocessed coefficient arrays for the distributed algorithm
-    allocate (tdsops%dist_fw(n), tdsops%dist_bw(n))
-    allocate (tdsops%dist_sa(n), tdsops%dist_sc(n))
-    allocate (tdsops%dist_af(n))
+    allocate (self%dist_fw(n), self%dist_bw(n))
+    allocate (self%dist_sa(n), self%dist_sc(n))
+    allocate (self%dist_af(n))
 
     ! preprocessed coefficient arrays for the Thomas algorithm
-    allocate (tdsops%thom_f(n), tdsops%thom_s(n))
-    allocate (tdsops%thom_w(n), tdsops%thom_p(n))
+    allocate (self%thom_f(n), self%thom_s(n))
+    allocate (self%thom_w(n), self%thom_p(n))
 
     ! RHS coefficient arrays
-    n_stencil = 2*tdsops%n_halo + 1
-    allocate (tdsops%coeffs(n_stencil))
-    allocate (tdsops%coeffs_s(n_stencil, tdsops%n_halo))
-    allocate (tdsops%coeffs_e(n_stencil, tdsops%n_halo))
+    n_stencil = 2*self%n_halo + 1
+    allocate (self%coeffs(n_stencil))
+    allocate (self%coeffs_s(n_stencil, self%n_halo))
+    allocate (self%coeffs_e(n_stencil, self%n_halo))
 
-    allocate (tdsops%stretch(n_tds))
+    allocate (self%stretch(n_tds))
     if (present(stretch)) then
-      tdsops%stretch(:) = stretch(:)
+      self%stretch(:) = stretch(:)
     else
-      tdsops%stretch(:) = 1._dp
+      self%stretch(:) = 1._dp
     end if
 
-    allocate (tdsops%stretch_correct(n_tds))
+    allocate (self%stretch_correct(n_tds))
     if (present(stretch_correct)) then
-      tdsops%stretch_correct(:) = stretch_correct(:)
+      self%stretch_correct(:) = stretch_correct(:)
     else
-      tdsops%stretch_correct(:) = 0._dp
+      self%stretch_correct(:) = 0._dp
     end if
 
-    tdsops%periodic = bc_start == BC_PERIODIC .and. bc_end == BC_PERIODIC
+    self%periodic = bc_start == BC_PERIODIC .and. bc_end == BC_PERIODIC
 
     if (operation == 'first-deriv') then
-      call tdsops%deriv_1st(delta, scheme, bc_start, bc_end, sym)
+      call self%deriv_1st(delta, scheme, bc_start, bc_end, sym)
     else if (operation == 'second-deriv') then
-      call tdsops%deriv_2nd(delta, scheme, bc_start, bc_end, sym, &
+      call self%deriv_2nd(delta, scheme, bc_start, bc_end, sym, &
                             c_nu, nu0_nu)
     else if (operation == 'interpolate') then
-      call tdsops%interpl_mid(scheme, from_to, bc_start, bc_end, sym)
+      call self%interpl_mid(scheme, from_to, bc_start, bc_end, sym)
     else if (operation == 'stag-deriv') then
-      call tdsops%stagder_1st(delta, scheme, from_to, bc_start, bc_end, sym)
+      call self%stagder_1st(delta, scheme, from_to, bc_start, bc_end, sym)
     else
       error stop 'operation is not defined'
     end if
 
     select case (from_to)
     case ('v2p')
-      tdsops%move = 1
+      self%move = 1
     case ('p2v')
-      tdsops%move = -1
+      self%move = -1
     case default
-      tdsops%move = 0
+      self%move = 0
     end select
 
-    if (tdsops%dist_sa(n_tds) > 1d-16) then
+    if (self%dist_sa(n_tds) > 1d-16) then
       print *, 'There are ', n_tds, 'points in a subdomain, it may be too few!'
       print *, 'The entry distributed solver disregards in "' &
-        //operation//'" operation is:', tdsops%dist_sa(n_tds)
+        //operation//'" operation is:', self%dist_sa(n_tds)
       print *, 'It may result in numerical errors with the distributed solver!'
     end if
 
-  end function tdsops_init
+  end subroutine tdsops_init
 
   subroutine deriv_1st(self, delta, scheme, bc_start, bc_end, sym)
     implicit none
