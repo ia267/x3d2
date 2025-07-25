@@ -55,7 +55,7 @@ contains
     damping_layer_size = 50
 
     dims = self%solver%mesh%get_dims(VERT)
-    call self%solver%host_allocator%get_block(ramp, DIR_C, VERT)
+    call self%solver%host_allocator%get_block(ramp, DIR_C)
 
     do j = 1, dims(2) - damping_layer_size
       ramp%data(:, j, :) = 1.0_dp
@@ -66,7 +66,7 @@ contains
       ramp%data(:, j, :) = cos(pi*l/(damping_layer_size*2.0_dp))
     end do
 
-    call self%solver%backend%allocator%get_block(ramp_dev, DIR_X, VERT)
+    call self%solver%backend%allocator%get_block(ramp_dev, DIR_X)
     call self%solver%backend%set_field_data(ramp_dev, ramp%data)
 
     call self%solver%host_allocator%release_block(ramp)
@@ -81,6 +81,7 @@ contains
     call self%solver%backend%field_scale(ramp_dev, -1.0_dp)
     call self%solver%backend%field_shift(ramp_dev, 1.0_dp)
     call self%solver%backend%field_scale(ramp_dev, 14.5_dp)
+
     call self%solver%backend%vecadd(1.0_dp, ramp_dev, 1.0_dp, self%solver%v)
 
     call self%solver%backend%allocator%release_block(ramp_dev)
@@ -92,9 +93,23 @@ contains
 
     class(case_foil_t) :: self
 
-    call self%solver%u%fill(0.0_dp)
-    call self%solver%v%fill(14.5_dp)
-    call self%solver%w%fill(0._dp)
+    class(field_t), pointer :: u_init, v_init, w_init
+
+    call self%solver%host_allocator%get_block(u_init, DIR_C)
+    call self%solver%host_allocator%get_block(v_init, DIR_C)
+    call self%solver%host_allocator%get_block(w_init, DIR_C)
+
+    u_init%data(:, :, :) = 0.0_dp
+    v_init%data(:, :, :) = 14.5_dp
+    w_init%data(:, :, :) = 0.0_dp
+
+    call self%solver%backend%set_field_data(self%solver%u, u_init%data)
+    call self%solver%backend%set_field_data(self%solver%v, v_init%data)
+    call self%solver%backend%set_field_data(self%solver%w, w_init%data)
+
+    call self%solver%host_allocator%release_block(u_init)
+    call self%solver%host_allocator%release_block(v_init)
+    call self%solver%host_allocator%release_block(w_init)
 
     call self%solver%u%set_data_loc(VERT)
     call self%solver%v%set_data_loc(VERT)
