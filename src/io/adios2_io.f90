@@ -661,11 +661,12 @@ contains
     integer :: ierr
 
     call adios2_inquire_variable(var, self%io, name, ierr)
-    call self%handle_error(ierr, "Failed to inquire variable"//name)
 
     if (ierr == adios2_found) then
       call adios2_get(file%engine, var, data, adios2_mode_sync, ierr)
       call self%handle_error(ierr, "Failed to read variable"//name)
+    else
+      call self%handle_error(1, "Variable "//trim(name)//" not found in file")
     end if
   end subroutine read_scalar_integer
 
@@ -680,11 +681,12 @@ contains
     integer :: ierr
 
     call adios2_inquire_variable(var, self%io, name, ierr)
-    call self%handle_error(ierr, "Failed to inquire variable"//name)
 
     if (ierr == adios2_found) then
       call adios2_get(file%engine, var, data, adios2_mode_sync, ierr)
       call self%handle_error(ierr, "Failed to read variable"//name)
+    else
+      call self%handle_error(1, "Variable "//trim(name)//" not found in file")
     end if
   end subroutine read_scalar_i8
 
@@ -700,11 +702,12 @@ contains
 
     ! retrieve a variable hanlder within current io handler
     call adios2_inquire_variable(var, self%io, name, ierr)
-    call self%handle_error(ierr, "Failed to inquire variable"//name)
 
     if (ierr == adios2_found) then
       call adios2_get(file%engine, var, data, adios2_mode_sync, ierr)
       call self%handle_error(ierr, "Failed to read variable"//name)
+    else
+      call self%handle_error(1, "Variable "//trim(name)//" not found in file")
     end if
   end subroutine read_scalar_real
 
@@ -720,7 +723,6 @@ contains
     integer :: ierr
 
     call adios2_inquire_variable(var, self%io, name, ierr)
-    call self%handle_error(ierr, "Failed to inquire variable"//name)
 
     if (ierr == adios2_found) then
       if (.not. allocated(data)) allocate (data(count_dims(1), count_dims(2)))
@@ -731,6 +733,8 @@ contains
 
       call adios2_get(file%engine, var, data, adios2_mode_sync, ierr)
       call self%handle_error(ierr, "Failed to read variable"//name)
+    else
+      call self%handle_error(1, "Variable "//trim(name)//" not found in file")
     end if
   end subroutine read_array_2d_real
 
@@ -738,7 +742,7 @@ contains
   subroutine read_array_3d_real(self, name, data, file, start_dims, count_dims)
     class(adios2_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: name
-    real(dp), dimension(:, :, :), allocatable, intent(out) :: data
+    real(dp), dimension(:, :, :), allocatable, intent(inout) :: data
     type(adios2_file_t), intent(inout) :: file
     integer(i8), dimension(3), intent(in) :: start_dims, count_dims
 
@@ -746,19 +750,17 @@ contains
     integer :: ierr
 
     call adios2_inquire_variable(var, self%io, name, ierr)
-    call self%handle_error(ierr, "Failed to inquire variable"//name)
 
-    if (ierr == adios2_found) then
       if (.not. allocated(data)) &
         allocate (data(count_dims(1), count_dims(2), count_dims(3)))
 
       call adios2_set_selection(var, 3, start_dims, count_dims, ierr)
       call self%handle_error(ierr, &
-                             "Failed to set selection for variable"//name)
+                             "Failed to set selection for variable " &
+                             //trim(name))
 
       call adios2_get(file%engine, var, data, adios2_mode_sync, ierr)
-      call self%handle_error(ierr, "Failed to read variable"//name)
-    end if
+      call self%handle_error(ierr, "Failed to read variable "//trim(name))
   end subroutine read_array_3d_real
 
 end module m_adios2_io
