@@ -509,13 +509,20 @@ contains
                                              count_dims
     logical, intent(in), optional :: convert_to_sp
     type(adios2_variable) :: var
-    integer :: ierr, vartype
+    integer :: ierr, vartype, put_mode
     logical :: use_sp
     real(sp), dimension(:, :, :), allocatable :: data_sp
+    integer(i8), parameter :: large_array_size = 1000000_i8
 
     use_sp = .false.
     if (present(convert_to_sp)) use_sp = convert_to_sp
     vartype = get_vartype(use_sp)
+
+    if (product(count_dims) > large_array_size) then
+      put_mode = adios2_mode_sync
+    else
+      put_mode = adios2_mode_deferred
+    end if
 
     if (use_sp) then
       allocate (data_sp(size(data, 1), size(data, 2), size(data, 3)))
@@ -544,7 +551,7 @@ contains
                                      &real variable")
       end if
 
-      call adios2_put(file%engine, var, data, adios2_mode_deferred, ierr)
+      call adios2_put(file%engine, var, data, put_mode, ierr)
       call self%handle_error(ierr, "Error writing ADIOS2 3D array &
                                    &real data")
     end if
