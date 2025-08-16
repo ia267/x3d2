@@ -518,11 +518,11 @@ contains
     if (present(convert_to_sp)) use_sp = convert_to_sp
     vartype = get_vartype(use_sp)
 
-    if (product(count_dims) > large_array_size) then
+    !if (product(count_dims) > large_array_size) then
       put_mode = adios2_mode_sync
-    else
-      put_mode = adios2_mode_deferred
-    end if
+    !else
+    !  put_mode = adios2_mode_deferred
+    !end if
 
     if (use_sp) then
       allocate (data_sp(size(data, 1), size(data, 2), size(data, 3)))
