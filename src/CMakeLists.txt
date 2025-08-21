@@ -53,10 +53,17 @@ set(DUMMYDECOMPSRC
   decomp/decomp_dummy.f90
 )
 set(ADIOS2SRC
-  io/adios2_io.f90
+  io/io_interface.f90
+  io/io_backend_dummy.f90
+  io/io_factory.f90
+  io/io_backend_adios2.f90
+  io/adios2_wrapper.f90
   io/checkpoint_io.f90
 )
 set(DUMMYADIOS2SRC
+  io/io_interface.f90
+  io/io_backend_dummy.f90
+  io/io_factory.f90
   io/checkpoint_dummy.f90
 )
 
@@ -142,4 +149,7 @@ target_link_libraries(xcompact PRIVATE MPI::MPI_Fortran)
 if(WITH_ADIOS2)
   target_link_libraries(x3d2 PRIVATE adios2::fortran_mpi)
   target_link_libraries(xcompact PRIVATE adios2::fortran_mpi)
+  target_compile_definitions(x3d2 PRIVATE WITH_ADIOS2)
+  target_compile_definitions(x3d2_backends PRIVATE WITH_ADIOS2)
+  target_compile_definitions(xcompact PRIVATE WITH_ADIOS2)
 endif()

@@ -1,4 +1,5 @@
-module m_adios2_io
+module m_adios2_wrapper
+!! Low-level ADIOS2 wrapper module
 !! This module contains ADIOS2 (ADaptable Input Output System version 2)
 !! operations for reading and writing data. ADIOS2 transports data as
 !! groups of self-describing variables and attributes across different
@@ -627,4 +628,4 @@ contains
     end if
   end subroutine read_array_3d_real
 
-end module m_adios2_io
+end module m_adios2_wrapper

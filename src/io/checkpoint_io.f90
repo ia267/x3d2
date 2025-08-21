@@ -52,7 +52,7 @@ module m_checkpoint_manager_impl
   use m_common, only: dp, i8, DIR_C, VERT, get_argument
   use m_field, only: field_t
   use m_solver, only: solver_t
-  use m_adios2_io, only: adios2_writer_t, adios2_reader_t, adios2_file_t, &
+  use m_adios2_wrapper, only: adios2_writer_t, adios2_reader_t, adios2_file_t, &
                          adios2_mode_write, adios2_mode_read
   use m_config, only: checkpoint_config_t
   use m_checkpoint_manager_base, only: checkpoint_manager_base_t

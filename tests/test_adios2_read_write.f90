@@ -1,6 +1,6 @@
 program test_adios2
   use mpi
-  use m_adios2_io, only: adios2_writer_t, adios2_reader_t, &
+  use m_adios2_wrapper, only: adios2_writer_t, adios2_reader_t, &
                          adios2_mode_write, adios2_mode_read, &
                          adios2_file_t
   use m_common, only: dp

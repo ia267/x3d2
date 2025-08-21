@@ -10,7 +10,8 @@ module m_ibm
   use iso_fortran_env, only: stderr => error_unit
   use mpi
 
-  use m_adios2_io, only: adios2_reader_t, adios2_file_t, adios2_mode_read
+  use m_io_interface, only: io_backend_t, io_file_t, io_mode_read
+  use m_io_factory, only: create_io_backend
   use m_allocator, only: allocator_t, field_t
   use m_base_backend, only: base_backend_t
   use m_common, only: dp, i8, pi, DIR_X, DIR_C, VERT
@@ -30,6 +31,7 @@ module m_ibm
     type(allocator_t), pointer :: host_allocator => null()
     integer :: iibm = 0
     type(field_t), pointer :: ep1 => null()
+    class(io_backend_t), allocatable :: io_backend
   contains
     procedure :: body
   end type ibm_t
@@ -41,7 +43,7 @@ module m_ibm
 contains
 
   function init(backend, mesh, host_allocator) result(ibm)
-    !! Initialize the basic IBM
+    !! Initialize the basic IBM with I/O abstraction
     implicit none
 
     class(base_backend_t), target, intent(inout) :: backend
@@ -53,27 +55,30 @@ contains
     integer :: dims(3)
     real(dp), allocatable :: field_data(:, :, :)
     class(field_t), pointer :: ep1
-    type(adios2_reader_t) :: reader
-    type(adios2_file_t) :: file
+    class(io_file_t), allocatable :: file
     integer(i8) :: start_dims(3), count_dims(3), iibm_i8
 
     ibm%backend => backend
     ibm%mesh => mesh
     ibm%host_allocator => host_allocator
 
-    ! Open the IBM ADIOS2 object
-    call reader%init(MPI_COMM_WORLD, "IBM_reader")
-    file = reader%open("ibm.bp", adios2_mode_read, MPI_COMM_WORLD)
-    call reader%begin_step(file)
+    ! Create appropriate I/O backend (ADIOS2 or dummy based on build config)
+    ibm%io_backend = create_io_backend()
 
-    ! Read the iibm parameter
-    call reader%read_data("iibm", iibm_i8, file)
+    ! Initialize I/O backend
+    call ibm%io_backend%init(MPI_COMM_WORLD, "IBM_reader")
+    
+    file = ibm%io_backend%open("ibm.bp", io_mode_read, MPI_COMM_WORLD)
+    call ibm%io_backend%begin_step(file)
+
+    ! Read the iibm parameter (will return 0 for dummy backend)
+    call ibm%io_backend%read_scalar_i8("iibm", iibm_i8, file)
     ibm%iibm = int(iibm_i8, kind=4)
 
     ! Basic IBM only needs ep1 on the vertices
     if (ibm%iibm == iibm_basic) then
 
-      ! Read the vertex mask ep1 and close
+      ! Read the vertex mask ep1
       !
       ! The mask was written in python in C order
       ! start_dims and count_dims are thus reversed
@@ -81,8 +86,7 @@ contains
       dims = mesh%get_dims(VERT)
       start_dims = int(ibm%mesh%par%n_offset(3:1:-1), i8)
       count_dims = int(dims(3:1:-1), i8)
-      call reader%read_data("ep1", field_data, file, start_dims, count_dims)
-      call reader%close(file)
+      call ibm%io_backend%read_array_3d_real("ep1", field_data, file, start_dims, count_dims)
 
       ! Get and fill a block on the host
       ! The order of the data is corrected in the loop below
@@ -103,11 +107,9 @@ contains
       call ibm%host_allocator%release_block(ep1)
       deallocate (field_data)
 
-    else
-
-      call reader%close(file)
-
     end if
+
+    call ibm%io_backend%close(file)
 
   end function init
 
