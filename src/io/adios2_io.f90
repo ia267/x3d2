@@ -21,6 +21,7 @@ module m_adios2_io
                     adios2_define_attribute, &
                     adios2_set_selection, adios2_put, &
                     adios2_get, adios2_remove_all_variables, &
+                    adios2_remove_variable, &
                     adios2_found, adios2_constant_dims, &
                     adios2_type_dp, adios2_type_integer4, adios2_type_real
   use mpi, only: MPI_COMM_NULL, MPI_Initialized, MPI_Comm_rank
@@ -534,6 +535,14 @@ contains
                                     count_dims, adios2_constant_dims, ierr)
         call self%handle_error(ierr, "Error defining ADIOS2 3D array &
                                      &single precision real variable")
+      else
+        ! Variable exists - remove all variables and redefine to avoid conflicts
+        call adios2_remove_all_variables(self%io, ierr)
+        call adios2_define_variable(var, self%io, name, vartype, &
+                                    3, shape_dims, start_dims, &
+                                    count_dims, adios2_constant_dims, ierr)
+        call self%handle_error(ierr, "Error redefining ADIOS2 3D array &
+                                     &single precision real variable")
       end if
 
       call adios2_put(file%engine, var, data_sp, adios2_mode_sync, ierr)
@@ -547,6 +556,14 @@ contains
                                     3, shape_dims, start_dims, &
                                     count_dims, adios2_constant_dims, ierr)
         call self%handle_error(ierr, "Error defining ADIOS2 3D array &
+                                     &real variable")
+      else
+        ! Variable exists - remove all variables and redefine to avoid conflicts
+        call adios2_remove_all_variables(self%io, ierr)
+        call adios2_define_variable(var, self%io, name, vartype, &
+                                    3, shape_dims, start_dims, &
+                                    count_dims, adios2_constant_dims, ierr)
+        call self%handle_error(ierr, "Error redefining ADIOS2 3D array &
                                      &real variable")
       end if
 
