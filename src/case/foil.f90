@@ -93,7 +93,6 @@ contains
 
     class(case_foil_t) :: self
 
-    class(field_t), pointer :: u_init, v_init, w_init
     call self%solver%u%fill(0.0_dp)
     call self%solver%v%fill(14.5_dp)
     call self%solver%w%fill(0._dp)
