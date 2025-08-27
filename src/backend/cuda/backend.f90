@@ -224,8 +224,11 @@ contains
     logical, intent(in) :: sync
 
     integer :: n_groups
-    type(cuda_tdsops_t), pointer :: der1st, der1st_sym, der2nd, der2nd_sym
-    real(dp), device, pointer, dimension(:, :, :) :: u_dev, spec_dev, dspec_dev
+    type(cuda_tdsops_t), pointer :: der1st => null(), der1st_sym => null(), &
+                                    der2nd => null(), der2nd_sym => null()
+    real(dp), device, pointer, dimension(:, :, :) :: u_dev => null(), &
+                                                     spec_dev => null(), &
+                                                     dspec_dev => null()
 
     call resolve_field_t(u_dev, uvw)
     call resolve_field_t(spec_dev, spec)
@@ -291,10 +294,15 @@ contains
     type(dirps_t), intent(in) :: dirps
     type(dim3), intent(in) :: blocks, threads
 
-    real(dp), device, pointer, dimension(:, :, :) :: u_dev, v_dev, w_dev, &
-                                                     du_dev, dv_dev, dw_dev
+    real(dp), device, pointer, dimension(:, :, :) :: u_dev => null(), &
+                                                     v_dev => null(), &
+                                                     w_dev => null(), &
+                                                     du_dev => null(), &
+                                                     dv_dev => null(), &
+                                                     dw_dev => null()
 
-    type(cuda_tdsops_t), pointer :: der1st, der1st_sym, der2nd, der2nd_sym
+    type(cuda_tdsops_t), pointer :: der1st => null(), der1st_sym => null(), &
+                                    der2nd => null(), der2nd_sym => null()
 
     call resolve_field_t(u_dev, u)
     call resolve_field_t(v_dev, v)
@@ -391,9 +399,10 @@ contains
     integer, intent(in) :: dir
     type(dim3), intent(in) :: blocks, threads
 
-    class(field_t), pointer :: dud, d2u
+    class(field_t), pointer :: dud => null(), d2u => null()
 
-    real(dp), device, pointer, dimension(:, :, :) :: dud_dev, d2u_dev
+    real(dp), device, pointer, dimension(:, :, :) :: dud_dev => null(), &
+                                                     d2u_dev => null()
 
     ! Get some fields for storing the intermediate results
     dud => self%allocator%get_block(dir)
@@ -472,11 +481,12 @@ contains
     class(tdsops_t), intent(in) :: tdsops
     type(dim3), intent(in) :: blocks, threads
 
-    real(dp), device, pointer, dimension(:, :, :) :: du_dev, u_dev
+    real(dp), device, pointer, dimension(:, :, :) :: du_dev => null(), &
+                                                     u_dev => null()
 
-    type(cuda_tdsops_t), pointer :: tdsops_dev
+    type(cuda_tdsops_t), pointer :: tdsops_dev => null()
 
-    integer :: n_groups, dir
+    integer :: n_groups, dir, ierr
 
     dir = u%dir
     n_groups = self%allocator%get_n_groups(u%dir)
@@ -487,6 +497,13 @@ contains
     select type (tdsops)
     type is (cuda_tdsops_t); tdsops_dev => tdsops
     end select
+
+    ! --- NEW DEBUG CHECK ---
+    if (.not. associated(tdsops_dev)) then
+        print *, "FATAL ERROR: tdsops_dev is NULL before calling exec_dist_tds_compact."
+        call MPI_ABORT(MPI_COMM_WORLD, 512, ierr)
+    end if
+    ! --- END DEBUG CHECK ---
 
     call copy_into_buffers(self%u_send_s_dev, self%u_send_e_dev, u_dev, &
                            tdsops_dev%n_tds)
@@ -519,8 +536,10 @@ contains
     class(field_t), intent(in) :: u_i
     integer, intent(in) :: direction
 
-    real(dp), device, pointer, dimension(:, :, :) :: u_o_d, u_i_d, u_temp_d
-    class(field_t), pointer :: u_temp
+    real(dp), device, pointer, dimension(:, :, :) :: u_o_d => null(), &
+                                                     u_i_d => null(), &
+                                                     u_temp_d => null()
+    class(field_t), pointer :: u_temp => null()
     type(dim3) :: blocks, threads
     integer :: nx_padded, ny_padded, nz_padded
     integer, dimension(3) :: dims_padded
@@ -638,7 +657,8 @@ contains
     class(field_t), intent(inout) :: u
     class(field_t), intent(in) :: u_y
 
-    real(dp), device, pointer, dimension(:, :, :) :: u_d, u_y_d
+    real(dp), device, pointer, dimension(:, :, :) :: u_d => null(), &
+                                                     u_y_d => null()
     type(dim3) :: blocks, threads
     integer, dimension(3) :: dims_padded
 
@@ -660,7 +680,8 @@ contains
     class(field_t), intent(inout) :: u
     class(field_t), intent(in) :: u_z
 
-    real(dp), device, pointer, dimension(:, :, :) :: u_d, u_z_d
+    real(dp), device, pointer, dimension(:, :, :) :: u_d => null(), &
+                                                     u_z_d => null()
     type(dim3) :: blocks, threads
     integer, dimension(3) :: dims_padded
 
@@ -682,7 +703,8 @@ contains
     class(field_t), intent(inout) :: dst
     class(field_t), intent(in) :: src
 
-    real(dp), device, pointer, dimension(:, :, :) :: dst_d, src_d
+    real(dp), device, pointer, dimension(:, :, :) :: dst_d => null(), &
+                                                     src_d => null()
     type(dim3) :: blocks, threads
     integer :: n
 
@@ -705,7 +727,8 @@ contains
     real(dp), intent(in) :: b
     class(field_t), intent(inout) :: y
 
-    real(dp), device, pointer, dimension(:, :, :) :: x_d, y_d
+    real(dp), device, pointer, dimension(:, :, :) :: x_d => null(), &
+                                                     y_d => null()
     type(dim3) :: blocks, threads
     integer :: nx
 
@@ -726,7 +749,8 @@ contains
     class(cuda_backend_t) :: self
     class(field_t), intent(inout) :: y
     class(field_t), intent(in) :: x
-    real(dp), device, pointer, dimension(:, :, :) :: x_d, y_d
+    real(dp), device, pointer, dimension(:, :, :) :: x_d => null(), &
+                                                     y_d => null()
     type(dim3) :: blocks, threads
     integer :: n
 
@@ -747,7 +771,8 @@ contains
     class(cuda_backend_t) :: self
     class(field_t), intent(in) :: x, y
 
-    real(dp), device, pointer, dimension(:, :, :) :: x_d, y_d
+    real(dp), device, pointer, dimension(:, :, :) :: x_d => null(), &
+                                                     y_d => null()
     real(dp), device, allocatable :: sum_d
     integer :: dims(3), dims_padded(3), n, n_i, n_i_pad, n_j, ierr
     type(dim3) :: blocks, threads
@@ -817,7 +842,7 @@ contains
     class(field_t), intent(in) :: f
     integer, optional, intent(in) :: enforced_data_loc
 
-    real(dp), device, pointer, dimension(:, :, :) :: f_d
+    real(dp), device, pointer, dimension(:, :, :) :: f_d => null()
     real(dp), device, allocatable :: max_d, sum_d
     integer :: data_loc, dims(3), dims_padded(3), n, n_i, n_i_pad, n_j, ierr
     type(dim3) :: blocks, threads
@@ -877,7 +902,7 @@ contains
     class(field_t), intent(in) :: f
     real(dp), intent(in) :: a
 
-    real(dp), device, pointer, dimension(:, :, :) :: f_d
+    real(dp), device, pointer, dimension(:, :, :) :: f_d => null()
     type(dim3) :: blocks, threads
     integer :: n
 
@@ -897,7 +922,7 @@ contains
     class(field_t), intent(in) :: f
     real(dp), intent(in) :: a
 
-    real(dp), device, pointer, dimension(:, :, :) :: f_d
+    real(dp), device, pointer, dimension(:, :, :) :: f_d => null()
     type(dim3) :: blocks, threads
     integer :: n
 
@@ -919,7 +944,7 @@ contains
     real(dp), intent(in) :: c_start, c_end
     integer, intent(in) :: face
 
-    real(dp), device, pointer, dimension(:, :, :) :: f_d
+    real(dp), device, pointer, dimension(:, :, :) :: f_d => null()
     type(dim3) :: blocks, threads
     integer :: dims(3), nx, ny, nz
 
@@ -958,7 +983,7 @@ contains
     class(cuda_backend_t) :: self
     class(field_t), intent(in) :: f
 
-    real(dp), device, pointer, dimension(:, :, :) :: f_d
+    real(dp), device, pointer, dimension(:, :, :) :: f_d => null()
     real(dp), device, allocatable :: integral_d
     integer :: dims(3), dims_padded(3), ierr
     type(dim3) :: blocks, threads
@@ -1026,6 +1051,8 @@ contains
   subroutine resolve_field_t(u_dev, u)
     real(dp), device, pointer, dimension(:, :, :), intent(out) :: u_dev
     class(field_t), intent(in) :: u
+
+    u_dev => null()
 
     select type (u)
     type is (cuda_field_t)

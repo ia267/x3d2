@@ -16,8 +16,8 @@ module m_cuda_allocator
   end interface cuda_allocator_t
 
   type, extends(field_t) :: cuda_field_t
-    real(dp), device, pointer, private :: p_data_d(:)
-    real(dp), device, pointer, contiguous :: data_d(:, :, :)
+    real(dp), device, pointer, private :: p_data_d(:) => null()
+    real(dp), device, pointer, contiguous :: data_d(:, :, :) => null()
   contains
     procedure :: fill => fill_cuda
     procedure :: get_shape => get_shape_cuda
@@ -47,7 +47,12 @@ contains
     class(cuda_field_t) :: self
     real(dp), intent(in) :: c
 
-    self%p_data_d = c
+    ! --- NEW DEBUG PRINT ---
+    print *, "Entering fill_cuda for field ID:", self%id, &
+             " Is p_data_d associated?", ASSOCIATED(self%p_data_d)
+    ! --- END DEBUG ---
+
+    self%p_data_d(:) = c
 
   end subroutine fill_cuda
 
@@ -56,6 +61,11 @@ contains
 
     class(cuda_field_t) :: self
     integer :: dims(3)
+
+    ! --- NEW DEBUG PRINT ---
+    print *, "Entering get_shape_cuda for field ID:", self%id, &
+             " Is data_d associated?", ASSOCIATED(self%data_d)
+    ! --- END DEBUG ---
 
     dims = shape(self%data_d)
 
@@ -66,6 +76,11 @@ contains
 
     class(cuda_field_t) :: self
     integer, intent(in) :: dims(3)
+
+    ! --- DEBUG PRINT ---
+    print *, "Entering set_shape_cuda for field ID:", self%id, &
+             " Is p_data_d associated?", ASSOCIATED(self%p_data_d)
+    ! --- END DEBUG ---
 
     self%data_d(1:dims(1), 1:dims(2), 1:dims(3)) => self%p_data_d
 

@@ -27,9 +27,9 @@ module m_base_backend
 
     !> DistD2 implementation is hardcoded for 4 halo layers for all backends
     integer :: n_halo = 4
-    type(mesh_t), pointer :: mesh
-    class(allocator_t), pointer :: allocator
-    class(poisson_fft_t), pointer :: poisson_fft
+    type(mesh_t), pointer :: mesh => null()
+    class(allocator_t), pointer :: allocator => null()
+    class(poisson_fft_t), pointer :: poisson_fft  => null()
   contains
     procedure(transeq_ders), deferred :: transeq_x
     procedure(transeq_ders), deferred :: transeq_y
