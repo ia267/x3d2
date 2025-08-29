@@ -66,6 +66,7 @@ module m_cuda_backend
     procedure :: copy_data_to_f => copy_data_to_f_cuda
     procedure :: copy_f_to_data => copy_f_to_data_cuda
     procedure :: init_poisson_fft => init_cuda_poisson_fft
+    procedure :: apply_sponge_layer
     procedure :: transeq_cuda_dist
     procedure :: transeq_cuda_thom
     procedure :: tds_solve_dist
@@ -1033,6 +1034,31 @@ contains
     end select
 
   end subroutine resolve_field_t
+
+  subroutine apply_sponge_layer(self, v, dv, ramp, target_v)
+    class(cuda_backend_t), intent(inout) :: self
+    class(field_t), intent(inout) :: v, dv
+    class(field_t), intent(in) :: ramp
+    real(dp), intent(in) :: target_v
+
+    integer, dimension(3) :: dims
+    type(dim3) :: threads, grid
+    real(dp), device, pointer, dimension(:, :, :) :: v_d, dv_d, ramp_d
+
+    dims = self%mesh%get_dims(v%data_loc)
+    threads = dim3(8, 8, 4) ! Standard block size, may need to be tuned
+    grid = dim3(ceiling(real(dims(1))/threads%x), &
+                ceiling(real(dims(2))/threads%y), &
+                ceiling(real(dims(3))/threads%z))
+
+    call resolve_field_t(v_d, v)
+    call resolve_field_t(dv_d, dv)
+    call resolve_field_t(ramp_d, ramp)
+
+    call apply_sponge_layer_kernel<<<grid, threads>>>( &
+        v_d, dv_d, ramp_d, target_v, dims(1), dims(2), dims(3))
+
+  end subroutine apply_sponge_layer
 
 end module m_cuda_backend
 
