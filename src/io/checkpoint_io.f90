@@ -72,11 +72,10 @@ module m_checkpoint_manager_impl
     type(adios2_writer_t) :: adios2_writer                     !! Writer for checkpoints
     type(adios2_writer_t) :: snapshot_writer                   !! Dedicated writer for snapshots
     integer :: last_checkpoint_step = -1
-    integer, dimension(3) :: output_stride = [1, 1, 1]         !! Spatial stride for snapshot output (default: full resolution)
-    integer, dimension(3) :: checkpoint_stride_factors = [1, 1, 1]  !! Stride factors for checkpoints (no striding)
-    logical :: convert_to_sp = .false.                          !! Flag for single precision snapshots
-    real(dp), dimension(:, :, :), allocatable :: strided_buffer  !! Fallback buffer for extra fields
-    type(field_buffer_map_t), allocatable :: field_buffers(:) !! Dynamic field buffer mapping for true async I/O
+    integer, dimension(3) :: output_stride = [1, 1, 1]              !! Stride factors for snapshots (default: full resolution)
+    integer, dimension(3) :: full_resolution = [1, 1, 1]           !! Full resolution factors for checkpoints (no downsampling)
+    real(dp), dimension(:, :, :), allocatable :: strided_buffer     !! Fallback buffer for extra fields
+    type(field_buffer_map_t), allocatable :: field_buffers(:)       !! Dynamic field buffer mapping for true async I/O
     real(dp), dimension(:, :, :), allocatable :: coords_x, coords_y, coords_z
     integer(i8), dimension(3) :: last_shape_dims = 0
     integer, dimension(3) :: last_stride_factors = 0
@@ -327,8 +326,8 @@ contains
     end block
 
     call self%write_fields( &
-      field_names, field_ptrs, host_fields, &
-      solver, file, use_stride=.false., writer=self%adios2_writer &
+      field_names, host_fields, &
+      solver, file, data_loc, use_stride=.false., writer=self%adios2_writer &
       )
     deallocate (field_ptrs)
 
@@ -486,8 +485,9 @@ contains
     end do
       
     call self%write_fields( &
-      field_names, field_ptrs, host_fields, &
-      solver, self%snapshot_file, use_stride=snapshot_uses_stride, writer=self%snapshot_writer &
+      field_names, host_fields, &
+      solver, self%snapshot_file, solver%u%data_loc, use_stride=snapshot_uses_stride, &
+      writer=self%snapshot_writer &
       )
     call self%snapshot_writer%end_step(self%snapshot_file)
 
@@ -876,15 +876,16 @@ contains
   end subroutine restart_checkpoint
 
   subroutine write_fields( &
-             self, field_names, fields, host_fields, solver, file, &
-             use_stride, writer &
-             )
+    self, field_names, host_fields, solver, file, data_loc, &
+    use_stride, writer &
+    )
     !! Write field data, optionally with striding, using separate buffers for true async I/O
     class(checkpoint_manager_adios2_t), intent(inout) :: self
     character(len=*), dimension(:), intent(in) :: field_names
-    class(field_ptr_t), dimension(:), target, intent(in) :: fields, host_fields
+    class(field_ptr_t), dimension(:), target, intent(in) :: host_fields
     class(solver_t), intent(in) :: solver
     type(adios2_file_t), intent(inout) :: file
+    integer, intent(in) :: data_loc
     logical, intent(in), optional :: use_stride
     type(adios2_writer_t), intent(inout) :: writer
 
@@ -895,33 +896,31 @@ contains
     if (present(use_stride)) apply_stride = use_stride
 
     ! pre-allocate separate buffers for each field to enable race-free async I/O
-    if (size(field_names) >= 3) then
-      if (apply_stride) then
-        call prepare_field_buffers(solver, self%output_stride, field_names)
-      else
-        call prepare_field_buffers(solver, self%checkpoint_stride_factors, field_names)
-      end if
+    if (apply_stride) then
+      call prepare_field_buffers(solver, self%output_stride, field_names, data_loc)
+    else
+      call prepare_field_buffers(solver, self%full_resolution, field_names, data_loc)
     end if
 
     do i_field = 1, size(field_names)
-      call write_single_field(trim(field_names(i_field)), &
-                              host_fields(i_field)%ptr, &
-                              fields(i_field)%ptr%data_loc)
+      call write_single_field( &
+        trim(field_names(i_field)), host_fields(i_field)%ptr, &
+        data_loc)
     end do
 
   contains
 
-    subroutine prepare_field_buffers(solver, stride_factors, field_names)
+    subroutine prepare_field_buffers(solver, stride_factors, field_names, data_loc)
       class(solver_t), intent(in) :: solver
       integer, dimension(3), intent(in) :: stride_factors
       character(len=*), dimension(:), intent(in) :: field_names
-      
+      integer, intent(in) :: data_loc
       integer :: dims(3), strided_dims_local(3), i
       integer(i8), dimension(3) :: shape_dims, start_dims, count_dims
       integer(i8), dimension(3) :: strided_shape, strided_start, strided_count
-      
-      dims = solver%mesh%get_dims(fields(1)%ptr%data_loc)
-      shape_dims = int(solver%mesh%get_global_dims(fields(1)%ptr%data_loc), i8)
+
+      dims = solver%mesh%get_dims(data_loc)
+      shape_dims = int(solver%mesh%get_global_dims(data_loc), i8)
       start_dims = int(solver%mesh%par%n_offset, i8)
       count_dims = int(dims, i8)
       
@@ -951,7 +950,6 @@ contains
       integer :: dims(3)
       integer :: buffer_idx
       logical :: buffer_found
-      real(dp), dimension(:, :, :), allocatable :: temp_data
 
       dims = solver%mesh%get_dims(data_loc)
       shape_dims = int(solver%mesh%get_global_dims(data_loc), i8)
@@ -962,7 +960,7 @@ contains
         stride_factors = self%output_stride
       else
         !no striding for checkpointing
-        stride_factors = self%checkpoint_stride_factors
+        stride_factors = self%full_resolution
       end if
 
       call self%get_strided_dimensions( &
@@ -980,54 +978,31 @@ contains
         end if
       end do
 
-      ! copy field data to temporary buffer
-      allocate(temp_data(dims(1), dims(2), dims(3)))
-      temp_data = host_field%data(1:dims(1), 1:dims(2), 1:dims(3))
-
       if (buffer_found) then
         ! use the dedicated buffer for this field for true async I/O
         call self%stride_data_to_buffer( &
-          temp_data, dims, stride_factors, &
+          host_field%data(1:dims(1), 1:dims(2), 1:dims(3)), dims, stride_factors, &
           self%field_buffers(buffer_idx)%buffer, strided_dims_local)
-        
-        if (apply_stride) then
-          call writer%write_data( &
-            field_name, self%field_buffers(buffer_idx)%buffer, &
-            file, strided_shape, strided_start, strided_count, &
-            self%convert_to_sp &
-            )
-        else
-          call writer%write_data( &
-            field_name, self%field_buffers(buffer_idx)%buffer, &
-            file, strided_shape, strided_start, strided_count, &
-            self%convert_to_sp &
-            )
-        end if
+
+        call writer%write_data( &
+          field_name, self%field_buffers(buffer_idx)%buffer, &
+          file, strided_shape, strided_start, strided_count &
+          )
       else
         ! fallback to shared buffer for fields not in the map
         if (.not. allocated(self%strided_buffer)) then
           allocate(self%strided_buffer(strided_dims_local(1), strided_dims_local(2), strided_dims_local(3)))
         end if
         call self%stride_data_to_buffer( &
-          temp_data, dims, stride_factors, &
+          host_field%data(1:dims(1), 1:dims(2), 1:dims(3)), dims, stride_factors, &
           self%strided_buffer, strided_dims_local)
-        
-        if (apply_stride) then
-          call writer%write_data( &
-            field_name, self%strided_buffer, &
-            file, strided_shape, strided_start, strided_count, &
-            self%convert_to_sp &
-            )
-        else
-          call writer%write_data( &
-            field_name, self%strided_buffer, &
-            file, strided_shape, strided_start, strided_count, &
-            self%convert_to_sp &
-            )
-        end if
+
+        call writer%write_data( &
+          field_name, self%strided_buffer, &
+          file, strided_shape, strided_start, strided_count &
+          )
       end if
 
-      deallocate(temp_data)
     end subroutine write_single_field
 
   end subroutine write_fields
