@@ -74,13 +74,13 @@ module m_checkpoint_manager_impl
     integer :: last_checkpoint_step = -1
     integer, dimension(3) :: output_stride = [1, 1, 1]              !! Stride factors for snapshots (default: full resolution)
     integer, dimension(3) :: full_resolution = [1, 1, 1]           !! Full resolution factors for checkpoints (no downsampling)
-    real(dp), dimension(:, :, :), allocatable :: strided_buffer     !! Fallback buffer for extra fields
+    real(dp), dimension(:, :, :), allocatable :: output_buffer     !! Fallback buffer for extra fields
     type(field_buffer_map_t), allocatable :: field_buffers(:)       !! Dynamic field buffer mapping for true async I/O
     real(dp), dimension(:, :, :), allocatable :: coords_x, coords_y, coords_z
     integer(i8), dimension(3) :: last_shape_dims = 0
     integer, dimension(3) :: last_stride_factors = 0
-    integer(i8), dimension(3) :: last_strided_shape = 0
-    character(len=4096) :: vtk_xml = ""                 !! VTK XML string for ParaView compatibility
+    integer(i8), dimension(3) :: last_output_shape = 0
+    character(len=4096) :: vtk_xml = ""                             !! VTK XML string for ParaView compatibility
     type(adios2_file_t) :: snapshot_file
     logical :: is_snapshot_file_open = .false.
   contains
@@ -95,8 +95,8 @@ module m_checkpoint_manager_impl
     procedure, private :: write_fields
     procedure, private :: stride_data
     procedure, private :: stride_data_to_buffer
-    procedure, private :: cleanup_strided_buffers
-    procedure, private :: get_strided_dimensions
+    procedure, private :: cleanup_output_buffers
+    procedure, private :: get_output_dimensions
     procedure, private :: generate_coordinates
     procedure, private :: generate_vtk_xml
   end type checkpoint_manager_adios2_t
@@ -381,11 +381,11 @@ contains
     character(len=*), parameter :: field_names(*) = ["u", "v", "w"]
     integer :: myrank, ierr, comm_to_use, i
     character(len=256) :: filename
-    integer(i8), dimension(3) :: strided_shape_dims
-    integer, dimension(3) :: global_dims, strided_dims
+    integer(i8), dimension(3) :: output_shape_dims
+    integer, dimension(3) :: global_dims, output_dims
     type(field_ptr_t), allocatable :: field_ptrs(:), host_fields(:)
     integer, parameter :: num_fields = size(field_names)
-    real(dp), dimension(3) :: origin, original_spacing, strided_spacing
+    real(dp), dimension(3) :: origin, original_spacing, output_spacing
     real(dp) :: simulation_time
     logical :: snapshot_uses_stride = .true. ! snapshots always use striding
     logical :: file_exists
@@ -401,25 +401,25 @@ contains
     if (.not. self%is_snapshot_file_open) then
       write (filename, '(A,A)') trim(self%checkpoint_cfg%snapshot_prefix), '.bp'
 
-      global_dims = solver%mesh%get_global_dims(VERT)
-      origin = solver%mesh%get_coordinates(1, 1, 1)
-      original_spacing = solver%mesh%geo%d
-      
-      if (snapshot_uses_stride) then
-        strided_spacing = original_spacing*real(self%output_stride, dp)
-        do i = 1, size(global_dims)
-          strided_dims(i) = (global_dims(i) + self%output_stride(i) - 1)/ &
-                            self%output_stride(i)
-        end do
-      else
-        strided_spacing = original_spacing
-        strided_dims = global_dims
-      end if
-      strided_shape_dims = int(strided_dims, i8)
+    global_dims = solver%mesh%get_global_dims(VERT)
+    origin = solver%mesh%get_coordinates(1, 1, 1)
+    original_spacing = solver%mesh%geo%d
 
-      call self%generate_vtk_xml( &
-        strided_shape_dims, field_names, origin, strided_spacing &
-        )
+    if (snapshot_uses_stride) then
+      output_spacing = original_spacing*real(self%output_stride, dp)
+      do i = 1, size(global_dims)
+        output_dims(i) = (global_dims(i) + self%output_stride(i) - 1)/ &
+                          self%output_stride(i)
+      end do
+    else
+      output_spacing = original_spacing
+      output_dims = global_dims
+    end if
+    output_shape_dims = int(output_dims, i8)
+
+    call self%generate_vtk_xml( &
+      output_shape_dims, field_names, origin, output_spacing &
+      )
 
       ! Only rank 0 checks file existence to avoid race conditions
       if (myrank == 0) then
@@ -615,23 +615,23 @@ contains
   end subroutine generate_coordinates
 
   function stride_data( &
-    self, input_data, dims, stride, strided_dims_out) &
-    result(strided_data)
+    self, input_data, dims, stride, output_dims_out) &
+    result(output_data)
     !! stride the input data based on the specified stride
     class(checkpoint_manager_adios2_t), intent(inout) :: self
     real(dp), dimension(:, :, :), intent(in) :: input_data
     integer, dimension(3), intent(in) :: dims
     integer, dimension(3), intent(in) :: stride
-    integer, dimension(3), intent(out) :: strided_dims_out
+    integer, dimension(3), intent(out) :: output_dims_out
 
-    real(dp), dimension(:, :, :), allocatable :: strided_data
+    real(dp), dimension(:, :, :), allocatable :: output_data
     integer :: i_stride, j_stride, k_stride
     integer :: i_max, j_max, k_max
 
     if (all(stride == 1)) then
-      allocate (strided_data(dims(1), dims(2), dims(3)))
-      strided_data = input_data
-      strided_dims_out = dims
+      allocate (output_data(dims(1), dims(2), dims(3)))
+      output_data = input_data
+      output_dims_out = dims
       return
     end if
 
@@ -641,22 +641,22 @@ contains
     j_max = (dims(2) - 1)/j_stride + 1
     k_max = (dims(3) - 1)/k_stride + 1
 
-    strided_dims_out = [i_max, j_max, k_max]
-    allocate (strided_data(i_max, j_max, k_max))
+    output_dims_out = [i_max, j_max, k_max]
+    allocate (output_data(i_max, j_max, k_max))
 
-    strided_data = input_data(1:dims(1):i_stride, &
+    output_data = input_data(1:dims(1):i_stride, &
                               1:dims(2):j_stride, 1:dims(3):k_stride)
   end function stride_data
 
   subroutine stride_data_to_buffer( &
-    self, input_data, dims, stride, out_buffer, strided_dims_out &
+    self, input_data, dims, stride, out_buffer, output_dims_out &
     )
     class(checkpoint_manager_adios2_t), intent(inout) :: self
     real(dp), dimension(:, :, :), intent(in) :: input_data
     integer, dimension(3), intent(in) :: dims
     integer, dimension(3), intent(in) :: stride
     real(dp), dimension(:, :, :), allocatable, intent(inout) :: out_buffer
-    integer, dimension(3), intent(out) :: strided_dims_out
+    integer, dimension(3), intent(out) :: output_dims_out
 
     integer :: i_stride, j_stride, k_stride
     integer :: i_max, j_max, k_max
@@ -673,7 +673,7 @@ contains
         allocate (out_buffer(dims(1), dims(2), dims(3)))
       end if
       out_buffer = input_data
-      strided_dims_out = dims
+      output_dims_out = dims
       return
     end if
 
@@ -683,7 +683,7 @@ contains
     j_max = (dims(2) + j_stride - 1)/j_stride
     k_max = (dims(3) + k_stride - 1)/k_stride
 
-    strided_dims_out = [i_max, j_max, k_max]
+    output_dims_out = [i_max, j_max, k_max]
 
     if (allocated(out_buffer)) then
       if (size(out_buffer, 1) /= i_max &
@@ -700,49 +700,57 @@ contains
                             1:dims(2):j_stride, 1:dims(3):k_stride)
   end subroutine stride_data_to_buffer
 
-  subroutine get_strided_dimensions( &
+  subroutine get_output_dimensions( &
     self, shape_dims, start_dims, count_dims, stride_factors, &
-    strided_shape, strided_start, strided_count, strided_dims_local)
+    output_shape, output_start, output_count, output_dims_local)
 
     class(checkpoint_manager_adios2_t), intent(inout) :: self
     integer(i8), dimension(3), intent(in) :: shape_dims, start_dims, count_dims
     integer, dimension(3), intent(in) :: stride_factors
-    integer(i8), dimension(3), intent(out) :: strided_shape, strided_start
-    integer(i8), dimension(3), intent(out) :: strided_count
-    integer, dimension(3), intent(out) :: strided_dims_local
+    integer(i8), dimension(3), intent(out) :: output_shape, output_start
+    integer(i8), dimension(3), intent(out) :: output_count
+    integer, dimension(3), intent(out) :: output_dims_local
+
+    if (all(stride_factors == 1)) then
+      output_shape = shape_dims
+      output_start = start_dims
+      output_count = count_dims
+      output_dims_local = int(count_dims)
+      return
+    end if
 
     if (all(shape_dims == self%last_shape_dims) .and. &
         all(stride_factors == self%last_stride_factors) .and. &
-        all(self%last_strided_shape > 0)) then
-      strided_shape = self%last_strided_shape
+        all(self%last_output_shape > 0)) then
+      output_shape = self%last_output_shape
     else
-      strided_shape = [(shape_dims(1) + stride_factors(1) - 1_i8) &
-                       /int(stride_factors(1), i8), &
-                       (shape_dims(2) + stride_factors(2) - 1_i8) &
-                       /int(stride_factors(2), i8), &
-                       (shape_dims(3) + stride_factors(3) - 1_i8) &
-                       /int(stride_factors(3), i8)]
+      output_shape = [(shape_dims(1) + stride_factors(1) - 1_i8) &
+                      /int(stride_factors(1), i8), &
+                      (shape_dims(2) + stride_factors(2) - 1_i8) &
+                      /int(stride_factors(2), i8), &
+                      (shape_dims(3) + stride_factors(3) - 1_i8) &
+                      /int(stride_factors(3), i8)]
 
       self%last_shape_dims = shape_dims
       self%last_stride_factors = stride_factors
-      self%last_strided_shape = strided_shape
+      self%last_output_shape = output_shape
     end if
 
-    strided_start = [start_dims(1)/int(stride_factors(1), i8), &
-                     start_dims(2)/int(stride_factors(2), i8), &
-                     start_dims(3)/int(stride_factors(3), i8)]
+    output_start = [start_dims(1)/int(stride_factors(1), i8), &
+                    start_dims(2)/int(stride_factors(2), i8), &
+                    start_dims(3)/int(stride_factors(3), i8)]
 
-    strided_dims_local = [(int(count_dims(1)) + stride_factors(1) - 1) &
-                          /stride_factors(1), &
-                          (int(count_dims(2)) + stride_factors(2) - 1) &
-                          /stride_factors(2), &
-                          (int(count_dims(3)) + stride_factors(3) - 1) &
-                          /stride_factors(3)]
+    output_dims_local = [(int(count_dims(1)) + stride_factors(1) - 1) &
+                         /stride_factors(1), &
+                         (int(count_dims(2)) + stride_factors(2) - 1) &
+                         /stride_factors(2), &
+                         (int(count_dims(3)) + stride_factors(3) - 1) &
+                         /stride_factors(3)]
 
-    strided_count = [int(strided_dims_local(1), i8), &
-                     int(strided_dims_local(2), i8), &
-                     int(strided_dims_local(3), i8)]
-  end subroutine get_strided_dimensions
+    output_count = [int(output_dims_local(1), i8), &
+                    int(output_dims_local(2), i8), &
+                    int(output_dims_local(3), i8)]
+  end subroutine get_output_dimensions
 
   subroutine restart_checkpoint( &
     self, solver, filename, timestep, restart_time, comm &
@@ -915,19 +923,19 @@ contains
       integer, dimension(3), intent(in) :: stride_factors
       character(len=*), dimension(:), intent(in) :: field_names
       integer, intent(in) :: data_loc
-      integer :: dims(3), strided_dims_local(3), i
+      integer :: dims(3), output_dims_local(3), i
       integer(i8), dimension(3) :: shape_dims, start_dims, count_dims
-      integer(i8), dimension(3) :: strided_shape, strided_start, strided_count
+      integer(i8), dimension(3) :: output_shape, output_start, output_count
 
       dims = solver%mesh%get_dims(data_loc)
       shape_dims = int(solver%mesh%get_global_dims(data_loc), i8)
       start_dims = int(solver%mesh%par%n_offset, i8)
       count_dims = int(dims, i8)
-      
-      call self%get_strided_dimensions( &
+
+      call self%get_output_dimensions( &
         shape_dims, start_dims, count_dims, stride_factors, &
-        strided_shape, strided_start, strided_count, &
-        strided_dims_local &
+        output_shape, output_start, output_count, &
+        output_dims_local &
         )
       
       if (allocated(self%field_buffers)) deallocate(self%field_buffers)
@@ -935,7 +943,11 @@ contains
       
       do i = 1, size(field_names)
         self%field_buffers(i)%field_name = trim(field_names(i))
-        allocate(self%field_buffers(i)%buffer(strided_dims_local(1), strided_dims_local(2), strided_dims_local(3)))
+        allocate ( &
+          self%field_buffers(i)%buffer( &
+          output_dims_local(1), &
+          output_dims_local(2), &
+          output_dims_local(3)))
       end do
     end subroutine prepare_field_buffers
 
@@ -944,9 +956,9 @@ contains
       class(field_t), pointer :: host_field
       integer, intent(in) :: data_loc
 
-      integer, dimension(3) :: strided_dims_local, stride_factors
+      integer, dimension(3) :: output_dims_local, stride_factors
       integer(i8), dimension(3) :: shape_dims, start_dims, count_dims
-      integer(i8), dimension(3) :: strided_shape, strided_start, strided_count
+      integer(i8), dimension(3) :: output_shape, output_start, output_count
       integer :: dims(3)
       integer :: buffer_idx
       logical :: buffer_found
@@ -963,10 +975,10 @@ contains
         stride_factors = self%full_resolution
       end if
 
-      call self%get_strided_dimensions( &
+      call self%get_output_dimensions( &
         shape_dims, start_dims, count_dims, stride_factors, &
-        strided_shape, strided_start, strided_count, &
-        strided_dims_local &
+        output_shape, output_start, output_count, &
+        output_dims_local &
         )
 
       ! find the matching buffer for this field
@@ -982,24 +994,27 @@ contains
         ! use the dedicated buffer for this field for true async I/O
         call self%stride_data_to_buffer( &
           host_field%data(1:dims(1), 1:dims(2), 1:dims(3)), dims, stride_factors, &
-          self%field_buffers(buffer_idx)%buffer, strided_dims_local)
+          self%field_buffers(buffer_idx)%buffer, output_dims_local)
 
         call writer%write_data( &
           field_name, self%field_buffers(buffer_idx)%buffer, &
-          file, strided_shape, strided_start, strided_count &
+          file, output_shape, output_start, output_count &
           )
       else
         ! fallback to shared buffer for fields not in the map
-        if (.not. allocated(self%strided_buffer)) then
-          allocate(self%strided_buffer(strided_dims_local(1), strided_dims_local(2), strided_dims_local(3)))
+        if (.not. allocated(self%output_buffer)) then
+          allocate ( &
+            self%output_buffer(output_dims_local(1), &
+                                output_dims_local(2), &
+                                output_dims_local(3)))
         end if
         call self%stride_data_to_buffer( &
           host_field%data(1:dims(1), 1:dims(2), 1:dims(3)), dims, stride_factors, &
-          self%strided_buffer, strided_dims_local)
+          self%output_buffer, output_dims_local)
 
         call writer%write_data( &
-          field_name, self%strided_buffer, &
-          file, strided_shape, strided_start, strided_count &
+          field_name, self%output_buffer, &
+          file, output_shape, output_start, output_count &
           )
       end if
 
@@ -1007,13 +1022,13 @@ contains
 
   end subroutine write_fields
 
-  subroutine cleanup_strided_buffers(self)
+  subroutine cleanup_output_buffers(self)
     !! Clean up dynamic field buffers
     class(checkpoint_manager_adios2_t), intent(inout) :: self
     integer :: i
 
-    if (allocated(self%strided_buffer)) deallocate (self%strided_buffer)
-    
+    if (allocated(self%output_buffer)) deallocate (self%output_buffer)
+
     if (allocated(self%field_buffers)) then
       do i = 1, size(self%field_buffers)
         if (allocated(self%field_buffers(i)%buffer)) then
@@ -1022,17 +1037,12 @@ contains
       end do
       deallocate(self%field_buffers)
     end if
-  end subroutine cleanup_strided_buffers
+  end subroutine cleanup_output_buffers
 
   subroutine finalise(self)
     class(checkpoint_manager_adios2_t), intent(inout) :: self
 
-    if (self%is_snapshot_file_open) then
-        call self%snapshot_writer%close(self%snapshot_file)
-        self%is_snapshot_file_open = .false.
-    end if
-
-    call self%cleanup_strided_buffers()
+    call self%cleanup_output_buffers()
     call self%adios2_writer%finalise()
     call self%snapshot_writer%finalise()
   end subroutine finalise
