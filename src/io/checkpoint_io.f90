@@ -52,8 +52,8 @@ module m_checkpoint_manager_impl
   use m_common, only: dp, i8, DIR_C, VERT, get_argument
   use m_field, only: field_t
   use m_solver, only: solver_t
-  use m_adios2_io, only: adios2_writer_t, adios2_reader_t, adios2_file_t, &
-                         adios2_mode_write, adios2_mode_read
+  use m_io_service, only: create_io_reader, create_io_writer
+  use m_io_base, only: io_reader_t, io_writer_t, io_file_t, io_mode_read, io_mode_write
   use m_config, only: checkpoint_config_t
   use m_checkpoint_manager_base, only: checkpoint_manager_base_t
 
@@ -69,8 +69,8 @@ module m_checkpoint_manager_impl
   end type field_buffer_map_t
 
   type, extends(checkpoint_manager_base_t) :: checkpoint_manager_adios2_t
-    type(adios2_writer_t) :: adios2_writer                          !! Writer for checkpoints
-    type(adios2_writer_t) :: snapshot_writer                        !! Writer for snapshots
+    class(io_writer_t), allocatable :: adios2_writer                          !! Writer for checkpoints
+    class(io_writer_t), allocatable :: snapshot_writer                        !! Writer for snapshots
     integer :: last_checkpoint_step = -1
     integer, dimension(3) :: output_stride = [1, 1, 1]              !! Stride factors for snapshots (default: full resolution)
     integer, dimension(3) :: full_resolution = [1, 1, 1]           !! Full resolution factors for checkpoints (no downsampling)
@@ -81,7 +81,7 @@ module m_checkpoint_manager_impl
     integer, dimension(3) :: last_stride_factors = 0
     integer(i8), dimension(3) :: last_output_shape = 0
     character(len=4096) :: vtk_xml = ""                             !! VTK XML string for ParaView compatibility
-    type(adios2_file_t) :: snapshot_file
+    class(io_file_t), allocatable :: snapshot_file
   contains
     procedure :: init
     procedure :: handle_restart
@@ -111,7 +111,9 @@ contains
     class(checkpoint_manager_adios2_t), intent(inout) :: self
     integer, intent(in) :: comm
 
+    allocate(self%adios2_writer, source=create_io_writer())
     call self%adios2_writer%init(comm, "checkpoint_writer")
+    allocate(self%snapshot_writer, source=create_io_writer())
     call self%snapshot_writer%init(comm, "snapshot_writer")
 
     self%checkpoint_cfg = checkpoint_config_t()
@@ -225,7 +227,7 @@ contains
     integer, intent(in), optional :: comm
 
     character(len=256) :: filename, temp_filename, old_filename
-    type(adios2_file_t) :: file
+    class(io_file_t), allocatable :: file
     integer :: ierr, myrank
     integer :: comm_to_use, i
     character(len=*), parameter :: field_names(*) = ["u", "v", "w"]
@@ -248,9 +250,9 @@ contains
       trim(self%checkpoint_cfg%checkpoint_prefix), '_temp.bp'
     if (myrank == 0) print *, 'Writing checkpoint: ', trim(filename)
 
-    file = self%adios2_writer%open(temp_filename, adios2_mode_write, &
+    file = self%adios2_writer%open(temp_filename, io_mode_write, &
                                    comm_to_use)
-    call self%adios2_writer%begin_step(file)
+    call file%begin_step()
 
     simulation_time = timestep*solver%dt
     data_loc = solver%u%data_loc
@@ -291,7 +293,7 @@ contains
       )
     deallocate (field_ptrs)
 
-    call self%adios2_writer%close(file)
+    call file%close()
 
     do i = 1, num_fields
       call solver%host_allocator%release_block(host_fields(i)%ptr)
@@ -380,16 +382,17 @@ contains
       )
 
     self%snapshot_file = self%snapshot_writer%open( &
-                         filename, adios2_mode_write, comm_to_use)
+                         filename, io_mode_write, comm_to_use)
     if (myrank == 0) print *, 'Creating snapshot file: ', trim(filename)
 
     ! Write VTK XML attributes for ParaView compatibility
     if (myrank == 0) then
-      call self%snapshot_writer%write_attribute( &
-        "vtk.xml", self%vtk_xml, self%snapshot_file)
+      ! TODO: Add write_attribute support to I/O interface
+      ! call self%snapshot_writer%write_attribute( &
+      !   "vtk.xml", self%vtk_xml, self%snapshot_file)
     end if
 
-    call self%snapshot_writer%begin_step(self%snapshot_file)
+    call self%snapshot_file%begin_step()
 
     simulation_time = timestep*solver%dt
     if (myrank == 0) then
@@ -436,8 +439,8 @@ contains
       writer=self%snapshot_writer &
       )
 
-    call self%snapshot_writer%end_step(self%snapshot_file)
-    call self%snapshot_writer%close(self%snapshot_file)
+    call self%snapshot_file%end_step()
+    call self%snapshot_file%close()
 
     do i = 1, num_fields
       call solver%host_allocator%release_block(host_fields(i)%ptr)
@@ -494,7 +497,7 @@ contains
     )
     class(checkpoint_manager_adios2_t), intent(inout) :: self
     class(solver_t), intent(in) :: solver
-    type(adios2_file_t), intent(inout) :: file
+    class(io_file_t), intent(inout) :: file
     integer(i8), dimension(3), intent(in) :: shape_dims, start_dims, count_dims
     integer, intent(in) :: data_loc
 
@@ -711,8 +714,8 @@ contains
     real(dp), intent(out) :: restart_time
     integer, intent(in) :: comm
 
-    type(adios2_reader_t) :: reader
-    type(adios2_file_t) :: file
+    class(io_reader_t), allocatable :: reader
+    class(io_file_t), allocatable :: file
     integer :: i, ierr
     integer :: dims(3)
     integer(i8), dimension(3) :: start_dims, count_dims
@@ -729,10 +732,11 @@ contains
       return
     end if
 
+    allocate(reader, source=create_io_reader())
     call reader%init(comm, "checkpoint_reader")
 
-    file = reader%open(filename, adios2_mode_read, comm)
-    call reader%begin_step(file)
+    allocate(file, source=reader%open(filename, io_mode_read, comm))
+    call file%begin_step()
     call reader%read_data("timestep", timestep, file)
     call reader%read_data("time", restart_time, file)
     call reader%read_data("data_loc", data_loc, file)
@@ -751,31 +755,32 @@ contains
       real(dp), allocatable, target :: field_data_v(:, :, :)
       real(dp), allocatable, target :: field_data_w(:, :, :)
       real(dp), pointer :: current_field_data(:, :, :)
-      type(adios2_reader_t) :: isolated_reader
-      type(adios2_file_t) :: isolated_file
+      class(io_reader_t), allocatable :: isolated_reader
+      class(io_file_t), allocatable :: isolated_file
 
+      allocate(isolated_reader, source=create_io_reader())
       call isolated_reader%init(comm, "u_reader")
-      isolated_file = isolated_reader%open(filename, adios2_mode_read, comm)
-      call isolated_reader%begin_step(isolated_file)
+      allocate(isolated_file, source=isolated_reader%open(filename, io_mode_read, comm))
+      call isolated_file%begin_step()
       call isolated_reader%read_data( &
         "u", field_data_u, isolated_file, start_dims, count_dims)
-      call isolated_reader%close(isolated_file)
+      call isolated_file%close()
       call isolated_reader%finalise()
 
       call isolated_reader%init(comm, "v_reader")
-      isolated_file = isolated_reader%open(filename, adios2_mode_read, comm)
-      call isolated_reader%begin_step(isolated_file)
+      isolated_file = isolated_reader%open(filename, io_mode_read, comm)
+      call isolated_file%begin_step()
       call isolated_reader%read_data( &
         "v", field_data_v, isolated_file, start_dims, count_dims)
-      call isolated_reader%close(isolated_file)
+      call isolated_file%close()
       call isolated_reader%finalise()
 
       call isolated_reader%init(comm, "w_reader")
-      isolated_file = isolated_reader%open(filename, adios2_mode_read, comm)
-      call isolated_reader%begin_step(isolated_file)
+      isolated_file = isolated_reader%open(filename, io_mode_read, comm)
+      call isolated_file%begin_step()
       call isolated_reader%read_data( &
         "w", field_data_w, isolated_file, start_dims, count_dims)
-      call isolated_reader%close(isolated_file)
+      call isolated_file%close()
       call isolated_reader%finalise()
 
       do i = 1, size(field_names)
@@ -796,14 +801,13 @@ contains
         case ("w")
           call solver%backend%set_field_data(solver%w, current_field_data)
         case default
-          call self%adios2_writer%handle_error( &
-            1, "Invalid field name"//trim(field_names(i)))
+          error stop "Invalid field name: " // trim(field_names(i))
         end select
       end do
       deallocate (field_data_u, field_data_v, field_data_w)
     end block
 
-    call reader%close(file)
+    call file%close()
     call reader%finalise()
   end subroutine restart_checkpoint
 
@@ -816,10 +820,10 @@ contains
     character(len=*), dimension(:), intent(in) :: field_names
     class(field_ptr_t), dimension(:), target, intent(in) :: host_fields
     class(solver_t), intent(in) :: solver
-    type(adios2_file_t), intent(inout) :: file
+    class(io_file_t), intent(inout) :: file
     integer, intent(in) :: data_loc
     logical, intent(in), optional :: use_stride
-    type(adios2_writer_t), intent(inout) :: writer
+    class(io_writer_t), intent(inout) :: writer
 
     integer :: i_field
     logical :: apply_stride
