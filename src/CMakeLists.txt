@@ -60,9 +60,9 @@ set(IOBASESRC
 set(IOBACKENDSRC)
 
 if(WITH_ADIOS2)
-  list(APPEND IOBACKENDSRC io/io_adios2.f90)
+  list(APPEND IOBACKENDSRC io/adios2/io.f90)
 else()
-  list(APPEND IOBACKENDSRC io/io_dummy.f90)
+  list(APPEND IOBACKENDSRC io/dummy/io.f90)
 endif()
 
 set(IOSERVICESRC
