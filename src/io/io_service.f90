@@ -7,12 +7,10 @@ module m_io_service
   use mpi, only: MPI_COMM_WORLD
   use m_common, only: dp, i8
   use m_io_base, only: io_reader_t, io_writer_t, io_file_t, io_mode_read
-
 #ifdef WITH_ADIOS2
   use m_io_adios2, only: io_adios2_reader_t, io_adios2_writer_t
-#else
-  use m_io_dummy, only: io_dummy_reader_t, io_dummy_writer_t
 #endif
+  use m_io_dummy, only: io_dummy_reader_t, io_dummy_writer_t
 
   implicit none
 
@@ -26,6 +24,12 @@ module m_io_service
 
   ! Session-based API
   public :: io_session_t
+
+#ifdef WITH_ADIOS2
+  logical, parameter :: use_adios2_backend = .true.
+#else
+  logical, parameter :: use_adios2_backend = .false.
+#endif
 
   !> Type for reading multiple variables from the same file efficiently
   type :: io_session_t
@@ -49,21 +53,21 @@ contains
   function create_io_reader() result(reader)
     class(io_reader_t), allocatable :: reader
 
-#ifdef WITH_ADIOS2
-    allocate(io_adios2_reader_t :: reader)
-#else
-    allocate(io_dummy_reader_t :: reader)
-#endif
+    if (use_adios2_backend) then
+      allocate(io_adios2_reader_t :: reader)
+    else
+      allocate(io_dummy_reader_t :: reader)
+    end if
   end function create_io_reader
 
   function create_io_writer() result(writer)
     class(io_writer_t), allocatable :: writer
 
-#ifdef WITH_ADIOS2
-    allocate(io_adios2_writer_t :: writer)
-#else
-    allocate(io_dummy_writer_t :: writer)
-#endif
+    if (use_adios2_backend) then
+      allocate(io_adios2_writer_t :: writer)
+    else
+      allocate(io_dummy_writer_t :: writer)
+    end if
   end function create_io_writer
 
   !> Read a scalar integer(i8) value from a file

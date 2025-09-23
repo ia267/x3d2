@@ -53,21 +53,16 @@ set(DUMMYDECOMPSRC
   decomp/decomp_dummy.f90
 )
 
-set(IOBASESRC
+set(IOSRC
   io/io_base.f90
+  io/dummy/io.f90
+  io/io_service.f90
+  io/checkpoint_io.f90
 )
-
-set(IOBACKENDSRC)
 
 if(WITH_ADIOS2)
-  list(APPEND IOBACKENDSRC io/adios2/io.f90)
-else()
-  list(APPEND IOBACKENDSRC io/dummy/io.f90)
+  list(APPEND IOSRC io/adios2/io.f90)
 endif()
-
-set(IOSERVICESRC
-  io/io_service.f90
-)
 
 if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI" OR
    ${CMAKE_Fortran_COMPILER_ID} STREQUAL "NVHPC")
@@ -84,10 +79,7 @@ else()
   list(APPEND SRC ${DUMMYDECOMPSRC})
 endif()
 
-list(APPEND SRC ${IOBASESRC})
-list(APPEND SRC ${IOBACKENDSRC})
-list(APPEND SRC ${IOSERVICESRC})
-list(APPEND SRC io/checkpoint_io.f90)
+list(APPEND SRC ${IOSRC})
 
 if(SINGLE_PREC)
   add_definitions("-DSINGLE_PREC")
