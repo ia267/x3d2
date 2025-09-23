@@ -32,13 +32,16 @@ module m_io_adios2
     logical :: is_step_active = .false.      !! Flag to track if a step is active
     integer :: comm = MPI_COMM_NULL          !! MPI communicator
   contains
-    procedure :: init => reader_init_impl
-    procedure :: open => reader_open_impl
-    procedure :: read_data_i8 => read_data_i8_impl
-    procedure :: read_data_integer => read_data_integer_impl
-    procedure :: read_data_real => read_data_real_impl  
-    procedure :: read_data_array_3d => read_data_array_3d_impl
-    procedure :: finalise => finalise_reader_impl
+    procedure :: init => reader_init_adios2
+    procedure :: open => reader_open_adios2
+    
+    generic :: read_data => read_data_i8_adios2, read_data_integer_adios2, read_data_real_adios2, read_data_array_3d_adios2
+    procedure :: read_data_i8 => read_data_i8_adios2
+    procedure :: read_data_integer => read_data_integer_adios2
+    procedure :: read_data_real => read_data_real_adios2  
+    procedure :: read_data_array_3d => read_data_array_3d_adios2
+    
+    procedure :: finalise => finalise_reader_adios2
     procedure, private :: handle_error => handle_error_reader
   end type io_adios2_reader_t
 
@@ -49,15 +52,20 @@ module m_io_adios2
     logical :: is_step_active = .false.      !! Flag to track if a step is active
     integer :: comm = MPI_COMM_NULL          !! MPI communicator
   contains
-    procedure :: init => writer_init_impl
-    procedure :: open => writer_open_impl
-    procedure :: write_data_i8 => write_data_i8_impl
-    procedure :: write_data_integer => write_data_integer_impl
-    procedure :: write_data_real => write_data_real_impl
-    procedure :: write_data_array_3d => write_data_array_3d_impl
-    procedure :: write_attribute_string => write_attribute_string_impl
-    procedure :: write_attribute_array_1d_real => write_attribute_array_1d_real_impl
-    procedure :: finalise => finalise_writer_impl
+    procedure :: init => writer_init_adios2
+    procedure :: open => writer_open_adios2
+    
+    generic :: write_data => write_data_i8_adios2, write_data_integer_adios2, write_data_real_adios2, write_data_array_3d_adios2
+    procedure :: write_data_i8 => write_data_i8_adios2
+    procedure :: write_data_integer => write_data_integer_adios2
+    procedure :: write_data_real => write_data_real_adios2
+    procedure :: write_data_array_3d => write_data_array_3d_adios2
+    
+    generic :: write_attribute => write_attribute_string_adios2, write_attribute_array_1d_real_adios2
+    procedure :: write_attribute_string => write_attribute_string_adios2
+    procedure :: write_attribute_array_1d_real => write_attribute_array_1d_real_adios2
+    
+    procedure :: finalise => finalise_writer_adios2
     procedure, private :: handle_error => handle_error_writer
   end type io_adios2_writer_t
 
@@ -67,15 +75,15 @@ module m_io_adios2
     logical :: is_step_active = .false.      !! Flag to track if a step is active
     logical :: is_writer = .false.           !! Flag to track if this is for writing
   contains
-    procedure :: close => file_close_impl
-    procedure :: begin_step => file_begin_step_impl
-    procedure :: end_step => file_end_step_impl
+    procedure :: close => file_close_adios2
+    procedure :: begin_step => file_begin_step_adios2
+    procedure :: end_step => file_end_step_adios2
     procedure, private :: handle_error => handle_error_file
   end type io_adios2_file_t
 
 contains
 
-  subroutine reader_init_impl(self, comm, name)
+  subroutine reader_init_adios2(self, comm, name)
     class(io_adios2_reader_t), intent(inout) :: self
     integer, intent(in) :: comm
     character(len=*), intent(in) :: name
@@ -107,9 +115,9 @@ contains
 
     if (.not. self%io_handle%valid) &
       call self%handle_error(1, "Failed to create ADIOS2 IO object")
-  end subroutine reader_init_impl
+  end subroutine reader_init_adios2
 
-  function reader_open_impl(self, filename, mode, comm) result(file_handle)
+  function reader_open_adios2(self, filename, mode, comm) result(file_handle)
     class(io_adios2_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
@@ -130,9 +138,9 @@ contains
       call self%handle_error(ierr, "Failed to open ADIOS2 engine for reading")
       file_handle%is_writer = .false.
     end select
-  end function reader_open_impl
+  end function reader_open_adios2
 
-  subroutine read_data_i8_impl(self, variable_name, value, file_handle)
+  subroutine read_data_i8_adios2(self, variable_name, value, file_handle)
     class(io_adios2_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     integer(i8), intent(out) :: value
@@ -154,9 +162,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine read_data_i8_impl
+  end subroutine read_data_i8_adios2
 
-  subroutine read_data_integer_impl(self, variable_name, value, file_handle)
+  subroutine read_data_integer_adios2(self, variable_name, value, file_handle)
     class(io_adios2_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     integer, intent(out) :: value
@@ -178,9 +186,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine read_data_integer_impl
+  end subroutine read_data_integer_adios2
 
-  subroutine read_data_real_impl(self, variable_name, value, file_handle)
+  subroutine read_data_real_adios2(self, variable_name, value, file_handle)
     class(io_adios2_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     real(dp), intent(out) :: value
@@ -203,9 +211,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine read_data_real_impl
+  end subroutine read_data_real_adios2
 
-  subroutine read_data_array_3d_impl(self, variable_name, array, file_handle, shape_dims, start_dims, count_dims)
+  subroutine read_data_array_3d_adios2(self, variable_name, array, file_handle, shape_dims, start_dims, count_dims)
     class(io_adios2_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     real(dp), intent(inout) :: array(:, :, :)
@@ -248,9 +256,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine read_data_array_3d_impl
+  end subroutine read_data_array_3d_adios2
 
-  subroutine finalise_reader_impl(self)
+  subroutine finalise_reader_adios2(self)
     class(io_adios2_reader_t), intent(inout) :: self
     integer :: ierr
 
@@ -258,9 +266,9 @@ contains
       call adios2_finalize(self%adios, ierr)
       call self%handle_error(ierr, "Failed to finalise ADIOS2")
     end if
-  end subroutine finalise_reader_impl
+  end subroutine finalise_reader_adios2
 
-  subroutine writer_init_impl(self, comm, name)
+  subroutine writer_init_adios2(self, comm, name)
     class(io_adios2_writer_t), intent(inout) :: self
     integer, intent(in) :: comm
     character(len=*), intent(in) :: name
@@ -292,9 +300,9 @@ contains
 
     if (.not. self%io_handle%valid) &
       call self%handle_error(1, "Failed to create ADIOS2 IO object")
-  end subroutine writer_init_impl
+  end subroutine writer_init_adios2
 
-  function writer_open_impl(self, filename, mode, comm) result(file_handle)
+  function writer_open_adios2(self, filename, mode, comm) result(file_handle)
     class(io_adios2_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
@@ -323,9 +331,9 @@ contains
       call self%handle_error(ierr, "Failed to open ADIOS2 engine for writing")
       file_handle%is_writer = .true.
     end select
-  end function writer_open_impl
+  end function writer_open_adios2
 
-  subroutine write_data_i8_impl(self, variable_name, value, file_handle)
+  subroutine write_data_i8_adios2(self, variable_name, value, file_handle)
     class(io_adios2_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     integer(i8), intent(in) :: value
@@ -351,9 +359,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine write_data_i8_impl
+  end subroutine write_data_i8_adios2
 
-  subroutine write_data_integer_impl(self, variable_name, value, file_handle)
+  subroutine write_data_integer_adios2(self, variable_name, value, file_handle)
     class(io_adios2_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     integer, intent(in) :: value
@@ -378,9 +386,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine write_data_integer_impl
+  end subroutine write_data_integer_adios2
 
-  subroutine write_data_real_impl(self, variable_name, value, file_handle)
+  subroutine write_data_real_adios2(self, variable_name, value, file_handle)
     class(io_adios2_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     real(dp), intent(in) :: value
@@ -406,9 +414,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine write_data_real_impl
+  end subroutine write_data_real_adios2
 
-  subroutine write_data_array_3d_impl(self, variable_name, array, file_handle, shape_dims, start_dims, count_dims)
+  subroutine write_data_array_3d_adios2(self, variable_name, array, file_handle, shape_dims, start_dims, count_dims)
     class(io_adios2_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     real(dp), intent(in) :: array(:, :, :)
@@ -457,9 +465,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine write_data_array_3d_impl
+  end subroutine write_data_array_3d_adios2
 
-  subroutine write_attribute_string_impl(self, attribute_name, value, file_handle)
+  subroutine write_attribute_string_adios2(self, attribute_name, value, file_handle)
     class(io_adios2_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: attribute_name
     character(len=*), intent(in) :: value
@@ -475,9 +483,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine write_attribute_string_impl
+  end subroutine write_attribute_string_adios2
 
-  subroutine write_attribute_array_1d_real_impl(self, attribute_name, values, file_handle)
+  subroutine write_attribute_array_1d_real_adios2(self, attribute_name, values, file_handle)
     class(io_adios2_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: attribute_name
     real(dp), intent(in) :: values(:)
@@ -495,9 +503,9 @@ contains
     class default
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
-  end subroutine write_attribute_array_1d_real_impl
+  end subroutine write_attribute_array_1d_real_adios2
 
-  subroutine finalise_writer_impl(self)
+  subroutine finalise_writer_adios2(self)
     class(io_adios2_writer_t), intent(inout) :: self
     integer :: ierr
 
@@ -505,9 +513,9 @@ contains
       call adios2_finalize(self%adios, ierr)
       call self%handle_error(ierr, "Failed to finalise ADIOS2")
     end if
-  end subroutine finalise_writer_impl
+  end subroutine finalise_writer_adios2
 
-  subroutine file_close_impl(self)
+  subroutine file_close_adios2(self)
     class(io_adios2_file_t), intent(inout) :: self
     integer :: ierr
 
@@ -517,9 +525,9 @@ contains
       call adios2_close(self%engine, ierr)
       call self%handle_error(ierr, "Failed to close ADIOS2 engine")
     end if
-  end subroutine file_close_impl
+  end subroutine file_close_adios2
 
-  subroutine file_begin_step_impl(self)
+  subroutine file_begin_step_adios2(self)
     class(io_adios2_file_t), intent(inout) :: self
     integer :: ierr
 
@@ -534,9 +542,9 @@ contains
     end if
     
     self%is_step_active = .true.
-  end subroutine file_begin_step_impl
+  end subroutine file_begin_step_adios2
 
-  subroutine file_end_step_impl(self)
+  subroutine file_end_step_adios2(self)
     class(io_adios2_file_t), intent(inout) :: self
     integer :: ierr
 
@@ -544,7 +552,7 @@ contains
     call adios2_end_step(self%engine, ierr)
     call self%handle_error(ierr, "Failed to end ADIOS2 step")
     self%is_step_active = .false.
-  end subroutine file_end_step_impl
+  end subroutine file_end_step_adios2
 
   subroutine handle_error_reader(self, ierr, message)
     class(io_adios2_reader_t), intent(inout) :: self

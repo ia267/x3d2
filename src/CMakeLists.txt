@@ -52,12 +52,6 @@ set(2DECOMPFFTSRC
 set(DUMMYDECOMPSRC
   decomp/decomp_dummy.f90
 )
-set(ADIOS2SRC
-  io/checkpoint_io.f90
-)
-set(DUMMYADIOS2SRC
-  io/checkpoint_dummy.f90
-)
 
 set(IOBASESRC
   io/io_base.f90
@@ -66,10 +60,8 @@ set(IOBASESRC
 set(IOBACKENDSRC)
 
 if(WITH_ADIOS2)
-  list(APPEND SRC ${ADIOS2SRC})
   list(APPEND IOBACKENDSRC io/io_adios2.f90)
 else()
-  list(APPEND SRC ${DUMMYADIOS2SRC})
   list(APPEND IOBACKENDSRC io/io_dummy.f90)
 endif()
 
@@ -95,12 +87,7 @@ endif()
 list(APPEND SRC ${IOBASESRC})
 list(APPEND SRC ${IOBACKENDSRC})
 list(APPEND SRC ${IOSERVICESRC})
-
-if(WITH_ADIOS2)
-  list(APPEND SRC ${ADIOS2SRC})
-else()
-  list(APPEND SRC ${DUMMYADIOS2SRC})
-endif()
+list(APPEND SRC io/checkpoint_io.f90)
 
 if(SINGLE_PREC)
   add_definitions("-DSINGLE_PREC")

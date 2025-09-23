@@ -13,71 +13,71 @@ module m_io_dummy
   type, extends(io_file_t) :: io_dummy_file_t
     logical :: is_open = .false.
   contains
-    procedure :: close => file_close
-    procedure :: begin_step => file_begin_step
-    procedure :: end_step => file_end_step
+    procedure :: close => file_close_dummy
+    procedure :: begin_step => file_begin_step_dummy
+    procedure :: end_step => file_end_step_dummy
   end type io_dummy_file_t
 
   type, extends(io_reader_t) :: io_dummy_reader_t
     logical :: initialised = .false.
   contains
-    procedure :: init => reader_init
-    procedure :: open => reader_open
-    procedure :: finalise => reader_finalise
+    procedure :: init => reader_init_dummy
+    procedure :: open => reader_open_dummy
+    procedure :: finalise => reader_finalise_dummy
     
-    generic :: read_data => read_data_i8, read_data_integer, read_data_real, read_data_array_3d
-    procedure, private :: read_data_i8 => reader_read_data_i8
-    procedure, private :: read_data_integer => reader_read_data_integer
-    procedure, private :: read_data_real => reader_read_data_real
-    procedure, private :: read_data_array_3d => reader_read_data_array_3d
+    generic :: read_data => read_data_i8_dummy, read_data_integer_dummy, read_data_real_dummy, read_data_array_3d_dummy
+    procedure :: read_data_i8 => read_data_i8_dummy
+    procedure :: read_data_integer => read_data_integer_dummy
+    procedure :: read_data_real => read_data_real_dummy
+    procedure :: read_data_array_3d => read_data_array_3d_dummy
   end type io_dummy_reader_t
 
   type, extends(io_writer_t) :: io_dummy_writer_t
     logical :: initialised = .false.
   contains
-    procedure :: init => writer_init
-    procedure :: open => writer_open
-    procedure :: finalise => writer_finalise
+    procedure :: init => writer_init_dummy
+    procedure :: open => writer_open_dummy
+    procedure :: finalise => writer_finalise_dummy
     
-    generic :: write_data => write_data_i8, write_data_integer, write_data_real, write_data_array_3d
-    procedure, private :: write_data_i8 => writer_write_data_i8
-    procedure, private :: write_data_integer => writer_write_data_integer
-    procedure, private :: write_data_real => writer_write_data_real
-    procedure, private :: write_data_array_3d => writer_write_data_array_3d
+    generic :: write_data => write_data_i8_dummy, write_data_integer_dummy, write_data_real_dummy, write_data_array_3d_dummy
+    procedure :: write_data_i8 => write_data_i8_dummy
+    procedure :: write_data_integer => write_data_integer_dummy
+    procedure :: write_data_real => write_data_real_dummy
+    procedure :: write_data_array_3d => write_data_array_3d_dummy
     
-    generic :: write_attribute => write_attribute_string, write_attribute_array_1d_real
-    procedure, private :: write_attribute_string => writer_write_attribute_string
-    procedure, private :: write_attribute_array_1d_real => writer_write_attribute_array_1d_real
+    generic :: write_attribute => write_attribute_string_dummy, write_attribute_array_1d_real_dummy
+    procedure :: write_attribute_string => write_attribute_string_dummy
+    procedure :: write_attribute_array_1d_real => write_attribute_array_1d_real_dummy
   end type io_dummy_writer_t
 
 contains
 
-  subroutine file_close(self)
+  subroutine file_close_dummy(self)
     class(io_dummy_file_t), intent(inout) :: self
     write(stderr, '(A)') "WARNING: Dummy I/O backend - file close operation ignored"
     self%is_open = .false.
-  end subroutine file_close
+  end subroutine file_close_dummy
 
-  subroutine file_begin_step(self)
+  subroutine file_begin_step_dummy(self)
     class(io_dummy_file_t), intent(inout) :: self
     write(stderr, '(A)') "WARNING: Dummy I/O backend - begin_step operation ignored"
-  end subroutine file_begin_step
+  end subroutine file_begin_step_dummy
 
-  subroutine file_end_step(self)
+  subroutine file_end_step_dummy(self)
     class(io_dummy_file_t), intent(inout) :: self
     write(stderr, '(A)') "WARNING: Dummy I/O backend - end_step operation ignored"
-  end subroutine file_end_step
+  end subroutine file_end_step_dummy
 
-  subroutine reader_init(self, comm, name)
+  subroutine reader_init_dummy(self, comm, name)
     class(io_dummy_reader_t), intent(inout) :: self
     integer, intent(in) :: comm
     character(len=*), intent(in) :: name
     write(stderr, '(A)') "WARNING: Using dummy I/O backend - ADIOS2 not available"
     write(stderr, '(A)') "I/O operations will not function properly"
     self%initialised = .true.
-  end subroutine reader_init
+  end subroutine reader_init_dummy
 
-  function reader_open(self, filename, mode, comm) result(file_handle)
+  function reader_open_dummy(self, filename, mode, comm) result(file_handle)
     class(io_dummy_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
@@ -94,9 +94,9 @@ contains
     dummy_file%is_open = .false.
 
     call move_alloc(dummy_file, file_handle)
-  end function reader_open
+  end function reader_open_dummy
 
-  subroutine reader_read_data_i8(self, variable_name, value, file_handle)
+  subroutine read_data_i8_dummy(self, variable_name, value, file_handle)
     class(io_dummy_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     integer(i8), intent(out) :: value
@@ -105,9 +105,9 @@ contains
     write(stderr, '(A)') "ERROR: Cannot read scalar i8 '" // trim(variable_name) // "' - ADIOS2 not available"
     value = 0_i8
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine reader_read_data_i8
+  end subroutine read_data_i8_dummy
 
-  subroutine reader_read_data_integer(self, variable_name, value, file_handle)
+  subroutine read_data_integer_dummy(self, variable_name, value, file_handle)
     class(io_dummy_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     integer, intent(out) :: value
@@ -116,9 +116,9 @@ contains
     write(stderr, '(A)') "ERROR: Cannot read scalar integer '" // trim(variable_name) // "' - ADIOS2 not available"
     value = 0
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine reader_read_data_integer
+  end subroutine read_data_integer_dummy
 
-  subroutine reader_read_data_real(self, variable_name, value, file_handle)
+  subroutine read_data_real_dummy(self, variable_name, value, file_handle)
     class(io_dummy_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     real(dp), intent(out) :: value
@@ -127,9 +127,9 @@ contains
     write(stderr, '(A)') "ERROR: Cannot read scalar real '" // trim(variable_name) // "' - ADIOS2 not available"
     value = 0.0_dp
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine reader_read_data_real
+  end subroutine read_data_real_dummy
 
-  subroutine reader_read_data_array_3d(self, variable_name, array, file_handle, shape_dims, start_dims, count_dims)
+  subroutine read_data_array_3d_dummy(self, variable_name, array, file_handle, shape_dims, start_dims, count_dims)
     class(io_dummy_reader_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     real(dp), intent(inout) :: array(:, :, :)
@@ -141,24 +141,24 @@ contains
     write(stderr, '(A)') "ERROR: Cannot read 3D array '" // trim(variable_name) // "' - ADIOS2 not available"
     array = 0.0_dp
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine reader_read_data_array_3d
+  end subroutine read_data_array_3d_dummy
 
-  subroutine reader_finalise(self)
+  subroutine reader_finalise_dummy(self)
     class(io_dummy_reader_t), intent(inout) :: self
     write(stderr, '(A)') "WARNING: Dummy I/O backend - finalise operation ignored"
     self%initialised = .false.
-  end subroutine reader_finalise
+  end subroutine reader_finalise_dummy
 
-  subroutine writer_init(self, comm, name)
+  subroutine writer_init_dummy(self, comm, name)
     class(io_dummy_writer_t), intent(inout) :: self
     integer, intent(in) :: comm
     character(len=*), intent(in) :: name
     write(stderr, '(A)') "WARNING: Using dummy I/O backend - ADIOS2 not available"
     write(stderr, '(A)') "I/O operations will not function properly"
     self%initialised = .true.
-  end subroutine writer_init
+  end subroutine writer_init_dummy
 
-  function writer_open(self, filename, mode, comm) result(file_handle)
+  function writer_open_dummy(self, filename, mode, comm) result(file_handle)
     class(io_dummy_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
@@ -175,9 +175,9 @@ contains
     dummy_file%is_open = .false.
 
     call move_alloc(dummy_file, file_handle)
-  end function writer_open
+  end function writer_open_dummy
 
-  subroutine writer_write_data_i8(self, variable_name, value, file_handle)
+  subroutine write_data_i8_dummy(self, variable_name, value, file_handle)
     class(io_dummy_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     integer(i8), intent(in) :: value
@@ -185,9 +185,9 @@ contains
 
     write(stderr, '(A)') "ERROR: Cannot write scalar i8 '" // trim(variable_name) // "' - ADIOS2 not available"
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine writer_write_data_i8
+  end subroutine write_data_i8_dummy
 
-  subroutine writer_write_data_integer(self, variable_name, value, file_handle)
+  subroutine write_data_integer_dummy(self, variable_name, value, file_handle)
     class(io_dummy_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     integer, intent(in) :: value
@@ -195,9 +195,9 @@ contains
 
     write(stderr, '(A)') "ERROR: Cannot write scalar integer '" // trim(variable_name) // "' - ADIOS2 not available"
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine writer_write_data_integer
+  end subroutine write_data_integer_dummy
 
-  subroutine writer_write_data_real(self, variable_name, value, file_handle)
+  subroutine write_data_real_dummy(self, variable_name, value, file_handle)
     class(io_dummy_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     real(dp), intent(in) :: value
@@ -205,9 +205,9 @@ contains
 
     write(stderr, '(A)') "ERROR: Cannot write scalar real '" // trim(variable_name) // "' - ADIOS2 not available"
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine writer_write_data_real
+  end subroutine write_data_real_dummy
 
-  subroutine writer_write_data_array_3d(self, variable_name, array, file_handle, shape_dims, start_dims, count_dims)
+  subroutine write_data_array_3d_dummy(self, variable_name, array, file_handle, shape_dims, start_dims, count_dims)
     class(io_dummy_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: variable_name
     real(dp), intent(in) :: array(:, :, :)
@@ -218,15 +218,15 @@ contains
 
     write(stderr, '(A)') "ERROR: Cannot write 3D array '" // trim(variable_name) // "' - ADIOS2 not available"
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine writer_write_data_array_3d
+  end subroutine write_data_array_3d_dummy
 
-  subroutine writer_finalise(self)
+  subroutine writer_finalise_dummy(self)
     class(io_dummy_writer_t), intent(inout) :: self
     write(stderr, '(A)') "WARNING: Dummy I/O backend - finalise operation ignored"
     self%initialised = .false.
-  end subroutine writer_finalise
+  end subroutine writer_finalise_dummy
 
-  subroutine writer_write_attribute_string(self, attribute_name, value, file_handle)
+  subroutine write_attribute_string_dummy(self, attribute_name, value, file_handle)
     class(io_dummy_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: attribute_name
     character(len=*), intent(in) :: value
@@ -234,9 +234,9 @@ contains
 
     write(stderr, '(A)') "ERROR: Cannot write string attribute '" // trim(attribute_name) // "' - ADIOS2 not available"
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine writer_write_attribute_string
+  end subroutine write_attribute_string_dummy
 
-  subroutine writer_write_attribute_array_1d_real(self, attribute_name, values, file_handle)
+  subroutine write_attribute_array_1d_real_dummy(self, attribute_name, values, file_handle)
     class(io_dummy_writer_t), intent(inout) :: self
     character(len=*), intent(in) :: attribute_name
     real(dp), intent(in) :: values(:)
@@ -244,6 +244,6 @@ contains
 
     write(stderr, '(A)') "ERROR: Cannot write real array attribute '" // trim(attribute_name) // "' - ADIOS2 not available"
     error stop "I/O operation failed: ADIOS2 support not compiled"
-  end subroutine writer_write_attribute_array_1d_real
+  end subroutine write_attribute_array_1d_real_dummy
 
 end module m_io_dummy

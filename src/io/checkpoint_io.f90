@@ -47,7 +47,7 @@ module m_checkpoint_manager_base
 end module m_checkpoint_manager_base
 
 module m_checkpoint_manager_impl
-!! Implementation of checkpoint manager when ADIOS2 is enabled
+!! Implementation of checkpoint manager using generic I/O abstraction
   use mpi, only: MPI_COMM_WORLD, MPI_Comm_rank, MPI_Abort
   use m_common, only: dp, i8, DIR_C, VERT, get_argument
   use m_field, only: field_t
@@ -60,7 +60,7 @@ module m_checkpoint_manager_impl
   implicit none
 
   private
-  public :: checkpoint_manager_adios2_t
+  public :: checkpoint_manager_impl_t
 
   ! type for dynamic field buffer mapping
   type :: field_buffer_map_t
@@ -68,8 +68,8 @@ module m_checkpoint_manager_impl
     real(dp), dimension(:, :, :), allocatable :: buffer
   end type field_buffer_map_t
 
-  type, extends(checkpoint_manager_base_t) :: checkpoint_manager_adios2_t
-    class(io_writer_t), allocatable :: adios2_writer                          !! Writer for checkpoints
+  type, extends(checkpoint_manager_base_t) :: checkpoint_manager_impl_t
+    class(io_writer_t), allocatable :: checkpoint_writer                      !! Writer for checkpoints
     class(io_writer_t), allocatable :: snapshot_writer                        !! Writer for snapshots
     integer :: last_checkpoint_step = -1
     integer, dimension(3) :: output_stride = [1, 1, 1]              !! Stride factors for snapshots (default: full resolution)
@@ -98,7 +98,7 @@ module m_checkpoint_manager_impl
     procedure, private :: get_output_dimensions
     procedure, private :: generate_coordinates
     procedure, private :: generate_vtk_xml
-  end type checkpoint_manager_adios2_t
+  end type checkpoint_manager_impl_t
 
   type :: field_ptr_t
     class(field_t), pointer :: ptr => null()
@@ -107,12 +107,12 @@ module m_checkpoint_manager_impl
 contains
 
   subroutine init(self, comm)
-    !! Initialise checkpoint manager with a reference to an ADIOS2 writer
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    !! Initialise checkpoint manager with a reference to a generic I/O writer
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     integer, intent(in) :: comm
 
-    allocate(self%adios2_writer, source=create_io_writer())
-    call self%adios2_writer%init(comm, "checkpoint_writer")
+    allocate(self%checkpoint_writer, source=create_io_writer())
+    call self%checkpoint_writer%init(comm, "checkpoint_writer")
     allocate(self%snapshot_writer, source=create_io_writer())
     call self%snapshot_writer%init(comm, "snapshot_writer")
 
@@ -132,7 +132,7 @@ contains
 
   subroutine handle_restart(self, solver, comm)
     !! Check if a restart is needed and handle it
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     class(solver_t), intent(inout) :: solver
     integer, intent(in), optional :: comm
 
@@ -157,7 +157,7 @@ contains
 
   subroutine handle_io_step(self, solver, timestep, comm)
     !! Method to handle checkpoint and snapshot writing at a given timestep
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     class(solver_t), intent(in) :: solver
     integer, intent(in) :: timestep
     integer, intent(in), optional :: comm
@@ -176,7 +176,7 @@ contains
     checkpoint_prefix, snapshot_prefix, output_stride, comm &
     )
     !! Configure checkpoint and snapshot settings
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     integer, intent(in), optional :: checkpoint_freq, snapshot_freq
     logical, intent(in), optional :: keep_checkpoint
     character(len=*), intent(in), optional :: checkpoint_prefix, &
@@ -221,7 +221,7 @@ contains
 
   subroutine write_checkpoint(self, solver, timestep, comm)
     !! Write a checkpoint file for simulation restart
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     class(solver_t), intent(in) :: solver
     integer, intent(in) :: timestep
     integer, intent(in), optional :: comm
@@ -250,16 +250,16 @@ contains
       trim(self%checkpoint_cfg%checkpoint_prefix), '_temp.bp'
     if (myrank == 0) print *, 'Writing checkpoint: ', trim(filename)
 
-    file = self%adios2_writer%open(temp_filename, io_mode_write, &
+    file = self%checkpoint_writer%open(temp_filename, io_mode_write, &
                                    comm_to_use)
     call file%begin_step()
 
     simulation_time = timestep*solver%dt
     data_loc = solver%u%data_loc
-    call self%adios2_writer%write_data("timestep", timestep, file)
-    call self%adios2_writer%write_data("time", real(simulation_time, dp), file)
-    call self%adios2_writer%write_data("dt", real(solver%dt, dp), file)
-    call self%adios2_writer%write_data("data_loc", data_loc, file)
+    call self%checkpoint_writer%write_data("timestep", timestep, file)
+    call self%checkpoint_writer%write_data("time", real(simulation_time, dp), file)
+    call self%checkpoint_writer%write_data("dt", real(solver%dt, dp), file)
+    call self%checkpoint_writer%write_data("data_loc", data_loc, file)
 
     allocate (field_ptrs(num_fields))
     allocate (host_fields(num_fields))
@@ -289,7 +289,7 @@ contains
 
     call self%write_fields( &
       field_names, host_fields, &
-      solver, file, data_loc, use_stride=.false., writer=self%adios2_writer &
+      solver, file, data_loc, use_stride=.false., writer=self%checkpoint_writer &
       )
     deallocate (field_ptrs)
 
@@ -335,7 +335,7 @@ contains
 
   subroutine write_snapshot(self, solver, timestep, comm)
    !! Write a snapshot file for visualisation
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     class(solver_t), intent(in) :: solver
     integer, intent(in) :: timestep
     integer, intent(in), optional :: comm
@@ -387,9 +387,8 @@ contains
 
     ! Write VTK XML attributes for ParaView compatibility
     if (myrank == 0) then
-      ! TODO: Add write_attribute support to I/O interface
-      ! call self%snapshot_writer%write_attribute( &
-      !   "vtk.xml", self%vtk_xml, self%snapshot_file)
+      call self%snapshot_writer%write_attribute( &
+        "vtk.xml", self%vtk_xml, self%snapshot_file)
     end if
 
     call self%snapshot_file%begin_step()
@@ -452,7 +451,7 @@ contains
 
   subroutine generate_vtk_xml(self, dims, fields, origin, spacing)
     !! Generate VTK XML string for ImageData format for ParaView's ADIOS2VTXReader
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     integer(i8), dimension(3), intent(in) :: dims
     character(len=*), dimension(:), intent(in) :: fields
     real(dp), dimension(3), intent(in) :: origin, spacing
@@ -495,7 +494,7 @@ contains
   subroutine generate_coordinates( &
     self, solver, file, shape_dims, start_dims, count_dims, data_loc &
     )
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     class(solver_t), intent(in) :: solver
     class(io_file_t), intent(inout) :: file
     integer(i8), dimension(3), intent(in) :: shape_dims, start_dims, count_dims
@@ -554,13 +553,13 @@ contains
     z_start = [start_dims(3), 0_i8, 0_i8]
     z_count = [count_dims(3), 1_i8, 1_i8]
 
-    call self%adios2_writer%write_data( &
+    call self%checkpoint_writer%write_data( &
       "coordinates/x", self%coords_x, file, x_shape, x_start, x_count &
       )
-    call self%adios2_writer%write_data( &
+    call self%checkpoint_writer%write_data( &
       "coordinates/y", self%coords_y, file, y_shape, y_start, y_count &
       )
-    call self%adios2_writer%write_data( &
+    call self%checkpoint_writer%write_data( &
       "coordinates/z", self%coords_z, file, z_shape, z_start, z_count &
       )
   end subroutine generate_coordinates
@@ -569,7 +568,7 @@ contains
     self, input_data, dims, stride, output_dims_out) &
     result(output_data)
     !! stride the input data based on the specified stride
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     real(dp), dimension(:, :, :), intent(in) :: input_data
     integer, dimension(3), intent(in) :: dims
     integer, dimension(3), intent(in) :: stride
@@ -602,7 +601,7 @@ contains
   subroutine stride_data_to_buffer( &
     self, input_data, dims, stride, out_buffer, output_dims_out &
     )
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     real(dp), dimension(:, :, :), intent(in) :: input_data
     integer, dimension(3), intent(in) :: dims
     integer, dimension(3), intent(in) :: stride
@@ -655,7 +654,7 @@ contains
     self, shape_dims, start_dims, count_dims, stride_factors, &
     output_shape, output_start, output_count, output_dims_local)
 
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     integer(i8), dimension(3), intent(in) :: shape_dims, start_dims, count_dims
     integer, dimension(3), intent(in) :: stride_factors
     integer(i8), dimension(3), intent(out) :: output_shape, output_start
@@ -707,7 +706,7 @@ contains
     self, solver, filename, timestep, restart_time, comm &
     )
     !! Restart simulation state from checkpoint file
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     class(solver_t), intent(inout) :: solver
     character(len=*), intent(in) :: filename
     integer, intent(out) :: timestep
@@ -816,7 +815,7 @@ contains
     use_stride, writer &
     )
     !! Write field data, optionally with striding, using separate buffers for true async I/O
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     character(len=*), dimension(:), intent(in) :: field_names
     class(field_ptr_t), dimension(:), target, intent(in) :: host_fields
     class(solver_t), intent(in) :: solver
@@ -959,7 +958,7 @@ contains
 
   subroutine cleanup_output_buffers(self)
     !! Clean up dynamic field buffers
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
     integer :: i
 
     if (allocated(self%output_buffer)) deallocate (self%output_buffer)
@@ -975,10 +974,10 @@ contains
   end subroutine cleanup_output_buffers
 
   subroutine finalise(self)
-    class(checkpoint_manager_adios2_t), intent(inout) :: self
+    class(checkpoint_manager_impl_t), intent(inout) :: self
 
     call self%cleanup_output_buffers()
-    call self%adios2_writer%finalise()
+    call self%checkpoint_writer%finalise()
     call self%snapshot_writer%finalise()
   end subroutine finalise
 
@@ -986,7 +985,7 @@ end module m_checkpoint_manager_impl
 
 module m_checkpoint_manager
   !! Public facade and factory function for checkpoint manager
-  use m_checkpoint_manager_impl, only: checkpoint_manager_adios2_t
+  use m_checkpoint_manager_impl, only: checkpoint_manager_impl_t
   use m_solver, only: solver_t
 
   implicit none
@@ -995,7 +994,7 @@ module m_checkpoint_manager
   public :: checkpoint_manager_t, create_checkpoint_manager
 
   type :: checkpoint_manager_t
-    type(checkpoint_manager_adios2_t) :: impl
+    type(checkpoint_manager_impl_t) :: impl
   contains
     procedure :: init => cm_init
     procedure :: handle_restart => cm_handle_restart
