@@ -55,6 +55,8 @@ module m_io_adios2
     procedure :: write_data_integer => write_data_integer_impl
     procedure :: write_data_real => write_data_real_impl
     procedure :: write_data_array_3d => write_data_array_3d_impl
+    procedure :: write_attribute_string => write_attribute_string_impl
+    procedure :: write_attribute_array_1d_real => write_attribute_array_1d_real_impl
     procedure :: finalise => finalise_writer_impl
     procedure, private :: handle_error => handle_error_writer
   end type io_adios2_writer_t
@@ -456,6 +458,44 @@ contains
       call self%handle_error(1, "Invalid file handle type for ADIOS2")
     end select
   end subroutine write_data_array_3d_impl
+
+  subroutine write_attribute_string_impl(self, attribute_name, value, file_handle)
+    class(io_adios2_writer_t), intent(inout) :: self
+    character(len=*), intent(in) :: attribute_name
+    character(len=*), intent(in) :: value
+    class(io_file_t), intent(inout) :: file_handle
+
+    type(adios2_attribute) :: attr
+    integer :: ierr
+    
+    select type(file_handle)
+    type is (io_adios2_file_t)
+      call adios2_define_attribute(attr, self%io_handle, attribute_name, value, ierr)
+      call self%handle_error(ierr, "Error defining ADIOS2 string attribute "//trim(attribute_name))
+    class default
+      call self%handle_error(1, "Invalid file handle type for ADIOS2")
+    end select
+  end subroutine write_attribute_string_impl
+
+  subroutine write_attribute_array_1d_real_impl(self, attribute_name, values, file_handle)
+    class(io_adios2_writer_t), intent(inout) :: self
+    character(len=*), intent(in) :: attribute_name
+    real(dp), intent(in) :: values(:)
+    class(io_file_t), intent(inout) :: file_handle
+
+    type(adios2_attribute) :: attr
+    integer :: ierr
+    integer :: num_elements
+    
+    select type(file_handle)
+    type is (io_adios2_file_t)
+      num_elements = size(values)
+      call adios2_define_attribute(attr, self%io_handle, attribute_name, values, num_elements, ierr)
+      call self%handle_error(ierr, "Error defining ADIOS2 real array attribute "//trim(attribute_name))
+    class default
+      call self%handle_error(1, "Invalid file handle type for ADIOS2")
+    end select
+  end subroutine write_attribute_array_1d_real_impl
 
   subroutine finalise_writer_impl(self)
     class(io_adios2_writer_t), intent(inout) :: self

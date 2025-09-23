@@ -45,6 +45,10 @@ module m_io_base
     procedure(write_data_integer), deferred :: write_data_integer
     procedure(write_data_real), deferred :: write_data_real
     procedure(write_data_array_3d), deferred :: write_data_array_3d
+    
+    generic :: write_attribute => write_attribute_string, write_attribute_array_1d_real
+    procedure(write_attribute_string), deferred :: write_attribute_string
+    procedure(write_attribute_array_1d_real), deferred :: write_attribute_array_1d_real
   end type io_writer_t
 
   abstract interface
@@ -174,6 +178,22 @@ module m_io_base
       import :: io_writer_t
       class(io_writer_t), intent(inout) :: self
     end subroutine writer_finalise
+
+    subroutine write_attribute_string(self, attribute_name, value, file_handle)
+      import :: io_writer_t, io_file_t
+      class(io_writer_t), intent(inout) :: self
+      character(len=*), intent(in) :: attribute_name
+      character(len=*), intent(in) :: value
+      class(io_file_t), intent(inout) :: file_handle
+    end subroutine write_attribute_string
+
+    subroutine write_attribute_array_1d_real(self, attribute_name, values, file_handle)
+      import :: io_writer_t, io_file_t, dp
+      class(io_writer_t), intent(inout) :: self
+      character(len=*), intent(in) :: attribute_name
+      real(dp), intent(in) :: values(:)
+      class(io_file_t), intent(inout) :: file_handle
+    end subroutine write_attribute_array_1d_real
   end interface
 
 end module m_io_base

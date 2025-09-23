@@ -44,6 +44,10 @@ module m_io_dummy
     procedure, private :: write_data_integer => writer_write_data_integer
     procedure, private :: write_data_real => writer_write_data_real
     procedure, private :: write_data_array_3d => writer_write_data_array_3d
+    
+    generic :: write_attribute => write_attribute_string, write_attribute_array_1d_real
+    procedure, private :: write_attribute_string => writer_write_attribute_string
+    procedure, private :: write_attribute_array_1d_real => writer_write_attribute_array_1d_real
   end type io_dummy_writer_t
 
 contains
@@ -221,5 +225,25 @@ contains
     write(stderr, '(A)') "WARNING: Dummy I/O backend - finalise operation ignored"
     self%initialised = .false.
   end subroutine writer_finalise
+
+  subroutine writer_write_attribute_string(self, attribute_name, value, file_handle)
+    class(io_dummy_writer_t), intent(inout) :: self
+    character(len=*), intent(in) :: attribute_name
+    character(len=*), intent(in) :: value
+    class(io_file_t), intent(inout) :: file_handle
+
+    write(stderr, '(A)') "ERROR: Cannot write string attribute '" // trim(attribute_name) // "' - ADIOS2 not available"
+    error stop "I/O operation failed: ADIOS2 support not compiled"
+  end subroutine writer_write_attribute_string
+
+  subroutine writer_write_attribute_array_1d_real(self, attribute_name, values, file_handle)
+    class(io_dummy_writer_t), intent(inout) :: self
+    character(len=*), intent(in) :: attribute_name
+    real(dp), intent(in) :: values(:)
+    class(io_file_t), intent(inout) :: file_handle
+
+    write(stderr, '(A)') "ERROR: Cannot write real array attribute '" // trim(attribute_name) // "' - ADIOS2 not available"
+    error stop "I/O operation failed: ADIOS2 support not compiled"
+  end subroutine writer_write_attribute_array_1d_real
 
 end module m_io_dummy
