@@ -52,6 +52,7 @@ module m_base_backend
     procedure(copy_f_to_data), deferred :: copy_f_to_data
     procedure(alloc_tdsops), deferred :: alloc_tdsops
     procedure(init_poisson_fft), deferred :: init_poisson_fft
+    procedure(apply_sponge_layer_interface), deferred :: apply_sponge_layer
     procedure :: base_init
     procedure :: get_field_data
     procedure :: set_field_data
@@ -332,6 +333,20 @@ module m_base_backend
       type(dirps_t), intent(in) :: xdirps, ydirps, zdirps
       logical, optional, intent(in) :: lowmem
     end subroutine init_poisson_fft
+  end interface
+
+  abstract interface
+    subroutine apply_sponge_layer_interface(self, v, dv, ramp, target_v)
+      import :: base_backend_t
+      import :: field_t
+      import :: dp
+      implicit none
+
+      class(base_backend_t), intent(inout) :: self
+      class(field_t), intent(inout) :: v, dv
+      class(field_t), intent(in) :: ramp
+      real(dp), intent(in) :: target_v
+    end subroutine apply_sponge_layer_interface
   end interface
 
 contains
