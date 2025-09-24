@@ -117,6 +117,8 @@ contains
 
     end if
 
+    call io_session%close()
+
   end function init
 
   subroutine body(self, u, v, w)
