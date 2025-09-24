@@ -219,4 +219,27 @@ contains
 
   end subroutine volume_integral
 
+  attributes(global) subroutine apply_sponge_layer_kernel( &
+    v, dv, ramp, target_v, nx, ny, nz &
+    )
+    implicit none
+
+    real(dp), device, intent(inout) :: v(:, :, :), dv(:, :, :)
+    real(dp), device, intent(in) :: ramp(:, :, :)
+    real(dp), value, intent(in) :: target_v
+    integer, value, intent(in) :: nx, ny, nz
+  
+    integer :: i, j, k
+    
+    i = blockIdx%x * blockDim%x + threadIdx%x
+    j = blockIdx%y * blockDim%y + threadIdx%y
+    k = blockIdx%z * blockDim%z + threadIdx%z
+    
+    if (i <= nx .and. j <= ny .and. k <= nz) then
+      dv(i, j, k) = dv(i, j, k) + (1.0_dp - ramp(i, j, k)) &
+                    * (target_v - v(i, j, k))
+    end if
+  
+  end subroutine apply_sponge_layer_kernel
+
 end module m_cuda_kernels_fieldops
