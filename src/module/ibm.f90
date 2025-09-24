@@ -91,10 +91,9 @@ contains
 
       ! Read the vertex mask ep1
       !
-      ! The mask was written in python in C order
-      ! start_dims and count_dims are thus reversed
-      ! The resulting output is in reversed order
       dims = mesh%get_dims(VERT)
+      start_dims = int(ibm%mesh%par%n_offset, i8)
+      count_dims = int(dims, i8)
       start_dims = int(ibm%mesh%par%n_offset, i8)
       count_dims = int(dims, i8)
 
