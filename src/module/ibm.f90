@@ -77,9 +77,9 @@ contains
       start_dims = int(ibm%mesh%par%n_offset, i8)
       count_dims = int(dims, i8)
 
-      ! Allocate field_data with the expected dimensions from the read
-      allocate(field_data(count_dims(1), count_dims(2), count_dims(3)))
-      call io_session%read_data("ep1", field_data, start_dims, count_dims)
+      ! Allocate field_data with the expected (reversed) dimensions from the read
+      allocate (field_data(count_dims(1), count_dims(2), count_dims(3)))
+      call reader_session%read_data("ep1", field_data, start_dims, count_dims)
 
       ! Get and fill a block on the host
       ep1 => ibm%host_allocator%get_block(DIR_C)
