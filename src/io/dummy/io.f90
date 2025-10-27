@@ -1,6 +1,20 @@
-module m_io_dummy
-!! Dummy implementation of the general I/O interface for when ADIOS2 is not available
-
+module m_io_backend
+!! @brief Provides a dummy, non-functional I/O backend for when an I/O backend
+!! is not available
+!!
+!! @details This module provides a fallback implementation of the I/O backend
+!! interface. It is used when no real I/O backend (e.g. ADIOS2) is enabled at
+!! compile time.
+!!
+!! The primary purpose of this dummy backend is to allow the full program to
+!! compile and link against the session interface (`m_io_session`) without
+!! requiring a functional I/O library.
+!!
+!! @warning This is a non-functional stub. Calling any of its I/O procedures
+!! will immediately terminate the program with an error message.
+!!
+!! @note If you require file I/O, you must recompile the code with a functional
+!! backend
   use iso_fortran_env, only: stderr => error_unit
   use m_io_base, only: io_reader_t, io_writer_t, io_file_t, io_mode_read, &
                        io_mode_write
@@ -9,9 +23,13 @@ module m_io_dummy
   implicit none
 
   private
-  public :: io_dummy_reader_t, io_dummy_writer_t, io_dummy_file_t
+  public :: allocate_io_reader, allocate_io_writer
+  public :: get_default_backend, IO_BACKEND_DUMMY, IO_BACKEND_ADIOS2
 
   logical, save :: write_warning_shown = .false.
+
+  integer, parameter :: IO_BACKEND_DUMMY = 0
+  integer, parameter :: IO_BACKEND_ADIOS2 = 1
 
   type, extends(io_file_t) :: io_dummy_file_t
     logical :: is_open = .false.
@@ -19,6 +37,7 @@ module m_io_dummy
     procedure :: close => file_close_dummy
     procedure :: begin_step => file_begin_step_dummy
     procedure :: end_step => file_end_step_dummy
+    procedure :: is_file_functional => is_file_functional_dummy
   end type io_dummy_file_t
 
   type, extends(io_reader_t) :: io_dummy_reader_t
@@ -49,6 +68,21 @@ module m_io_dummy
   end type io_dummy_writer_t
 
 contains
+
+  subroutine allocate_io_reader(reader)
+    class(io_reader_t), allocatable, intent(out) :: reader
+    allocate (io_dummy_reader_t :: reader)
+  end subroutine allocate_io_reader
+
+  subroutine allocate_io_writer(writer)
+    class(io_writer_t), allocatable, intent(out) :: writer
+    allocate (io_dummy_writer_t :: writer)
+  end subroutine allocate_io_writer
+
+  function get_default_backend() result(backend)
+    integer :: backend
+    backend = IO_BACKEND_DUMMY
+  end function get_default_backend
 
   subroutine report_read_error(variable_name)
     character(len=*), intent(in) :: variable_name
@@ -84,7 +118,7 @@ contains
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
     integer, intent(in) :: comm
-    class(io_file_t), pointer :: file_handle
+    class(io_file_t), allocatable :: file_handle
 
     write (stderr, '(A)') "ERROR: Cannot open file '"//trim(filename)// &
       "' for reading - ADIOS2 not available"
@@ -97,6 +131,12 @@ contains
       file_handle%is_open = .false.
     end select
   end function reader_open_dummy
+
+  function is_file_functional_dummy(self) result(is_functional)
+    class(io_dummy_file_t), intent(in) :: self
+    logical :: is_functional
+    is_functional = self%is_open
+  end function is_file_functional_dummy
 
   subroutine read_data_i8_dummy(self, variable_name, value, file_handle)
     class(io_dummy_reader_t), intent(inout) :: self
@@ -162,7 +202,7 @@ contains
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
     integer, intent(in) :: comm
-    class(io_file_t), pointer :: file_handle
+    class(io_file_t), allocatable :: file_handle
 
     ! Show warning for write operations (once)
     if (.not. write_warning_shown) then
@@ -244,4 +284,4 @@ contains
     ! silently ignore attribute writes
   end subroutine write_attribute_array_1d_real_dummy
 
-end module m_io_dummy
+end module m_io_backend

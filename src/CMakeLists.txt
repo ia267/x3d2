@@ -56,8 +56,6 @@ set(DUMMYDECOMPSRC
 
 set(IOSRC
   io/io_base.f90
-  io/dummy/io.f90
-  io/io_factory.f90
   io/io_session.f90
   io/io_field_utils.f90
   io/checkpoint_manager.f90
@@ -66,8 +64,16 @@ set(IOSRC
 )
 
 if(WITH_ADIOS2)
-  list(APPEND IOSRC io/adios2/io.f90)
+  list(APPEND IOSRC 
+    io/adios2/io.f90
+  )
+else()
+  list(APPEND IOSRC 
+  io/dummy/io.f90
+  )
 endif()
+
+list(APPEND SRC ${IOSRC})
 
 if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI" OR
    ${CMAKE_Fortran_COMPILER_ID} STREQUAL "NVHPC")

@@ -55,12 +55,15 @@ contains
     class(field_t), pointer :: ep1
     type(reader_session_t) :: reader_session
     character(len=*), parameter :: ibm_file = "ibm.bp"
+    type(reader_session_t) :: reader_session
     integer(i8) :: start_dims(3), count_dims(3), iibm_i8
 
     ibm%backend => backend
     ibm%mesh => mesh
     ibm%host_allocator => host_allocator
 
+    ! Open a session to read the IBM configuration file
+    call reader_session%open(ibm_file, MPI_COMM_WORLD)
     ! Open a session to read the IBM configuration file
     call reader_session%open(ibm_file, MPI_COMM_WORLD)
 

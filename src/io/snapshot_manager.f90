@@ -1,5 +1,11 @@
 module m_snapshot_manager
-!! Snapshot manager for visualisation output
+!! @brief Manages the creation of simulation snapshots for post-processing
+!! and visualisation.
+!!
+!! @details This module is responsible for periodically writing simulation
+!! data to files intended for analysis and visualisation
+!! Unlike checkpoints, which are always full-resolution for exact restarts,
+!! snapshots can be strided to reduce file size.
   use mpi, only: MPI_COMM_WORLD, MPI_Comm_rank
   use m_common, only: dp, i8, DIR_C, VERT, get_argument
   use m_field, only: field_t
@@ -52,7 +58,7 @@ contains
 
   subroutine configure_output(self, comm)
     !! Configure snapshot output settings
-    use m_io_factory, only: get_default_backend, IO_BACKEND_DUMMY
+    use m_io_backend, only: get_default_backend, IO_BACKEND_DUMMY
     class(snapshot_manager_t), intent(inout) :: self
     integer, intent(in) :: comm
 

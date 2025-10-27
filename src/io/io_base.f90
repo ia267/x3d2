@@ -1,19 +1,32 @@
 module m_io_base
-!! Base types and constants for session-based I/O architecture
-!! This module provides the fundamental building blocks for X3D2's I/O system,
-!! but users should interact only with the high-level session interface (m_io_session).
+!! @brief Provides the abstract base types and interfaces for the session-based
+!! I/O architecture.
 !!
-!! **Architecture Overview:**
-!! - Session interface (`reader_session_t` and `writer_session_t` in `m_io_session`) is the primary user interface
-!! - Factory pattern (`m_io_factory`) handles backend selection (only supports ADIOS2 currently)
-!! - Concrete backends (ADIOS2) extend the base types defined here
-!! - Base types provide polymorphic containers and enforce consistent interfaces
+!! @details This internal module defines the fundamental building blocks of
+!! the I/O system. It establishes a polymorphic layer that allows the
+!! high-level user session to interact with various I/O backends through a
+!! consistent interface.
 !!
-!! **Design Philosophy:**
-!! - Users interact only with session types - no manual file handle management
-!! - Backends are selected automatically based on compile-time availability
-!! - Base types provide fallback implementations that error out (forcing proper override)
-!! - Clean separation: session manages complexity, backends focus on I/O specifics
+!! The architecture is designed in distinct layers:
+!! User code
+!! - interacts only with the Session layer
+!!
+!! Session layer (`m_io_session`)
+!! - manages all I/O complexity (file handles, state, etc.)
+!! - instantiates the I/O backend selected at compile-time
+!! - provides `reader_session_t` and `writer_session_t` for users
+!!
+!! Backend layer (`m_io_backend`)
+!! - concrete implementation of an I/O backed (e.g., ADIOS2)
+!! - extends the abstract base types defined in this module
+!!
+!! Base layer (`m_io_base`, this module)
+!! - provides abstract `reader_base_t` and `writer_base_t` types
+!! - enforces a consistent interface for all backends
+!!
+!! @note This is an internal module and should not be used directly by users.
+!! The sole public interface for I/O is the high-level session API provided in
+!! `m_io_session`.
 
   use m_common, only: dp, i8
 
@@ -32,6 +45,7 @@ module m_io_base
     procedure :: close => base_close
     procedure :: begin_step => base_begin_step
     procedure :: end_step => base_end_step
+    procedure :: is_file_functional => base_is_file_functional
   end type io_file_t
 
   !> Base I/O reader type for polymorphic usage
@@ -102,8 +116,9 @@ contains
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
     integer, intent(in) :: comm
-    class(io_file_t), pointer :: file_handle
-    file_handle => null()
+    class(io_file_t), allocatable :: file_handle
+    type(io_file_t) :: temp_handle
+    file_handle = temp_handle
     error stop "base_reader_open should not be called - &
       & use concrete implementation"
   end function base_reader_open
@@ -127,8 +142,9 @@ contains
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
     integer, intent(in) :: comm
-    class(io_file_t), pointer :: file_handle
-    file_handle => null()
+    class(io_file_t), allocatable :: file_handle
+    type(io_file_t) :: temp_handle
+    file_handle = temp_handle
     error stop "base_writer_open should not be called - &
       & use concrete implementation"
   end function base_writer_open
@@ -138,6 +154,12 @@ contains
     error stop "base_writer_finalise should not be called - &
       & use concrete implementation"
   end subroutine base_writer_finalise
+
+  function base_is_file_functional(self) result(is_functional)
+    class(io_file_t), intent(in) :: self
+    logical :: is_functional
+    is_functional = .true.
+  end function base_is_file_functional
 
   ! Base read implementations
   subroutine read_data_i8(self, variable_name, value, file_handle)
