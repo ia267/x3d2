@@ -57,8 +57,6 @@ module m_io_backend
   contains
     procedure :: init => reader_init_adios2
     procedure :: open => reader_open_adios2
-    
-    generic :: read_data => read_data_i8_adios2, read_data_integer_adios2, read_data_real_adios2, read_data_array_3d_adios2
     procedure :: read_data_i8 => read_data_i8_adios2
     procedure :: read_data_integer => read_data_integer_adios2
     procedure :: read_data_real => read_data_real_adios2
@@ -76,14 +74,10 @@ module m_io_backend
   contains
     procedure :: init => writer_init_adios2
     procedure :: open => writer_open_adios2
-    
-    generic :: write_data => write_data_i8_adios2, write_data_integer_adios2, write_data_real_adios2, write_data_array_3d_adios2
     procedure :: write_data_i8 => write_data_i8_adios2
     procedure :: write_data_integer => write_data_integer_adios2
     procedure :: write_data_real => write_data_real_adios2
     procedure :: write_data_array_3d => write_data_array_3d_adios2
-    
-    generic :: write_attribute => write_attribute_string_adios2, write_attribute_array_1d_real_adios2
     procedure :: write_attribute_string => write_attribute_string_adios2
     procedure :: write_attribute_array_1d_real => &
       write_attribute_array_1d_real_adios2
@@ -172,22 +166,22 @@ contains
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
     integer, intent(in) :: comm
-    class(io_file_t), pointer :: file_handle
-    
+
+    class(io_file_t), allocatable :: file_handle
+    type(io_adios2_file_t) :: temp_handle
     integer :: ierr, use_comm
 
-    allocate(io_adios2_file_t :: file_handle)
-    
     use_comm = comm
     if (.not. self%io_handle%valid) &
       call self%handle_error(1, "ADIOS2 IO object is not valid")
 
-    select type(file_handle)
-    type is (io_adios2_file_t)
-      call adios2_open(file_handle%engine, self%io_handle, filename, adios2_mode_read, use_comm, ierr)
-      call self%handle_error(ierr, "Failed to open ADIOS2 engine for reading")
-      file_handle%is_writer = .false.
-    end select
+    call adios2_open( &
+      temp_handle%engine, self%io_handle, filename, &
+      adios2_mode_read, use_comm, ierr)
+    call self%handle_error(ierr, "Failed to open ADIOS2 engine for reading")
+    temp_handle%is_writer = .false.
+
+    file_handle = temp_handle
   end function reader_open_adios2
 
   subroutine read_data_i8_adios2(self, variable_name, value, file_handle)
@@ -367,11 +361,10 @@ contains
     character(len=*), intent(in) :: filename
     integer, intent(in) :: mode
     integer, intent(in) :: comm
-    class(io_file_t), pointer :: file_handle
-    
-    integer :: ierr, use_comm
 
-    allocate(io_adios2_file_t :: file_handle)
+    class(io_file_t), allocatable :: file_handle
+    type(io_adios2_file_t) :: temp_handle
+    integer :: ierr, use_comm
 
     use_comm = comm
     if (.not. self%io_handle%valid) &
@@ -385,10 +378,13 @@ contains
                              &before open")
     end if
 
-      call adios2_open(file_handle%engine, self%io_handle, filename, adios2_mode_write, use_comm, ierr)
-      call self%handle_error(ierr, "Failed to open ADIOS2 engine for writing")
-      file_handle%is_writer = .true.
-    end select
+    call adios2_open( &
+      temp_handle%engine, self%io_handle, filename, &
+      adios2_mode_write, use_comm, ierr)
+    call self%handle_error(ierr, "Failed to open ADIOS2 engine for writing")
+    temp_handle%is_writer = .true.
+
+    file_handle = temp_handle
   end function writer_open_adios2
 
   subroutine write_data_i8_adios2(self, variable_name, value, file_handle)
