@@ -1,0 +1,1914 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="x3d2 is the current codename for what is to become Xcompact3d version 2.0.">
+    <meta name="author" content="Xcompact3d Team" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>xcompact.f90 &ndash; x3d2</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">x3d2 </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../program/xcompact.html">Program</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>xcompact.f90
+      <small>Source File</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 1.0% of total for source files.">90 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/xcompact.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+            <li class="breadcrumb-item active" aria-current="page">xcompact.f90</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#progs-0"
+         aria-expanded="false" aria-controls="progs-0">
+         <h4 class="card-header bg-primary text-white">Programs</h4>
+      </a>
+      <div id="progs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../program/xcompact.html">xcompact</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/xcompact.f90.html#src">xcompact.f90</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This file depends on</h3>
+          </div>
+          <div class="card-body">
+            <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: sourcefile~~xcompact.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilexcompactf90EfferentGraph" width="641pt" height="810pt"
+ viewBox="0.00 0.00 641.00 810.36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~xcompact.f90~~EfferentGraph" class="graph" transform="scale(0.35 0.35) rotate(0) translate(4 2343.64)">
+<title>sourcefile~~xcompact.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-2343.64 1853,-2343.64 1853,4 -4,4"/>
+<!-- sourcefile~xcompact.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~xcompact.f90</title>
+<polygon fill="none" stroke="black" points="1849,-832.76 1764,-832.76 1764,-808.76 1849,-808.76 1849,-832.76"/>
+<text text-anchor="middle" x="1806.5" y="-818.36" font-family="Helvetica,sans-Serif" font-size="10.50">xcompact.f90</text>
+</g>
+<!-- sourcefile~allocator.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~allocator.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node2"><a xlink:href="../sourcefile/allocator.f90.html" xlink:title="allocator.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="664.5,-1366.76 585.5,-1366.76 585.5,-1342.76 664.5,-1342.76 664.5,-1366.76"/>
+<text text-anchor="middle" x="625" y="-1352.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">allocator.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~allocator.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~allocator.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M888.5,-1390.76C838.21,-1329.09 736.02,-1334.33 675.04,-1344.21"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="674.14,-1340.81 664.88,-1345.96 675.33,-1347.71 674.14,-1340.81"/>
+</g>
+<!-- sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~allocator.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node3"><a xlink:href="../sourcefile/allocator.f90~2.html" xlink:title="allocator.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="543.5,-601.76 464.5,-601.76 464.5,-577.76 543.5,-577.76 543.5,-601.76"/>
+<text text-anchor="middle" x="504" y="-587.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">allocator.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1288,-29.76C1240.09,-43.23 1229.27,-50.65 1181,-62.76 1027.72,-101.21 971.96,-57.38 832,-130.76 762.69,-167.1 750.4,-189.32 706,-253.76 683.19,-286.87 688.49,-301.05 670,-336.76 634.6,-405.12 616.03,-416.72 580,-484.76 561.94,-518.86 569.01,-534.38 544,-563.76 541.59,-566.59 538.8,-569.24 535.84,-571.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="533.72,-568.89 527.75,-577.64 537.88,-574.52 533.72,-568.89"/>
+</g>
+<!-- sourcefile~backend.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~backend.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node4"><a xlink:href="../sourcefile/backend.f90.html" xlink:title="backend.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="929,-2102.76 850,-2102.76 850,-2078.76 929,-2078.76 929,-2102.76"/>
+<text text-anchor="middle" x="889.5" y="-2088.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">backend.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~backend.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~backend.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1014,-2050.76C983.95,-2054.71 951.4,-2065.55 927.26,-2074.95"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="925.78,-2071.77 917.79,-2078.73 928.37,-2078.27 925.78,-2071.77"/>
+</g>
+<!-- sourcefile~backend.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~backend.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node5"><a xlink:href="../sourcefile/backend.f90~2.html" xlink:title="backend.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="929,-1984.76 850,-1984.76 850,-1960.76 929,-1960.76 929,-1984.76"/>
+<text text-anchor="middle" x="889.5" y="-1970.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">backend.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~backend.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~backend.f90~2</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1014,-2050.76C969.95,-2056.56 928.35,-2017.89 906.48,-1992.9"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="908.97,-1990.42 899.84,-1985.03 903.62,-1994.93 908.97,-1990.42"/>
+</g>
+<!-- sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~backend.f90~3</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node6"><a xlink:href="../sourcefile/backend.f90~3.html" xlink:title="backend.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="790.5,-1096.76 711.5,-1096.76 711.5,-1072.76 790.5,-1072.76 790.5,-1096.76"/>
+<text text-anchor="middle" x="751" y="-1082.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">backend.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1805.5,-832.78C1804.87,-911.26 1791.54,-1346.63 1573,-1314.76"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1571,-1314.76C1506.39,-1317.88 1354.69,-1238.76 1290,-1238.76 1290,-1238.76 1290,-1238.76 1014,-1238.76 961.02,-1238.76 829.93,-1143.99 775.89,-1103.14"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="777.68,-1100.11 767.6,-1096.84 773.45,-1105.68 777.68,-1100.11"/>
+</g>
+<!-- sourcefile~base_case.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~base_case.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node7"><a xlink:href="../sourcefile/base_case.f90.html" xlink:title="base_case.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1616,-792.76 1528,-792.76 1528,-768.76 1616,-768.76 1616,-792.76"/>
+<text text-anchor="middle" x="1572" y="-778.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">base_case.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~base_case.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~base_case.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1763.93,-813.61C1725.44,-806.98 1668,-797.1 1626.18,-789.91"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1626.62,-786.43 1616.18,-788.19 1625.44,-793.33 1626.62,-786.43"/>
+</g>
+<!-- sourcefile~channel.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~channel.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node8"><a xlink:href="../sourcefile/channel.f90.html" xlink:title="channel.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1728,-852.76 1652,-852.76 1652,-828.76 1728,-828.76 1728,-852.76"/>
+<text text-anchor="middle" x="1690" y="-838.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">channel.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~channel.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~channel.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1763.84,-828.04C1755.57,-829.48 1746.82,-831.01 1738.37,-832.48"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1737.52,-829.08 1728.27,-834.25 1738.72,-835.98 1737.52,-829.08"/>
+</g>
+<!-- sourcefile~common.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~common.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node9"><a xlink:href="../sourcefile/common.f90.html" xlink:title="common.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="544,-1849.76 464,-1849.76 464,-1825.76 544,-1825.76 544,-1849.76"/>
+<text text-anchor="middle" x="504" y="-1835.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">common.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~common.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~common.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1014,-2050.76C933.22,-2036.34 898.48,-2067.85 832,-2019.76 804.29,-1999.71 817.18,-1978.61 796,-1951.76 784.45,-1937.11 685.28,-1851.46 670,-1840.76 651.75,-1827.98 648.23,-1818.11 626,-1816.76"/>
+</g>
+<!-- sourcefile~common.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~common.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node10"><a xlink:href="../sourcefile/common.f90~2.html" xlink:title="common.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="665,-2184.76 585,-2184.76 585,-2160.76 665,-2160.76 665,-2184.76"/>
+<text text-anchor="middle" x="625" y="-2170.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">common.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~common.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~common.f90~2</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1014,-2050.76C994.88,-2053.28 906.56,-2162.08 890.5,-2172.76"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M888.5,-2172.76C837.99,-2206.36 812.04,-2164.06 752,-2172.76"/>
+</g>
+<!-- sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~common.f90~3</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node11"><a xlink:href="../sourcefile/common.f90~3.html" xlink:title="common.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="80,-1444.76 0,-1444.76 0,-1420.76 80,-1420.76 80,-1444.76"/>
+<text text-anchor="middle" x="40" y="-1430.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">common.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M888.5,-2172.76C839.7,-2205.22 844.8,-2234.3 796,-2266.76 728.24,-2311.83 705.18,-2353.53 626,-2334.76"/>
+</g>
+<!-- sourcefile~config.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~config.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node12"><a xlink:href="../sourcefile/config.f90.html" xlink:title="config.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="922.5,-248.76 856.5,-248.76 856.5,-224.76 922.5,-224.76 922.5,-248.76"/>
+<text text-anchor="middle" x="889.5" y="-234.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">config.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~config.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~config.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1803.72,-808.43C1787.11,-697.61 1651.67,119.72 1290,-29.76"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1288,-29.76C1222.67,-48.21 1238.52,-102.7 1181,-138.76 1100.81,-189.04 991.86,-216.75 932.79,-228.99"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="931.82,-225.61 922.71,-231.03 933.2,-232.48 931.82,-225.61"/>
+</g>
+<!-- sourcefile~generic.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~generic.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node13"><a xlink:href="../sourcefile/generic.f90.html" xlink:title="generic.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1726.5,-772.76 1653.5,-772.76 1653.5,-748.76 1726.5,-748.76 1726.5,-772.76"/>
+<text text-anchor="middle" x="1690" y="-758.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">generic.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~generic.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~generic.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1782.33,-808.62C1765.34,-799.71 1742.04,-787.51 1723.23,-777.65"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1724.62,-774.42 1714.14,-772.88 1721.37,-780.62 1724.62,-774.42"/>
+</g>
+<!-- sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~mesh.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node14"><a xlink:href="../sourcefile/mesh.f90.html" xlink:title="mesh.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="535,-1214.76 473,-1214.76 473,-1190.76 535,-1190.76 535,-1214.76"/>
+<text text-anchor="middle" x="504" y="-1200.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">mesh.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1571,-1314.76C1164.7,-1367.39 1422.19,-1997.29 1016,-2050.76"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1014,-2050.76C940.55,-2037.65 933.28,-1451.88 890.5,-1390.76"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M888.5,-1390.76C843.17,-1326.01 829.54,-1292.09 752,-1276.76"/>
+</g>
+<!-- sourcefile~tgv.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node15" class="node">
+<title>sourcefile~tgv.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node15"><a xlink:href="../sourcefile/tgv.f90.html" xlink:title="tgv.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1717,-977.76 1663,-977.76 1663,-953.76 1717,-953.76 1717,-977.76"/>
+<text text-anchor="middle" x="1690" y="-963.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tgv.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~xcompact.f90&#45;&gt;sourcefile~tgv.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~xcompact.f90&#45;&gt;sourcefile~tgv.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1795.74,-833.12C1775.96,-858.16 1731.02,-915.08 1706.94,-945.57"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1704.19,-943.41 1700.74,-953.43 1709.68,-947.75 1704.19,-943.41"/>
+</g>
+<!-- sourcefile~allocator.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~allocator.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M594.13,-1342.49C588.58,-1338.88 583.45,-1334.35 580,-1328.76 518.49,-1229.04 558.57,-919.01 544,-802.76 535.23,-732.82 518.39,-651.07 510,-612.33"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="513.33,-611.19 507.78,-602.17 506.49,-612.68 513.33,-611.19"/>
+</g>
+<!-- sourcefile~allocator.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~allocator.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M585.44,-1356.96C500.16,-1362.28 289.35,-1377.99 116,-1411.76 107.32,-1413.45 98.18,-1415.65 89.39,-1417.98"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="88.36,-1414.63 79.64,-1420.65 90.21,-1421.38 88.36,-1414.63"/>
+</g>
+<!-- sourcefile~allocator.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~allocator.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M598.71,-1342.72C592.14,-1338.85 585.4,-1334.15 580,-1328.76 548.82,-1297.68 525.55,-1251.1 513.72,-1224.14"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="516.9,-1222.67 509.76,-1214.84 510.46,-1225.41 516.9,-1222.67"/>
+</g>
+<!-- sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node20" class="node">
+<title>sourcefile~field.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node20"><a xlink:href="../sourcefile/field.f90.html" xlink:title="field.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="387,-1060.76 331,-1060.76 331,-1036.76 387,-1036.76 387,-1060.76"/>
+<text text-anchor="middle" x="359" y="-1046.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">field.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~allocator.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~allocator.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M585.4,-1352.4C558.53,-1348.57 524.19,-1338.9 505,-1314.76"/>
+</g>
+<!-- sourcefile~allocator.f90~2&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~allocator.f90~2&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M493.56,-577.71C468.37,-546.87 398.86,-470.44 360,-513.76"/>
+</g>
+<!-- sourcefile~allocator.f90~2&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~allocator.f90~2&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#ff6d00" stroke-dasharray="5,2" d="M499.18,-602.04C479.75,-664.39 391.96,-946.19 366.77,-1027.02"/>
+<polygon fill="#ff6d00" stroke="#ff6d00" points="363.4,-1026.07 363.77,-1036.66 370.09,-1028.15 363.4,-1026.07"/>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~allocator.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~allocator.f90</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M879.1,-2078.74C865.96,-2061.19 842.53,-2027.02 832,-1993.76 775.71,-1815.99 854.59,-1752.78 796,-1575.76 780.14,-1527.84 718.05,-1418.2 670.79,-1373.72"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="672.87,-1370.89 663.05,-1366.92 668.25,-1376.15 672.87,-1370.89"/>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M878.71,-2078.49C865.33,-2060.92 841.86,-2027.02 832,-1993.76 785.75,-1837.83 861.1,-1411.8 796,-1262.76 773.1,-1210.34 740.95,-1216.04 706,-1170.76 687,-1146.14 692.44,-1132.29 670,-1110.76 653.93,-1095.33 637.52,-1105.82 626,-1086.76"/>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M878.69,-2078.5C865.28,-2060.93 841.79,-2027.04 832,-1993.76 781.36,-1821.54 836.21,-1361.71 796,-1186.76 789.24,-1157.36 774.32,-1125.81 763.73,-1105.71"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="766.76,-1103.96 758.93,-1096.82 760.6,-1107.29 766.76,-1103.96"/>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~common.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~common.f90~2</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M876.33,-2102.8C853.99,-2123.71 803.98,-2165.23 752,-2172.76"/>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M750,-2172.76C725.52,-2176.31 698.03,-2176.67 675.17,-2175.99"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="675.15,-2172.49 665.02,-2175.61 674.89,-2179.48 675.15,-2172.49"/>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge25" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M750,-2252.76C731.49,-2265.16 723.57,-2263.06 706,-2276.76 687.4,-2291.26 689.25,-2302.12 670,-2315.76 652.62,-2328.07 646.73,-2339.67 626,-2334.76"/>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M624,-2334.76C603.27,-2329.84 595.62,-2330.24 580,-2315.76 527.38,-2266.96 572.73,-2196.49 505,-2172.76"/>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge30" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M878.76,-2078.48C865.45,-2060.88 842.07,-2026.96 832,-1993.76 794.2,-1869.12 863.82,-1519.95 796,-1408.76 751.04,-1335.05 706.7,-1345.43 626,-1314.76"/>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M624,-1314.76C603.81,-1305.36 597.29,-1304.8 580,-1290.76 555.52,-1270.87 532.84,-1242.25 518.97,-1223.1"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="521.71,-1220.92 513.07,-1214.79 516,-1224.97 521.71,-1220.92"/>
+</g>
+<!-- sourcefile~distributed.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node17" class="node">
+<title>sourcefile~distributed.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node17"><a xlink:href="../sourcefile/distributed.f90~2.html" xlink:title="distributed.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="670,-2306.76 580,-2306.76 580,-2282.76 670,-2282.76 670,-2306.76"/>
+<text text-anchor="middle" x="625" y="-2292.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">distributed.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~distributed.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge26" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~distributed.f90~2</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M750,-2252.76C729.03,-2266.81 702.91,-2276.57 680.07,-2283.12"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="678.89,-2279.82 670.16,-2285.83 680.73,-2286.57 678.89,-2279.82"/>
+</g>
+<!-- sourcefile~exec_dist.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node19" class="node">
+<title>sourcefile~exec_dist.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node19"><a xlink:href="../sourcefile/exec_dist.f90~2.html" xlink:title="exec_dist.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="792,-2224.76 710,-2224.76 710,-2200.76 792,-2200.76 792,-2224.76"/>
+<text text-anchor="middle" x="751" y="-2210.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exec_dist.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~exec_dist.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge27" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~exec_dist.f90~2</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M878.59,-2103C862.58,-2122.31 829.41,-2160.35 796,-2186.76 792.2,-2189.76 788.01,-2192.67 783.79,-2195.38"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="781.87,-2192.45 775.15,-2200.65 785.51,-2198.43 781.87,-2192.45"/>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge28" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M624,-1314.76C576.05,-1292.44 537.77,-1356.27 505,-1314.76"/>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M503,-1314.76C475.73,-1280.22 477.88,-1265.51 464,-1223.76 442.51,-1159.11 472.99,-1125.92 428,-1074.76 420,-1065.66 408.44,-1059.72 397.13,-1055.87"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="397.92,-1052.45 387.34,-1052.98 395.94,-1059.16 397.92,-1052.45"/>
+</g>
+<!-- sourcefile~fieldops.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node21" class="node">
+<title>sourcefile~fieldops.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node21"><a xlink:href="../sourcefile/fieldops.f90.html" xlink:title="fieldops.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="788.5,-2144.76 713.5,-2144.76 713.5,-2120.76 788.5,-2120.76 788.5,-2144.76"/>
+<text text-anchor="middle" x="751" y="-2130.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fieldops.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~fieldops.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge29" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~fieldops.f90</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M849.75,-2102.68C833.67,-2107.63 814.89,-2113.41 798.11,-2118.57"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="797.03,-2115.24 788.5,-2121.53 799.09,-2121.93 797.03,-2115.24"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node27" class="node">
+<title>sourcefile~poisson_fft.f90~3</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node27"><a xlink:href="../sourcefile/poisson_fft.f90~3.html" xlink:title="poisson_fft.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="796,-1733.76 706,-1733.76 706,-1709.76 796,-1709.76 796,-1733.76"/>
+<text text-anchor="middle" x="751" y="-1719.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">poisson_fft.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~poisson_fft.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge31" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~poisson_fft.f90~3</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M879.55,-2078.58C866.95,-2060.85 844.19,-2026.45 832,-1993.76 801.82,-1912.82 824.97,-1884.14 796,-1802.76 788.28,-1781.08 775.36,-1758.2 765.5,-1742.31"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="768.43,-1740.39 760.12,-1733.82 762.52,-1744.14 768.43,-1740.39"/>
+</g>
+<!-- sourcefile~reorder.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node28" class="node">
+<title>sourcefile~reorder.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node28"><a xlink:href="../sourcefile/reorder.f90.html" xlink:title="reorder.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="786.5,-2102.76 715.5,-2102.76 715.5,-2078.76 786.5,-2078.76 786.5,-2102.76"/>
+<text text-anchor="middle" x="751" y="-2088.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">reorder.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~reorder.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge32" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~reorder.f90</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M849.75,-2090.76C833.3,-2090.76 814.02,-2090.76 796.95,-2090.76"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="796.65,-2087.26 786.65,-2090.76 796.65,-2094.26 796.65,-2087.26"/>
+</g>
+<!-- sourcefile~sendrecv.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node29" class="node">
+<title>sourcefile~sendrecv.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node29"><a xlink:href="../sourcefile/sendrecv.f90.html" xlink:title="sendrecv.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="665,-2264.76 585,-2264.76 585,-2240.76 665,-2240.76 665,-2264.76"/>
+<text text-anchor="middle" x="625" y="-2250.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">sendrecv.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~sendrecv.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge33" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~sendrecv.f90</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M876.67,-2103.06C864.49,-2116.16 845.43,-2137.83 832,-2158.76 812.03,-2189.88 822.66,-2208.14 796,-2233.76 780.64,-2248.52 769.7,-2240.9 752,-2252.76"/>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M750,-2252.76C728.4,-2267.23 699.59,-2268.04 675.18,-2264.87"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="675.44,-2261.37 665.02,-2263.3 674.36,-2268.29 675.44,-2261.37"/>
+</g>
+<!-- sourcefile~tdsops.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node32" class="node">
+<title>sourcefile~tdsops.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node32"><a xlink:href="../sourcefile/tdsops.f90.html" xlink:title="tdsops.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="658.5,-2104.76 591.5,-2104.76 591.5,-2080.76 658.5,-2080.76 658.5,-2104.76"/>
+<text text-anchor="middle" x="625" y="-2090.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tdsops.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~tdsops.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge34" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~tdsops.f90</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M750,-2050.76C716.34,-2048.93 680.06,-2063.32 655.5,-2075.75"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="653.59,-2072.8 646.37,-2080.55 656.85,-2078.99 653.59,-2072.8"/>
+</g>
+<!-- sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node33" class="node">
+<title>sourcefile~tdsops.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node33"><a xlink:href="../sourcefile/tdsops.f90~2.html" xlink:title="tdsops.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="537.5,-1807.76 470.5,-1807.76 470.5,-1783.76 537.5,-1783.76 537.5,-1807.76"/>
+<text text-anchor="middle" x="504" y="-1793.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tdsops.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge35" class="edge">
+<title>sourcefile~backend.f90&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M861.19,-2078.69C834.1,-2067.71 791.08,-2052.88 752,-2050.76"/>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M750,-2050.76C674.18,-2046.65 635.4,-2085.68 580,-2033.76 508.67,-1966.9 600.85,-1896.29 544,-1816.76 543.45,-1815.99 542.87,-1815.25 542.25,-1814.53"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="544.43,-1811.79 534.63,-1807.77 539.79,-1817.03 544.43,-1811.79"/>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge36" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M887.38,-1960.67C878.43,-1864.14 818.03,-1220.93 796,-1186.76 760.57,-1131.79 726.72,-1143.31 670,-1110.76 650.68,-1099.67 638.24,-1105.37 626,-1086.76"/>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M624,-1086.76C598.56,-1044.66 527.9,-702.58 509.45,-611.8"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="512.84,-610.9 507.42,-601.8 505.98,-612.29 512.84,-610.9"/>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge37" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M887.28,-1960.71C876.8,-1857.12 802.06,-1120.17 796,-1110.76 794.17,-1107.92 791.92,-1105.36 789.41,-1103.04"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="791.33,-1100.11 781.25,-1096.83 787.09,-1105.68 791.33,-1100.11"/>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~common.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge38" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~common.f90</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M750,-1816.76C701.56,-1790.47 681.01,-1820.09 626,-1816.76"/>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M624,-1816.76C600.77,-1815.35 575.33,-1819.11 553.95,-1823.81"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="553.07,-1820.43 544.13,-1826.11 554.66,-1827.24 553.07,-1820.43"/>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge39" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M888.56,-1960.5C888.04,-1917.01 879.95,-1769.07 796,-1700.76 745.46,-1659.63 560.05,-1629.9 505,-1664.76"/>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge42" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M750,-1314.76C731.95,-1292.29 653.08,-1286.62 626,-1276.76"/>
+</g>
+<!-- sourcefile~exec_dist.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node18" class="node">
+<title>sourcefile~exec_dist.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node18"><a xlink:href="../sourcefile/exec_dist.f90.html" xlink:title="exec_dist.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="792,-1984.76 710,-1984.76 710,-1960.76 792,-1960.76 792,-1984.76"/>
+<text text-anchor="middle" x="751" y="-1970.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exec_dist.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~exec_dist.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge40" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~exec_dist.f90</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M849.75,-1972.76C835.01,-1972.76 817.99,-1972.76 802.33,-1972.76"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="802.27,-1969.26 792.27,-1972.76 802.27,-1976.26 802.27,-1969.26"/>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge41" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M888.26,-1960.54C886.47,-1881.33 873.13,-1440.47 796,-1335.76 783.15,-1318.31 765.57,-1331.65 752,-1314.76"/>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M750,-1314.76C638.22,-1175.6 584.39,-1160.78 428,-1074.76 418.26,-1069.4 407.2,-1064.66 396.86,-1060.74"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="397.84,-1057.37 387.24,-1057.24 395.44,-1063.95 397.84,-1057.37"/>
+</g>
+<!-- sourcefile~ordering.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node24" class="node">
+<title>sourcefile~ordering.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node24"><a xlink:href="../sourcefile/ordering.f90.html" xlink:title="ordering.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="224.5,-1444.76 145.5,-1444.76 145.5,-1420.76 224.5,-1420.76 224.5,-1444.76"/>
+<text text-anchor="middle" x="185" y="-1430.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ordering.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~ordering.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge43" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~ordering.f90</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M888.41,-1960.72C887.13,-1881.05 869.14,-1432.76 626,-1432.76 626,-1432.76 626,-1432.76 503,-1432.76 408.05,-1432.76 297.11,-1432.76 234.85,-1432.76"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="234.55,-1429.26 224.55,-1432.76 234.55,-1436.26 234.55,-1429.26"/>
+</g>
+<!-- sourcefile~poisson_fft.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node25" class="node">
+<title>sourcefile~poisson_fft.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node25"><a xlink:href="../sourcefile/poisson_fft.f90.html" xlink:title="poisson_fft.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="796,-1608.76 706,-1608.76 706,-1584.76 796,-1584.76 796,-1608.76"/>
+<text text-anchor="middle" x="751" y="-1594.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">poisson_fft.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~poisson_fft.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge44" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~poisson_fft.f90</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M886.83,-1960.71C880.4,-1916.91 854.61,-1762.87 796,-1650.76 789.52,-1638.37 779.92,-1626.15 771.34,-1616.48"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="773.81,-1614 764.46,-1609.01 768.66,-1618.74 773.81,-1614"/>
+</g>
+<!-- sourcefile~sendrecv.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node30" class="node">
+<title>sourcefile~sendrecv.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node30"><a xlink:href="../sourcefile/sendrecv.f90~2.html" xlink:title="sendrecv.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="665,-2024.76 585,-2024.76 585,-2000.76 665,-2000.76 665,-2024.76"/>
+<text text-anchor="middle" x="625" y="-2010.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">sendrecv.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~sendrecv.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge45" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~sendrecv.f90~2</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M849.99,-1982.52C833.45,-1986.44 813.86,-1990.74 796,-1993.76 755.66,-2000.57 709.51,-2005.55 675.49,-2008.7"/>
+<polygon fill="#b6ff00" stroke="#b6ff00" points="674.98,-2005.23 665.34,-2009.62 675.61,-2012.2 674.98,-2005.23"/>
+</g>
+<!-- sourcefile~backend.f90~2&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge46" class="edge">
+<title>sourcefile~backend.f90~2&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M882.38,-1960.43C869.39,-1935.27 836.89,-1877.31 796,-1840.76 779.39,-1825.91 771.58,-1827.38 752,-1816.76"/>
+<path fill="none" stroke="#b6ff00" stroke-dasharray="5,2" d="M750,-1816.76C699.34,-1789.26 683.47,-1783.17 626,-1778.76"/>
+</g>
+<!-- sourcefile~backend.f90~3&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge47" class="edge">
+<title>sourcefile~backend.f90~3&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#48ff00" stroke-dasharray="5,2" d="M739.95,-1072.59C711.26,-1037.3 627.93,-931.06 580,-830.76 543.34,-754.03 519.16,-655.15 509.61,-611.78"/>
+<polygon fill="#48ff00" stroke="#48ff00" points="513.03,-611.04 507.5,-602 506.19,-612.52 513.03,-611.04"/>
+</g>
+<!-- sourcefile~backend.f90~3&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge48" class="edge">
+<title>sourcefile~backend.f90~3&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#48ff00" stroke-dasharray="5,2" d="M717.23,-1096.85C692.46,-1105.61 657.45,-1117.21 626,-1124.76"/>
+<path fill="none" stroke="#48ff00" stroke-dasharray="5,2" d="M624,-1124.76C508.85,-1152.4 477.81,-1100.71 360,-1088.76"/>
+</g>
+<!-- sourcefile~backend.f90~3&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge50" class="edge">
+<title>sourcefile~backend.f90~3&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#48ff00" stroke-dasharray="5,2" d="M624,-1124.76C584.42,-1134.26 546.5,-1163.84 524.49,-1183.72"/>
+<polygon fill="#48ff00" stroke="#48ff00" points="522.08,-1181.18 517.13,-1190.55 526.84,-1186.31 522.08,-1181.18"/>
+</g>
+<!-- sourcefile~backend.f90~3&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge49" class="edge">
+<title>sourcefile~backend.f90~3&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#48ff00" stroke-dasharray="5,2" d="M711.18,-1081.17C636.07,-1074.24 471.76,-1059.07 397.61,-1052.23"/>
+<polygon fill="#48ff00" stroke="#48ff00" points="397.63,-1048.72 387.35,-1051.28 396.99,-1055.69 397.63,-1048.72"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node26" class="node">
+<title>sourcefile~poisson_fft.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node26"><a xlink:href="../sourcefile/poisson_fft.f90~2.html" xlink:title="poisson_fft.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="670,-1560.76 580,-1560.76 580,-1536.76 670,-1536.76 670,-1560.76"/>
+<text text-anchor="middle" x="625" y="-1546.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">poisson_fft.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~backend.f90~3&#45;&gt;sourcefile~poisson_fft.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge51" class="edge">
+<title>sourcefile~backend.f90~3&#45;&gt;sourcefile~poisson_fft.f90~2</title>
+<path fill="none" stroke="#48ff00" stroke-dasharray="5,2" d="M746.68,-1097.17C729.84,-1160.2 653.71,-1445.07 631.87,-1526.79"/>
+<polygon fill="#48ff00" stroke="#48ff00" points="628.47,-1525.96 629.27,-1536.52 635.23,-1527.77 628.47,-1525.96"/>
+</g>
+<!-- sourcefile~backend.f90~3&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge52" class="edge">
+<title>sourcefile~backend.f90~3&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#48ff00" stroke-dasharray="5,2" d="M747.23,-1096.88C739.81,-1129.63 719.17,-1222.64 706,-1300.76 695.98,-1360.23 705.49,-1520.99 670,-1569.76 643.92,-1605.6 610.44,-1580.53 580,-1612.76 556.96,-1637.15 525.39,-1730.95 511.74,-1773.97"/>
+<polygon fill="#48ff00" stroke="#48ff00" points="508.33,-1773.15 508.67,-1783.74 515.01,-1775.25 508.33,-1773.15"/>
+</g>
+<!-- sourcefile~base_case.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge53" class="edge">
+<title>sourcefile~base_case.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1527.8,-785.36C1503.36,-786.83 1472.4,-786.76 1445.5,-780.76"/>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1443.5,-780.76C1314.85,-752.06 1306.01,-684.53 1181,-642.76 1081.07,-609.37 1052.02,-613.23 947,-604.76 896.05,-600.65 880.95,-590.06 832,-604.76 726.93,-636.31 729.49,-777.17 626,-740.76"/>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M624,-740.76C601.59,-729.71 594.88,-725.83 580,-705.76 554.1,-670.81 571.64,-648.34 544,-614.76 542.08,-612.43 539.89,-610.25 537.55,-608.22"/>
+<polygon fill="#00ff24" stroke="#00ff24" points="539.25,-605.12 529.16,-601.92 535.05,-610.72 539.25,-605.12"/>
+</g>
+<!-- sourcefile~base_case.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge54" class="edge">
+<title>sourcefile~base_case.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1131,-858.76C988.81,-895.98 1037.15,-1075.83 890.5,-1085.76"/>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M888.5,-1085.76C859.56,-1089.56 826.88,-1089.47 800.75,-1088.36"/>
+<polygon fill="#00ff24" stroke="#00ff24" points="800.87,-1084.86 790.71,-1087.86 800.53,-1091.85 800.87,-1084.86"/>
+</g>
+<!-- sourcefile~base_case.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge55" class="edge">
+<title>sourcefile~base_case.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1570.01,-768.61C1565.84,-721.49 1547.27,-546.9 1492,-415.76 1403.39,-205.49 1358.37,-84.44 1133,-48.76"/>
+</g>
+<!-- sourcefile~base_case.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge58" class="edge">
+<title>sourcefile~base_case.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1556.71,-792.99C1480.63,-856.97 1113.07,-1152.12 752,-1200.76"/>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M750,-1200.76C677.99,-1204.78 593.89,-1204.35 545.31,-1203.6"/>
+<polygon fill="#00ff24" stroke="#00ff24" points="545.26,-1200.1 535.2,-1203.43 545.14,-1207.1 545.26,-1200.1"/>
+</g>
+<!-- sourcefile~base_case.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge56" class="edge">
+<title>sourcefile~base_case.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1131,-858.76C1025.15,-881.25 998.43,-888.94 890.5,-896.76"/>
+</g>
+<!-- sourcefile~io_manager.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node22" class="node">
+<title>sourcefile~io_manager.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node22"><a xlink:href="../sourcefile/io_manager.f90.html" xlink:title="io_manager.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1492,-448.76 1397,-448.76 1397,-424.76 1492,-424.76 1492,-448.76"/>
+<text text-anchor="middle" x="1444.5" y="-434.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">io_manager.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~base_case.f90&#45;&gt;sourcefile~io_manager.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge57" class="edge">
+<title>sourcefile~base_case.f90&#45;&gt;sourcefile~io_manager.f90</title>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1566.53,-768.52C1548.04,-717.84 1477.36,-524.08 1453.45,-458.56"/>
+<polygon fill="#00ff24" stroke="#00ff24" points="1456.63,-457.05 1449.91,-448.85 1450.05,-459.45 1456.63,-457.05"/>
+</g>
+<!-- sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node31" class="node">
+<title>sourcefile~solver.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node31"><a xlink:href="../sourcefile/solver.f90.html" xlink:title="solver.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1047,-728.76 983,-728.76 983,-704.76 1047,-704.76 1047,-728.76"/>
+<text text-anchor="middle" x="1015" y="-714.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">solver.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~base_case.f90&#45;&gt;sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge59" class="edge">
+<title>sourcefile~base_case.f90&#45;&gt;sourcefile~solver.f90</title>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1443.5,-780.76C1305.29,-746.92 1269,-816.91 1133,-858.76"/>
+<path fill="none" stroke="#00ff24" stroke-dasharray="5,2" d="M1131,-858.76C1070.61,-874.57 1035.11,-782.17 1021.92,-738.58"/>
+<polygon fill="#00ff24" stroke="#00ff24" points="1025.25,-737.51 1019.11,-728.88 1018.53,-739.46 1025.25,-737.51"/>
+</g>
+<!-- sourcefile~channel.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge60" class="edge">
+<title>sourcefile~channel.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1680.53,-828.74C1649.51,-785.03 1541.37,-635.53 1492,-604.76 1181.73,-411.33 703.1,-529.89 552.23,-574.76"/>
+<polygon fill="#00ff91" stroke="#00ff91" points="550.92,-571.5 542.35,-577.73 552.94,-578.2 550.92,-571.5"/>
+</g>
+<!-- sourcefile~channel.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge61" class="edge">
+<title>sourcefile~channel.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1686.36,-852.98C1679.69,-880.94 1659.48,-949.96 1616,-986.76 1503.41,-1082.03 1433.31,-1013.9 1290,-1048.76"/>
+</g>
+<!-- sourcefile~channel.f90&#45;&gt;sourcefile~base_case.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge62" class="edge">
+<title>sourcefile~channel.f90&#45;&gt;sourcefile~base_case.f90</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1665.53,-828.62C1648.23,-819.67 1624.5,-807.39 1605.39,-797.51"/>
+<polygon fill="#00ff91" stroke="#00ff91" points="1606.93,-794.37 1596.44,-792.88 1603.71,-800.59 1606.93,-794.37"/>
+</g>
+<!-- sourcefile~channel.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge63" class="edge">
+<title>sourcefile~channel.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1651.76,-851.15C1591.08,-867.94 1466.98,-901.69 1361,-926.76 1281.43,-945.58 1262.32,-956.27 1181,-964.76 1027.16,-980.82 760.16,-925.55 670,-920.76 630.06,-918.64 617.03,-905.64 580,-920.76 466.1,-967.27 482.23,-1102.74 360,-1088.76"/>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M358,-1088.76C319.92,-1083.19 206.67,-1036.3 186,-1068.76"/>
+</g>
+<!-- sourcefile~channel.f90&#45;&gt;sourcefile~config.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge64" class="edge">
+<title>sourcefile~channel.f90&#45;&gt;sourcefile~config.f90</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1679.03,-828.48C1670.36,-817.09 1658.24,-799.3 1652,-781.76 1608.34,-658.97 1671.18,-608.82 1616,-490.76 1545.7,-340.34 1513.29,-283.9 1361,-217.76 1267.66,-177.22 1231.62,-213.65 1133,-238.76"/>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1131,-238.76C1079.95,-241.27 1066.47,-246.86 1016,-238.76"/>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1014,-238.76C987.26,-234.47 956.84,-233.92 932.88,-234.47"/>
+<polygon fill="#00ff91" stroke="#00ff91" points="932.59,-230.98 922.71,-234.78 932.81,-237.98 932.59,-230.98"/>
+</g>
+<!-- sourcefile~channel.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge65" class="edge">
+<title>sourcefile~channel.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1684.86,-852.94C1671.51,-891.9 1629.7,-1011.63 1616,-1023.76 1322.57,-1283.64 1143.08,-1174.27 752,-1200.76"/>
+</g>
+<!-- sourcefile~channel.f90&#45;&gt;sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge66" class="edge">
+<title>sourcefile~channel.f90&#45;&gt;sourcefile~solver.f90</title>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1651.85,-844.96C1581.31,-852.39 1423.09,-866.34 1290,-858.76"/>
+<path fill="none" stroke="#00ff91" stroke-dasharray="5,2" d="M1288,-858.76C1197.21,-848.86 1159.26,-923 1083,-872.76 1037.47,-842.76 1022.76,-774.66 1018.1,-739.19"/>
+<polygon fill="#00ff91" stroke="#00ff91" points="1021.53,-738.44 1016.91,-728.91 1014.58,-739.24 1021.53,-738.44"/>
+</g>
+<!-- sourcefile~config.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge67" class="edge">
+<title>sourcefile~config.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#4800ff" stroke-dasharray="5,2" d="M871.95,-248.77C809.51,-293.8 587.53,-451.3 505,-474.76"/>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge68" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1688.28,-748.71C1685.49,-711.72 1672.52,-598.18 1616,-528.76 1602.18,-511.79 1593.1,-513.42 1573,-504.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1571,-504.76C1482.57,-466.66 794.96,-415.91 706,-452.76 685.09,-461.42 687.77,-474.75 670,-488.76 627.08,-522.58 572.06,-554.21 537.67,-572.77"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="535.71,-569.85 528.54,-577.65 539.01,-576.02 535.71,-569.85"/>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge69" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1680.37,-773.03C1672.39,-784.7 1660.52,-802.93 1652,-819.76 1632.36,-858.57 1646.79,-880.04 1616,-910.76 1541.97,-984.61 1487.87,-945.02 1397,-996.76 1379.39,-1006.79 1378.85,-1015.16 1361,-1024.76 1331.66,-1040.54 1322.24,-1040.4 1290,-1048.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1288,-1048.76C1115.72,-1091.21 1066.42,-1062.66 890.5,-1085.76"/>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~base_case.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge70" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~base_case.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1653.25,-766.92C1644.65,-768.41 1635.27,-770.02 1626.06,-771.61"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="1625.44,-768.16 1616.18,-773.31 1626.63,-775.06 1625.44,-768.16"/>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge71" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1689.15,-748.45C1689.36,-695.6 1685.61,-483.6 1616,-329.76 1541.89,-165.97 1523.32,-93.04 1361,-15.76 1303.22,11.75 1279.88,-3.85 1217,-15.76 1177.59,-23.22 1172.52,-55.6 1133,-48.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1131,-48.76C945.61,-11.5 893.95,-47.97 706,-68.76 670.12,-72.73 661.82,-78.29 626,-82.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M624,-82.76C568.38,-87.2 548.04,-87.25 505,-122.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M503,-122.76C360.26,-240.5 486.78,-378.98 360,-513.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M358,-513.76C181.06,-701.86 324.69,-850.92 186,-1068.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M184,-1068.76C108.64,-1187.13 61.75,-1351.63 46.49,-1410.61"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="43,-1410.11 43.93,-1420.66 49.79,-1411.84 43,-1410.11"/>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge73" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1670.4,-772.8C1656,-781.72 1635.31,-793.68 1616,-801.76 1227.7,-964.12 1105.68,-931.89 706,-1063.76 649.24,-1082.48 628.58,-1075.94 580,-1110.76 553.13,-1130.02 530.48,-1161.27 517.32,-1181.92"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="514.25,-1180.23 511.96,-1190.58 520.2,-1183.92 514.25,-1180.23"/>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge72" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1571,-504.76C1501.64,-475.31 1515.54,-590.97 1445.5,-618.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1443.5,-618.76C1264.12,-689.91 1208.98,-542.76 1016,-542.76 1016,-542.76 1016,-542.76 888.5,-542.76 718.03,-542.76 649.49,-459.29 505,-549.76"/>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M503,-549.76C486.69,-560.03 475.9,-553.59 464,-568.76 406.31,-642.26 371.18,-941.7 362.26,-1026.36"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="358.76,-1026.12 361.22,-1036.43 365.73,-1026.84 358.76,-1026.12"/>
+</g>
+<!-- sourcefile~generic.f90&#45;&gt;sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge74" class="edge">
+<title>sourcefile~generic.f90&#45;&gt;sourcefile~solver.f90</title>
+<path fill="none" stroke="#b600ff" stroke-dasharray="5,2" d="M1443.5,-618.76C1307.11,-670.84 1135.22,-699.88 1057.51,-711.18"/>
+<polygon fill="#b600ff" stroke="#b600ff" points="1056.59,-707.77 1047.19,-712.65 1057.58,-714.7 1056.59,-707.77"/>
+</g>
+<!-- sourcefile~mesh.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge75" class="edge">
+<title>sourcefile~mesh.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff00da" stroke-dasharray="5,2" d="M484.05,-1190.75C477.58,-1186.49 470.37,-1181.55 464,-1176.76 415.62,-1140.35 420.24,-1094.87 360,-1088.76"/>
+</g>
+<!-- sourcefile~decomp_dummy.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node16" class="node">
+<title>sourcefile~decomp_dummy.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node16"><a xlink:href="../sourcefile/decomp_dummy.f90.html" xlink:title="decomp_dummy.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="419.5,-1214.76 298.5,-1214.76 298.5,-1190.76 419.5,-1190.76 419.5,-1214.76"/>
+<text text-anchor="middle" x="359" y="-1200.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">decomp_dummy.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mesh.f90&#45;&gt;sourcefile~decomp_dummy.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge76" class="edge">
+<title>sourcefile~mesh.f90&#45;&gt;sourcefile~decomp_dummy.f90</title>
+<path fill="none" stroke="#ff00da" stroke-dasharray="5,2" d="M472.67,-1202.76C460.15,-1202.76 445.07,-1202.76 430.07,-1202.76"/>
+<polygon fill="#ff00da" stroke="#ff00da" points="429.74,-1199.26 419.74,-1202.76 429.74,-1206.26 429.74,-1199.26"/>
+</g>
+<!-- sourcefile~mesh.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge77" class="edge">
+<title>sourcefile~mesh.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#ff00da" stroke-dasharray="5,2" d="M495.4,-1190.57C487.44,-1177.74 474.65,-1156.95 464,-1138.76 447.51,-1110.6 452.71,-1096.08 428,-1074.76 419.13,-1067.11 407.78,-1061.59 396.9,-1057.66"/>
+<polygon fill="#ff00da" stroke="#ff00da" points="397.72,-1054.25 387.13,-1054.49 395.55,-1060.91 397.72,-1054.25"/>
+</g>
+<!-- sourcefile~mesh_content.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node23" class="node">
+<title>sourcefile~mesh_content.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node23"><a xlink:href="../sourcefile/mesh_content.f90.html" xlink:title="mesh_content.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="239,-1254.76 131,-1254.76 131,-1230.76 239,-1230.76 239,-1254.76"/>
+<text text-anchor="middle" x="185" y="-1240.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">mesh_content.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mesh.f90&#45;&gt;sourcefile~mesh_content.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge78" class="edge">
+<title>sourcefile~mesh.f90&#45;&gt;sourcefile~mesh_content.f90</title>
+<path fill="none" stroke="#ff00da" stroke-dasharray="5,2" d="M472.66,-1212.7C459.13,-1216.76 442.91,-1221.11 428,-1223.76 367.95,-1234.42 298.47,-1239.1 249.4,-1241.15"/>
+<polygon fill="#ff00da" stroke="#ff00da" points="249.1,-1237.66 239.25,-1241.55 249.38,-1244.65 249.1,-1237.66"/>
+</g>
+<!-- sourcefile~tgv.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge79" class="edge">
+<title>sourcefile~tgv.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M1443.5,-1010.76C1283.95,-957.15 1233.41,-970.3 1083,-894.76 1016.65,-861.44 1013.79,-830.18 947,-797.76 865.77,-758.32 840.36,-722.16 752,-740.76"/>
+</g>
+<!-- sourcefile~tgv.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge80" class="edge">
+<title>sourcefile~tgv.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M1571,-1200.76C1459.17,-1269.74 1112.56,-1160.64 983,-1138.76 919.25,-1127.99 846.82,-1110.12 800.33,-1097.91"/>
+<polygon fill="#ff006d" stroke="#ff006d" points="801.09,-1094.49 790.53,-1095.32 799.3,-1101.26 801.09,-1094.49"/>
+</g>
+<!-- sourcefile~tgv.f90&#45;&gt;sourcefile~base_case.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge81" class="edge">
+<title>sourcefile~tgv.f90&#45;&gt;sourcefile~base_case.f90</title>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M1681.39,-953.62C1662.06,-922.79 1610.88,-841.16 1586.4,-802.13"/>
+<polygon fill="#ff006d" stroke="#ff006d" points="1589.07,-799.8 1580.79,-793.18 1583.14,-803.52 1589.07,-799.8"/>
+</g>
+<!-- sourcefile~tgv.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge82" class="edge">
+<title>sourcefile~tgv.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M1571,-1200.76C1469.25,-1280.67 1419.38,-1276.76 1290,-1276.76 1290,-1276.76 1290,-1276.76 1131,-1276.76 1024.11,-1276.76 995.36,-1297.49 890.5,-1276.76"/>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M888.5,-1276.76C832.51,-1264.29 847.34,-1212.33 796,-1186.76 662.37,-1120.21 607.12,-1178.22 464,-1135.76 415.37,-1121.33 410.29,-1095.37 360,-1088.76"/>
+</g>
+<!-- sourcefile~tgv.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge84" class="edge">
+<title>sourcefile~tgv.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M888.5,-1276.76C828.99,-1264.99 811.51,-1288.53 752,-1276.76"/>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M750,-1276.76C695.94,-1266.07 677.78,-1295.62 626,-1276.76"/>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M624,-1276.76C587.72,-1263.54 550.68,-1238.27 527.77,-1220.97"/>
+<polygon fill="#ff006d" stroke="#ff006d" points="529.78,-1218.09 519.72,-1214.77 525.51,-1223.64 529.78,-1218.09"/>
+</g>
+<!-- sourcefile~tgv.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge83" class="edge">
+<title>sourcefile~tgv.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M1687.32,-977.78C1681.03,-1017.83 1654.82,-1147.14 1573,-1200.76"/>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M1571,-1200.76C1486.1,-1256.4 797.06,-951.63 706,-906.76 688.75,-898.26 686.46,-892.71 670,-882.76 650.94,-871.24 646.28,-867.98 626,-858.76"/>
+</g>
+<!-- sourcefile~tgv.f90&#45;&gt;sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge85" class="edge">
+<title>sourcefile~tgv.f90&#45;&gt;sourcefile~solver.f90</title>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M1668.25,-977.83C1624.66,-1001.48 1521.34,-1048.44 1445.5,-1010.76"/>
+<path fill="none" stroke="#ff006d" stroke-dasharray="5,2" d="M1443.5,-1010.76C1352.49,-980.18 1384.82,-873.84 1290,-858.76"/>
+</g>
+<!-- sourcefile~decomp_dummy.f90&#45;&gt;sourcefile~mesh_content.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge86" class="edge">
+<title>sourcefile~decomp_dummy.f90&#45;&gt;sourcefile~mesh_content.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M306.39,-1214.76C287.94,-1219.05 266.96,-1223.93 247.73,-1228.4"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="246.81,-1225.02 237.87,-1230.7 248.4,-1231.84 246.81,-1225.02"/>
+</g>
+<!-- sourcefile~distributed.f90~2&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge87" class="edge">
+<title>sourcefile~distributed.f90~2&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff5400" stroke-dasharray="5,2" d="M593.47,-2282.6C588.72,-2280.04 584.05,-2277.09 580,-2273.76 536.83,-2238.23 557.69,-2191.47 505,-2172.76"/>
+</g>
+<!-- sourcefile~exec_dist.f90&#45;&gt;sourcefile~common.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge88" class="edge">
+<title>sourcefile~exec_dist.f90&#45;&gt;sourcefile~common.f90</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M624,-1854.76C603.14,-1842.58 576.81,-1837.94 554.22,-1836.51"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="554.28,-1833.01 544.14,-1836.06 553.98,-1840 554.28,-1833.01"/>
+</g>
+<!-- sourcefile~exec_dist.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge89" class="edge">
+<title>sourcefile~exec_dist.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M709.76,-1966.48C672.41,-1962.95 617.15,-1963.83 580,-1991.76 510.4,-2044.08 587.06,-2201.89 505,-2172.76"/>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M503,-2172.76C419.84,-2142.99 443.41,-2063.8 360,-2034.76"/>
+</g>
+<!-- sourcefile~exec_dist.f90&#45;&gt;sourcefile~sendrecv.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge91" class="edge">
+<title>sourcefile~exec_dist.f90&#45;&gt;sourcefile~sendrecv.f90~2</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M712.8,-1984.76C700.4,-1988.76 686.43,-1993.27 673.37,-1997.48"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="672.05,-1994.23 663.61,-2000.63 674.2,-2000.89 672.05,-1994.23"/>
+</g>
+<!-- sourcefile~exec_dist.f90&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge92" class="edge">
+<title>sourcefile~exec_dist.f90&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M742.87,-1960.5C730.43,-1940.05 702.91,-1898.75 670,-1873.76 653.03,-1860.88 644.4,-1865.5 626,-1854.76"/>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M624,-1854.76C596.93,-1838.95 565.05,-1823.29 541.1,-1812.08"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="542.56,-1808.9 532.01,-1807.87 539.61,-1815.25 542.56,-1808.9"/>
+</g>
+<!-- sourcefile~distributed.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node35" class="node">
+<title>sourcefile~distributed.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node35"><a xlink:href="../sourcefile/distributed.f90.html" xlink:title="distributed.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="670,-1906.76 580,-1906.76 580,-1882.76 670,-1882.76 670,-1906.76"/>
+<text text-anchor="middle" x="625" y="-1892.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">distributed.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~exec_dist.f90&#45;&gt;sourcefile~distributed.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge90" class="edge">
+<title>sourcefile~exec_dist.f90&#45;&gt;sourcefile~distributed.f90</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M730.9,-1960.74C710.29,-1947.78 677.3,-1927.03 653.82,-1912.26"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="655.66,-1909.28 645.33,-1906.92 651.93,-1915.2 655.66,-1909.28"/>
+</g>
+<!-- sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~common.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge93" class="edge">
+<title>sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~common.f90~2</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M712.8,-2200.76C700.4,-2196.76 686.43,-2192.25 673.37,-2188.04"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="674.2,-2184.63 663.61,-2184.89 672.05,-2191.29 674.2,-2184.63"/>
+</g>
+<!-- sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge94" class="edge">
+<title>sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M709.88,-2210.11C675.25,-2207.39 624.02,-2202.32 580,-2193.76 546.02,-2187.15 537.59,-2184.42 505,-2172.76"/>
+</g>
+<!-- sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~distributed.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge95" class="edge">
+<title>sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~distributed.f90~2</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M726.95,-2225C719.99,-2229.05 712.49,-2233.8 706,-2238.76 688.27,-2252.31 688.31,-2261.01 670,-2273.76 667.93,-2275.2 665.75,-2276.59 663.51,-2277.92"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="661.79,-2274.87 654.69,-2282.74 665.15,-2281.01 661.79,-2274.87"/>
+</g>
+<!-- sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~sendrecv.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge96" class="edge">
+<title>sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~sendrecv.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M712.8,-2224.76C700.4,-2228.76 686.43,-2233.27 673.37,-2237.48"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="672.05,-2234.23 663.61,-2240.63 674.2,-2240.89 672.05,-2234.23"/>
+</g>
+<!-- sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~tdsops.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge97" class="edge">
+<title>sourcefile~exec_dist.f90~2&#45;&gt;sourcefile~tdsops.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M741.73,-2200.66C728.3,-2181.6 700.17,-2144.15 670,-2118.76 666.47,-2115.79 662.55,-2112.95 658.56,-2110.31"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="660.15,-2107.18 649.8,-2104.89 656.46,-2113.13 660.15,-2107.18"/>
+</g>
+<!-- sourcefile~field.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge98" class="edge">
+<title>sourcefile~field.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M330.89,-1041.31C290.33,-1032.02 215.46,-1022.48 186,-1068.76"/>
+</g>
+<!-- sourcefile~fieldops.f90&#45;&gt;sourcefile~common.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge99" class="edge">
+<title>sourcefile~fieldops.f90&#45;&gt;sourcefile~common.f90~2</title>
+<path fill="none" stroke="#54ff00" stroke-dasharray="5,2" d="M713.47,-2144.54C700.82,-2148.62 686.46,-2153.25 673.09,-2157.57"/>
+<polygon fill="#54ff00" stroke="#54ff00" points="672,-2154.24 663.56,-2160.64 674.15,-2160.9 672,-2154.24"/>
+</g>
+<!-- sourcefile~fieldops.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge100" class="edge">
+<title>sourcefile~fieldops.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#54ff00" stroke-dasharray="5,2" d="M713.36,-2128.19C688.38,-2126.19 654.74,-2125.66 626,-2132.76"/>
+</g>
+<!-- sourcefile~io_manager.f90&#45;&gt;sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge103" class="edge">
+<title>sourcefile~io_manager.f90&#45;&gt;sourcefile~solver.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1422.32,-448.77C1369.73,-479.2 1230.37,-563.57 1133,-656.76"/>
+</g>
+<!-- sourcefile~checkpoint_manager.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node34" class="node">
+<title>sourcefile~checkpoint_manager.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node34"><a xlink:href="../sourcefile/checkpoint_manager.f90.html" xlink:title="checkpoint_manager.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1361,-250.76 1217,-250.76 1217,-226.76 1361,-226.76 1361,-250.76"/>
+<text text-anchor="middle" x="1289" y="-236.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">checkpoint_manager.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~io_manager.f90&#45;&gt;sourcefile~checkpoint_manager.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge101" class="edge">
+<title>sourcefile~io_manager.f90&#45;&gt;sourcefile~checkpoint_manager.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1434.13,-424.67C1408.54,-391.67 1337.3,-299.78 1305.58,-258.86"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="1308.34,-256.7 1299.44,-250.94 1302.8,-260.99 1308.34,-256.7"/>
+</g>
+<!-- sourcefile~snapshot_manager.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node37" class="node">
+<title>sourcefile~snapshot_manager.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node37"><a xlink:href="../sourcefile/snapshot_manager.f90.html" xlink:title="snapshot_manager.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1355.5,-411.76 1222.5,-411.76 1222.5,-387.76 1355.5,-387.76 1355.5,-411.76"/>
+<text text-anchor="middle" x="1289" y="-397.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">snapshot_manager.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~io_manager.f90&#45;&gt;sourcefile~snapshot_manager.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge102" class="edge">
+<title>sourcefile~io_manager.f90&#45;&gt;sourcefile~snapshot_manager.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1396.61,-425.46C1381.86,-421.9 1365.36,-417.92 1349.83,-414.18"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="1350.34,-410.7 1339.8,-411.76 1348.7,-417.51 1350.34,-410.7"/>
+</g>
+<!-- sourcefile~mesh_content.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge104" class="edge">
+<title>sourcefile~mesh_content.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00ff55" stroke-dasharray="5,2" d="M174.84,-1254.93C150.88,-1286.76 86.19,-1372.72 56.4,-1412.3"/>
+<polygon fill="#00ff55" stroke="#00ff55" points="53.49,-1410.34 50.27,-1420.44 59.08,-1414.55 53.49,-1410.34"/>
+</g>
+<!-- sourcefile~ordering.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge105" class="edge">
+<title>sourcefile~ordering.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M145.3,-1432.76C128.35,-1432.76 108.26,-1432.76 90.26,-1432.76"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="90.23,-1429.26 80.23,-1432.76 90.23,-1436.26 90.23,-1429.26"/>
+</g>
+<!-- sourcefile~poisson_fft.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge106" class="edge">
+<title>sourcefile~poisson_fft.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M624,-1626.76C569.57,-1637.72 551.91,-1635.06 505,-1664.76"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M503,-1664.76C406.66,-1725.75 454.24,-1813.58 360,-1877.76"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M358,-1877.76C281.58,-1929.8 263.03,-2045.88 186,-1994.76"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M184,-1994.76C90.4,-1932.64 51.32,-1551.75 42.83,-1455.06"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="46.31,-1454.61 41.97,-1444.95 39.33,-1455.21 46.31,-1454.61"/>
+</g>
+<!-- sourcefile~poisson_fft.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge108" class="edge">
+<title>sourcefile~poisson_fft.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M743.66,-1584.53C728.08,-1554.69 687.92,-1478.99 670,-1456.76 636.22,-1414.86 611.42,-1419.45 580,-1375.76 570.6,-1362.69 531.36,-1267.54 513.69,-1224.18"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="516.89,-1222.77 509.88,-1214.82 510.41,-1225.4 516.89,-1222.77"/>
+</g>
+<!-- sourcefile~poisson_fft.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge107" class="edge">
+<title>sourcefile~poisson_fft.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M735.77,-1584.69C705.21,-1558.38 631.9,-1493.14 580,-1429.76 541.34,-1382.55 542.98,-1362.52 505,-1314.76"/>
+</g>
+<!-- sourcefile~poisson_fft.f90&#45;&gt;sourcefile~poisson_fft.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge109" class="edge">
+<title>sourcefile~poisson_fft.f90&#45;&gt;sourcefile~poisson_fft.f90~2</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M718.71,-1584.65C703,-1578.56 683.76,-1571.12 666.89,-1564.59"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="667.87,-1561.21 657.28,-1560.87 665.34,-1567.74 667.87,-1561.21"/>
+</g>
+<!-- sourcefile~poisson_fft.f90&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge111" class="edge">
+<title>sourcefile~poisson_fft.f90&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M733.2,-1608.82C702.23,-1631.22 634.35,-1681.13 580,-1726.76 560.79,-1742.88 539.86,-1762.31 525,-1776.43"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="522.23,-1774.24 517.42,-1783.68 527.07,-1779.3 522.23,-1774.24"/>
+</g>
+<!-- sourcefile~spectral_processing.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node38" class="node">
+<title>sourcefile~spectral_processing.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node38"><a xlink:href="../sourcefile/spectral_processing.f90.html" xlink:title="spectral_processing.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="254,-1581.76 116,-1581.76 116,-1557.76 254,-1557.76 254,-1581.76"/>
+<text text-anchor="middle" x="185" y="-1567.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">spectral_processing.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~poisson_fft.f90&#45;&gt;sourcefile~spectral_processing.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge110" class="edge">
+<title>sourcefile~poisson_fft.f90&#45;&gt;sourcefile~spectral_processing.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M710.79,-1608.81C686.61,-1615.6 654.82,-1623.37 626,-1626.76"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M624,-1626.76C483.59,-1643.24 318.25,-1606.42 236.71,-1584.52"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="237.29,-1581.05 226.72,-1581.8 235.45,-1587.81 237.29,-1581.05"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~2&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge112" class="edge">
+<title>sourcefile~poisson_fft.f90~2&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M579.9,-1541.86C491.43,-1527.71 286.18,-1493.41 116,-1453.76 107.48,-1451.77 98.49,-1449.45 89.79,-1447.09"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="90.72,-1443.71 80.15,-1444.42 88.85,-1450.46 90.72,-1443.71"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~2&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge114" class="edge">
+<title>sourcefile~poisson_fft.f90~2&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M594.97,-1536.53C589.22,-1532.88 583.8,-1528.33 580,-1522.76 523.65,-1440.2 570.64,-1397.1 544,-1300.76 536.48,-1273.55 523.88,-1243.58 515.04,-1224.04"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="518.17,-1222.46 510.81,-1214.84 511.81,-1225.39 518.17,-1222.46"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~2&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge113" class="edge">
+<title>sourcefile~poisson_fft.f90~2&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M596.62,-1536.54C590.52,-1532.81 584.53,-1528.23 580,-1522.76 517.33,-1447.07 566.16,-1391.68 505,-1314.76"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~2&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge115" class="edge">
+<title>sourcefile~poisson_fft.f90~2&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M596.55,-1560.91C590.45,-1564.64 584.48,-1569.25 580,-1574.76 578.35,-1576.78 530.7,-1718.94 512.22,-1774.16"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="508.89,-1773.1 509.03,-1783.69 515.52,-1775.32 508.89,-1773.1"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~allocator.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge116" class="edge">
+<title>sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~allocator.f90</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M744.25,-1709.45C735.36,-1690.18 718.05,-1651.55 706,-1617.76 686.87,-1564.11 686.54,-1549.26 670,-1494.76 657.33,-1453 641.92,-1404.46 633.11,-1376.9"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="636.35,-1375.55 629.97,-1367.09 629.68,-1377.68 636.35,-1375.55"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge117" class="edge">
+<title>sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M503,-2034.76C441.78,-2051.82 420.02,-2055.66 360,-2034.76"/>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M358,-2034.76C283.88,-2008.95 251.39,-2038.16 186,-1994.76"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge119" class="edge">
+<title>sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M744.77,-1709.62C736.45,-1690.25 719.73,-1651.12 706,-1617.76 689.61,-1577.92 692.95,-1564.22 670,-1527.76 638.5,-1477.71 608.74,-1481.44 580,-1429.76 551.07,-1377.74 563.03,-1357.16 544,-1300.76 534.98,-1274.02 522.68,-1243.95 514.32,-1224.26"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="517.51,-1222.79 510.35,-1214.98 511.07,-1225.55 517.51,-1222.79"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge118" class="edge">
+<title>sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M705.75,-1732.84C682.19,-1737.65 652.65,-1741.95 626,-1740.76"/>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M624,-1740.76C575.49,-1738.59 598.25,-1685.76 580,-1640.76 524.41,-1503.66 500.37,-1472.16 464,-1328.76 435.97,-1218.24 499.09,-1163.9 428,-1074.76 420.24,-1065.03 408.4,-1058.94 396.75,-1055.13"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="397.69,-1051.75 387.12,-1052.43 395.8,-1058.5 397.69,-1051.75"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~poisson_fft.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge120" class="edge">
+<title>sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~poisson_fft.f90~2</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M741.28,-1709.59C720.34,-1680.38 667.03,-1606 640.9,-1569.54"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="643.55,-1567.23 634.88,-1561.14 637.86,-1571.31 643.55,-1567.23"/>
+</g>
+<!-- sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge122" class="edge">
+<title>sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M624,-1740.76C587.71,-1739.13 550.41,-1760.91 527.47,-1777.55"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="525.3,-1774.8 519.42,-1783.61 529.51,-1780.39 525.3,-1774.8"/>
+</g>
+<!-- sourcefile~spectral_processing.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node39" class="node">
+<title>sourcefile~spectral_processing.f90~2</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node39"><a xlink:href="../sourcefile/spectral_processing.f90~2.html" xlink:title="spectral_processing.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="428,-2006.76 290,-2006.76 290,-1982.76 428,-1982.76 428,-2006.76"/>
+<text text-anchor="middle" x="359" y="-1992.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">spectral_processing.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~spectral_processing.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge121" class="edge">
+<title>sourcefile~poisson_fft.f90~3&#45;&gt;sourcefile~spectral_processing.f90~2</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M742.38,-1734.02C732.95,-1749.58 716.8,-1777.44 706,-1802.76 685.33,-1851.24 704.63,-1876.02 670,-1915.76 640.88,-1949.18 616.11,-1933.04 580,-1958.76 541.35,-1986.29 550.65,-2021.79 505,-2034.76"/>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M503,-2034.76C493.45,-2037.42 443.79,-2022.45 405.64,-2010.08"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="406.32,-2006.61 395.73,-2006.83 404.14,-2013.27 406.32,-2006.61"/>
+</g>
+<!-- sourcefile~reorder.f90&#45;&gt;sourcefile~common.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge123" class="edge">
+<title>sourcefile~reorder.f90&#45;&gt;sourcefile~common.f90~2</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M721.31,-2102.78C716.04,-2105.45 710.72,-2108.47 706,-2111.76 687.69,-2124.51 687.73,-2133.21 670,-2146.76 666.15,-2149.7 661.94,-2152.57 657.7,-2155.27"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="655.78,-2152.34 649.05,-2160.52 659.41,-2158.32 655.78,-2152.34"/>
+</g>
+<!-- sourcefile~reorder.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge124" class="edge">
+<title>sourcefile~reorder.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M719.34,-2102.76C694.51,-2112.09 658.44,-2124.74 626,-2132.76"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M624,-2132.76C596.92,-2139.45 531.27,-2182.16 505,-2172.76"/>
+</g>
+<!-- sourcefile~sendrecv.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge125" class="edge">
+<title>sourcefile~sendrecv.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#5400ff" stroke-dasharray="5,2" d="M602.73,-2240.71C595.43,-2236.44 587.28,-2231.52 580,-2226.76 545.62,-2204.29 543.71,-2186.5 505,-2172.76"/>
+</g>
+<!-- sourcefile~sendrecv.f90~2&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge126" class="edge">
+<title>sourcefile~sendrecv.f90~2&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M614.89,-2024.96C605.99,-2036.88 592.05,-2055.56 580,-2071.76 546.62,-2116.61 557.69,-2191.47 505,-2172.76"/>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge127" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M888.5,-618.76C862.21,-615.48 853.6,-622.42 832,-637.76 784.74,-671.32 808.72,-728.82 752,-740.76"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M750,-740.76C696.07,-752.11 677.99,-759.05 626,-740.76"/>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge128" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M888.5,-858.76C823.48,-920.63 778.07,-1020.07 760.31,-1063.41"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="757.05,-1062.12 756.57,-1072.7 763.55,-1064.73 757.05,-1062.12"/>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge129" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M1006.69,-704.52C995.78,-687.25 973.64,-655.83 947,-637.76 925.07,-622.89 916.79,-622.04 890.5,-618.76"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M888.5,-618.76C756.45,-602.29 758.16,-490.27 626,-474.76"/>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~config.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge130" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~config.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M1010.82,-704.41C994.26,-640.03 917.72,-342.55 896.16,-258.77"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="899.54,-257.84 893.66,-249.02 892.76,-259.58 899.54,-257.84"/>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge133" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M888.5,-858.76C854.95,-890.69 839.95,-892.15 796,-906.76 723.34,-930.91 683.39,-884.07 626,-934.76"/>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge131" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M1008.01,-728.93C993.4,-758.41 956.5,-831.79 947,-839.76 926.71,-856.79 909.98,-840.8 890.5,-858.76"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M888.5,-858.76C865.52,-879.95 783.17,-895.19 752,-892.76"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M750,-892.76C693.03,-888.31 678.02,-882.4 626,-858.76"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M624,-858.76C598.47,-847.15 529.71,-803.5 505,-816.76"/>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge134" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M1013.84,-728.92C1012.06,-856.63 995.51,-1947.72 947,-1993.76 909.92,-2028.94 873.19,-2024.02 832,-1993.76 788.84,-1962.05 830.18,-1919.99 796,-1878.76 767.07,-1843.86 744.03,-1855.43 706,-1830.76 689,-1819.73 686.95,-1813.87 670,-1802.76 651.37,-1790.55 648.24,-1780.06 626,-1778.76"/>
+</g>
+<!-- sourcefile~ibm.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node36" class="node">
+<title>sourcefile~ibm.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node36"><a xlink:href="../sourcefile/ibm.f90.html" xlink:title="ibm.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="916.5,-670.76 862.5,-670.76 862.5,-646.76 916.5,-646.76 916.5,-670.76"/>
+<text text-anchor="middle" x="889.5" y="-656.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ibm.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~ibm.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge132" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~ibm.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M993.88,-704.62C980.78,-696.97 963.18,-687.18 947,-679.76 940.48,-676.77 933.4,-673.87 926.53,-671.24"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="927.3,-667.79 916.71,-667.58 924.86,-674.35 927.3,-667.79"/>
+</g>
+<!-- sourcefile~time_integrator.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node40" class="node">
+<title>sourcefile~time_integrator.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node40"><a xlink:href="../sourcefile/time_integrator.f90.html" xlink:title="time_integrator.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="946.5,-712.76 832.5,-712.76 832.5,-688.76 946.5,-688.76 946.5,-712.76"/>
+<text text-anchor="middle" x="889.5" y="-698.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">time_integrator.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~time_integrator.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge135" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~time_integrator.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M982.84,-712.72C974.75,-711.67 965.74,-710.51 956.59,-709.32"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="957.03,-705.85 946.66,-708.03 956.13,-712.79 957.03,-705.85"/>
+</g>
+<!-- sourcefile~vector_calculus.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node41" class="node">
+<title>sourcefile~vector_calculus.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node41"><a xlink:href="../sourcefile/vector_calculus.f90.html" xlink:title="vector_calculus.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="947,-830.76 832,-830.76 832,-806.76 947,-806.76 947,-830.76"/>
+<text text-anchor="middle" x="889.5" y="-816.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">vector_calculus.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~solver.f90&#45;&gt;sourcefile~vector_calculus.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge136" class="edge">
+<title>sourcefile~solver.f90&#45;&gt;sourcefile~vector_calculus.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M1005.74,-728.97C994.19,-745.28 971.84,-774.28 947,-792.76 942.45,-796.14 937.39,-799.23 932.22,-802.01"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="930.28,-799.06 922.89,-806.65 933.4,-805.33 930.28,-799.06"/>
+</g>
+<!-- sourcefile~tdsops.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge137" class="edge">
+<title>sourcefile~tdsops.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M602.73,-2104.81C595.43,-2109.08 587.28,-2114 580,-2118.76 545.62,-2141.23 543.71,-2186.5 505,-2172.76"/>
+</g>
+<!-- sourcefile~tdsops.f90&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge138" class="edge">
+<title>sourcefile~tdsops.f90&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M594.9,-2080.58C589.15,-2076.93 583.75,-2072.36 580,-2066.76 517.54,-1973.48 608.3,-1908.77 544,-1816.76 543.55,-1816.12 543.08,-1815.5 542.59,-1814.9"/>
+<polygon fill="#ff00aa" stroke="#ff00aa" points="544.81,-1812.19 535.08,-1807.99 540.07,-1817.34 544.81,-1812.19"/>
+</g>
+<!-- sourcefile~tdsops.f90~2&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge139" class="edge">
+<title>sourcefile~tdsops.f90~2&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff0055" stroke-dasharray="5,2" d="M479.59,-1807.82C450.74,-1822.98 400.56,-1850.37 360,-1877.76"/>
+</g>
+<!-- sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge140" class="edge">
+<title>sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1274.37,-226.65C1248.42,-204.08 1189.47,-155.16 1133,-124.76"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1131,-124.76C1027.39,-68.98 781.59,-76.79 752,-82.76"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M750,-82.76C695.11,-87.69 680.69,-75.94 626,-82.76"/>
+</g>
+<!-- sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~config.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge141" class="edge">
+<title>sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~config.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1216.87,-231.43C1190.2,-230.58 1159.86,-231.92 1133,-238.76"/>
+</g>
+<!-- sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge142" class="edge">
+<title>sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1280.88,-251.01C1240.9,-319.41 1042.85,-653.3 947,-721.76 873.52,-774.24 841.13,-764.28 752,-778.76"/>
+</g>
+<!-- sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge146" class="edge">
+<title>sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~solver.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1280.2,-250.94C1265.43,-274.59 1233.41,-328.79 1217,-378.76 1186.64,-471.23 1219.97,-505.58 1181,-594.76 1167.05,-626.69 1158.18,-632.66 1133,-656.76"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1131,-656.76C1113.77,-673.25 1104.17,-669.78 1083,-680.76 1071.28,-686.84 1058.49,-693.66 1047.26,-699.72"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1045.38,-696.76 1038.25,-704.59 1048.71,-702.91 1045.38,-696.76"/>
+</g>
+<!-- sourcefile~io.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node42" class="node">
+<title>sourcefile~io.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node42"><a xlink:href="../sourcefile/io.f90.html" xlink:title="io.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="652,-134.76 598,-134.76 598,-110.76 652,-110.76 652,-134.76"/>
+<text text-anchor="middle" x="625" y="-120.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">io.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~io.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge143" class="edge">
+<title>sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~io.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M750,-82.76C719.6,-88.89 686.19,-99.93 661.72,-108.86"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="660.3,-105.65 652.15,-112.41 662.74,-112.21 660.3,-105.65"/>
+</g>
+<!-- sourcefile~io_field_utils.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node43" class="node">
+<title>sourcefile~io_field_utils.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node43"><a xlink:href="../sourcefile/io_field_utils.f90.html" xlink:title="io_field_utils.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1181,-363.76 1083,-363.76 1083,-339.76 1181,-339.76 1181,-363.76"/>
+<text text-anchor="middle" x="1132" y="-349.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">io_field_utils.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~io_field_utils.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge144" class="edge">
+<title>sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~io_field_utils.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1274.78,-250.87C1255.17,-268.52 1216.82,-301.8 1181,-325.76 1176.37,-328.85 1171.34,-331.9 1166.33,-334.75"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1164.51,-331.76 1157.44,-339.65 1167.89,-337.89 1164.51,-331.76"/>
+</g>
+<!-- sourcefile~io_session.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node44" class="node">
+<title>sourcefile~io_session.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node44"><a xlink:href="../sourcefile/io_session.f90.html" xlink:title="io_session.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="794.5,-286.76 707.5,-286.76 707.5,-262.76 794.5,-262.76 794.5,-286.76"/>
+<text text-anchor="middle" x="751" y="-272.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">io_session.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~io_session.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge145" class="edge">
+<title>sourcefile~checkpoint_manager.f90&#45;&gt;sourcefile~io_session.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1131,-124.76C998.5,-57.28 828.19,-201.62 771.39,-255.53"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="768.92,-253.05 764.15,-262.5 773.78,-258.09 768.92,-253.05"/>
+</g>
+<!-- sourcefile~distributed.f90&#45;&gt;sourcefile~common.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge147" class="edge">
+<title>sourcefile~distributed.f90&#45;&gt;sourcefile~common.f90</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M598.76,-1882.67C581.49,-1874.39 558.37,-1863.32 539.41,-1854.24"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="540.73,-1850.99 530.2,-1849.83 537.71,-1857.31 540.73,-1850.99"/>
+</g>
+<!-- sourcefile~distributed.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge148" class="edge">
+<title>sourcefile~distributed.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M579.8,-1885.56C514.11,-1872.93 394.73,-1854.3 360,-1877.76"/>
+</g>
+<!-- sourcefile~ibm.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge149" class="edge">
+<title>sourcefile~ibm.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M862.33,-665.8C852.37,-669.15 841.21,-673.76 832,-679.76 812.78,-692.28 814.28,-702.89 796,-716.76 778.26,-730.23 773.8,-736.17 752,-740.76"/>
+</g>
+<!-- sourcefile~ibm.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge150" class="edge">
+<title>sourcefile~ibm.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M862.32,-662.53C851.38,-665.45 839.49,-670.61 832,-679.76 767.28,-758.79 816.27,-806.64 796,-906.76 784.53,-963.38 767.21,-1029.18 758.1,-1062.69"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="754.61,-1062.18 755.34,-1072.75 761.36,-1064.03 754.61,-1062.18"/>
+</g>
+<!-- sourcefile~ibm.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge151" class="edge">
+<title>sourcefile~ibm.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M862.32,-661.43C834.84,-663.88 790.37,-666.83 752,-664.76"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M750,-664.76C612.4,-657.33 640.8,-451.37 505,-474.76"/>
+</g>
+<!-- sourcefile~ibm.f90&#45;&gt;sourcefile~mesh.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge154" class="edge">
+<title>sourcefile~ibm.f90&#45;&gt;sourcefile~mesh.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M862.35,-662.89C851.55,-665.86 839.77,-670.98 832,-679.76 786.28,-731.42 836.53,-774.93 796,-830.76 743.97,-902.44 691.75,-875.41 626,-934.76"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M624,-934.76C547.21,-1002.57 517.62,-1129.37 508.47,-1180.52"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="504.99,-1180.06 506.77,-1190.51 511.9,-1181.23 504.99,-1180.06"/>
+</g>
+<!-- sourcefile~ibm.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge152" class="edge">
+<title>sourcefile~ibm.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M862.43,-665.95C844.03,-670.64 818.71,-676.33 796,-678.76 700.54,-688.96 657.73,-735.1 580,-678.76 538.35,-648.57 577.8,-607.54 544,-568.76 531.33,-554.22 522.43,-541.51 505,-549.76"/>
+</g>
+<!-- sourcefile~ibm.f90&#45;&gt;sourcefile~io_session.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge153" class="edge">
+<title>sourcefile~ibm.f90&#45;&gt;sourcefile~io_session.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M862.49,-652.37C851.58,-648.43 839.67,-642.25 832,-632.76 789.34,-579.97 762.26,-366.93 754.39,-297.07"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="757.83,-296.34 753.25,-286.78 750.87,-297.11 757.83,-296.34"/>
+</g>
+<!-- sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge155" class="edge">
+<title>sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M1222.14,-395.95C1112.93,-391.4 888.3,-389.54 706,-436.76 667.89,-446.63 665.34,-473.36 626,-474.76"/>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M624,-474.76C571.14,-472.87 556.08,-461.03 505,-474.76"/>
+</g>
+<!-- sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~config.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge156" class="edge">
+<title>sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~config.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M1271.56,-387.7C1251.06,-373.02 1214.62,-348.04 1181,-330.76 1160.59,-320.27 1154.13,-320.71 1133,-311.76"/>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M1131,-311.76C1075.26,-288.14 1075.77,-248.35 1016,-238.76"/>
+</g>
+<!-- sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge157" class="edge">
+<title>sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M1285.43,-411.84C1276.48,-451.82 1243.81,-582.29 1181,-670.76 1086.31,-804.14 1051.58,-868.26 890.5,-896.76"/>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M888.5,-896.76C827.97,-901.14 812.51,-897.48 752,-892.76"/>
+</g>
+<!-- sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge161" class="edge">
+<title>sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~solver.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M1276.47,-411.79C1261.09,-428.38 1233.84,-459.77 1217,-490.76 1193.64,-533.73 1204.28,-551.74 1181,-594.76 1164.41,-625.41 1158.18,-632.66 1133,-656.76"/>
+</g>
+<!-- sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~io.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge158" class="edge">
+<title>sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~io.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M1282.24,-387.67C1264.83,-351.62 1212.04,-246.08 1181,-224.76 1014.8,-110.59 757.1,-114.07 662.46,-119.82"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="662.01,-116.34 652.26,-120.49 662.46,-123.33 662.01,-116.34"/>
+</g>
+<!-- sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~io_field_utils.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge159" class="edge">
+<title>sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~io_field_utils.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M1248.89,-387.65C1228.43,-381.31 1203.21,-373.5 1181.52,-366.78"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="1182.42,-363.4 1171.83,-363.78 1180.35,-370.09 1182.42,-363.4"/>
+</g>
+<!-- sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~io_session.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge160" class="edge">
+<title>sourcefile~snapshot_manager.f90&#45;&gt;sourcefile~io_session.f90</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M1131,-311.76C1022.14,-265.63 880.41,-265.9 804.87,-270.24"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="804.42,-266.77 794.66,-270.88 804.86,-273.75 804.42,-266.77"/>
+</g>
+<!-- sourcefile~spectral_processing.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge162" class="edge">
+<title>sourcefile~spectral_processing.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M162.28,-1557.7C148.3,-1549.4 130.17,-1537.58 116,-1524.76 91.76,-1502.81 68.75,-1472.72 54.76,-1453.02"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="57.59,-1450.96 49,-1444.76 51.85,-1454.96 57.59,-1450.96"/>
+</g>
+<!-- sourcefile~spectral_processing.f90~2&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge163" class="edge">
+<title>sourcefile~spectral_processing.f90~2&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#003fff" stroke-dasharray="5,2" d="M316.45,-2006.79C279.13,-2014.99 224.44,-2020.27 186,-1994.76"/>
+</g>
+<!-- sourcefile~time_integrator.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge164" class="edge">
+<title>sourcefile~time_integrator.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M852.96,-712.82C825.64,-721.69 786.8,-733.43 752,-740.76"/>
+</g>
+<!-- sourcefile~time_integrator.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge165" class="edge">
+<title>sourcefile~time_integrator.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M880.13,-712.78C868.04,-730.62 845.65,-765.44 832,-797.76 811.2,-847 771.84,-1003.8 757.45,-1062.39"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="753.97,-1061.89 754.99,-1072.44 760.77,-1063.56 753.97,-1061.89"/>
+</g>
+<!-- sourcefile~time_integrator.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge166" class="edge">
+<title>sourcefile~time_integrator.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M857.64,-688.76C830.35,-679.08 789.2,-666.77 752,-664.76"/>
+</g>
+<!-- sourcefile~time_integrator.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge167" class="edge">
+<title>sourcefile~time_integrator.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M875.48,-712.86C852.62,-732.96 802.83,-771.74 752,-778.76"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M750,-778.76C640.85,-793.83 601.67,-763.87 505,-816.76"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M503,-816.76C419.66,-861.46 379.28,-977.79 365.59,-1026.65"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="362.15,-1025.95 362.93,-1036.51 368.91,-1027.77 362.15,-1025.95"/>
+</g>
+<!-- sourcefile~vector_calculus.f90&#45;&gt;sourcefile~allocator.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge168" class="edge">
+<title>sourcefile~vector_calculus.f90&#45;&gt;sourcefile~allocator.f90~2</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M831.75,-821.44C807.11,-821.7 778,-820.79 752,-816.76"/>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M750,-816.76C686.12,-806.86 686.98,-762.21 626,-740.76"/>
+</g>
+<!-- sourcefile~vector_calculus.f90&#45;&gt;sourcefile~backend.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge169" class="edge">
+<title>sourcefile~vector_calculus.f90&#45;&gt;sourcefile~backend.f90~3</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M850.93,-830.77C843.93,-834.38 837.19,-838.97 832,-844.76 802.24,-877.97 769.36,-1009.49 757.03,-1062.47"/>
+<polygon fill="#ff00bf" stroke="#ff00bf" points="753.55,-1061.99 754.72,-1072.52 760.37,-1063.56 753.55,-1061.99"/>
+</g>
+<!-- sourcefile~vector_calculus.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge170" class="edge">
+<title>sourcefile~vector_calculus.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M750,-816.76C695.54,-808.32 678.16,-834.56 626,-816.76"/>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M624,-816.76C581.74,-802.33 389.82,-480.52 360,-513.76"/>
+</g>
+<!-- sourcefile~vector_calculus.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge171" class="edge">
+<title>sourcefile~vector_calculus.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M624,-816.76C573.95,-799.67 551.4,-791.37 505,-816.76"/>
+</g>
+<!-- sourcefile~vector_calculus.f90&#45;&gt;sourcefile~tdsops.f90~2 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge172" class="edge">
+<title>sourcefile~vector_calculus.f90&#45;&gt;sourcefile~tdsops.f90~2</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M847.6,-830.84C841.47,-834.38 835.9,-838.93 832,-844.76 776.46,-927.75 860.41,-1666.45 796,-1742.76 746.18,-1801.77 703,-1784.67 626,-1778.76"/>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M624,-1778.76C598.53,-1777.27 570.24,-1781.08 547.64,-1785.47"/>
+<polygon fill="#ff00bf" stroke="#ff00bf" points="546.78,-1782.07 537.68,-1787.51 548.18,-1788.93 546.78,-1782.07"/>
+</g>
+<!-- sourcefile~io.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge173" class="edge">
+<title>sourcefile~io.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M597.6,-114.01C571.11,-107.05 530.66,-101.59 505,-122.76"/>
+</g>
+<!-- sourcefile~io_base.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_node45" class="node">
+<title>sourcefile~io_base.f90</title>
+<g id="a_sourcefile~~xcompact.f90~~EfferentGraph_node45"><a xlink:href="../sourcefile/io_base.f90.html" xlink:title="io_base.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="540.5,-446.76 467.5,-446.76 467.5,-422.76 540.5,-422.76 540.5,-446.76"/>
+<text text-anchor="middle" x="504" y="-432.36" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">io_base.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~io.f90&#45;&gt;sourcefile~io_base.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge174" class="edge">
+<title>sourcefile~io.f90&#45;&gt;sourcefile~io_base.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M619.34,-134.99C601.34,-182.17 536.29,-352.71 513.2,-413.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="509.93,-412.02 509.63,-422.61 516.47,-414.52 509.93,-412.02"/>
+</g>
+<!-- sourcefile~io_field_utils.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge175" class="edge">
+<title>sourcefile~io_field_utils.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1082.89,-343.72C1021.35,-331.91 913.07,-305.87 832,-257.76 728.69,-196.45 744.15,-61 626,-82.76"/>
+</g>
+<!-- sourcefile~io_field_utils.f90&#45;&gt;sourcefile~field.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge176" class="edge">
+<title>sourcefile~io_field_utils.f90&#45;&gt;sourcefile~field.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1090.4,-363.83C960.42,-402.6 559.77,-522.95 505,-549.76"/>
+</g>
+<!-- sourcefile~io_field_utils.f90&#45;&gt;sourcefile~solver.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge178" class="edge">
+<title>sourcefile~io_field_utils.f90&#45;&gt;sourcefile~solver.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1127.17,-363.9C1110.56,-416.62 1044.57,-626.07 1022.92,-694.79"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="1019.51,-693.98 1019.84,-704.57 1026.18,-696.08 1019.51,-693.98"/>
+</g>
+<!-- sourcefile~io_field_utils.f90&#45;&gt;sourcefile~io_base.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge177" class="edge">
+<title>sourcefile~io_field_utils.f90&#45;&gt;sourcefile~io_base.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1082.8,-351.13C1003.58,-350.87 841.13,-353.58 706,-376.76 650.28,-386.31 588,-405.69 547.75,-419.42"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="546.57,-416.12 538.25,-422.69 548.85,-422.74 546.57,-416.12"/>
+</g>
+<!-- sourcefile~io_session.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge179" class="edge">
+<title>sourcefile~io_session.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M624,-322.76C605.57,-335.27 594.27,-329.65 580,-346.76 547.32,-385.94 577.57,-417.34 544,-455.76 531.31,-470.28 524,-471.49 505,-474.76"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M503,-474.76C438.08,-485.94 403.99,-464.72 360,-513.76"/>
+</g>
+<!-- sourcefile~io_session.f90&#45;&gt;sourcefile~io.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge180" class="edge">
+<title>sourcefile~io_session.f90&#45;&gt;sourcefile~io.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M740.06,-262.58C718.75,-236.45 668.47,-174.82 642.37,-142.82"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="645.02,-140.53 635.99,-135 639.59,-144.96 645.02,-140.53"/>
+</g>
+<!-- sourcefile~io_session.f90&#45;&gt;sourcefile~io_base.f90 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge181" class="edge">
+<title>sourcefile~io_session.f90&#45;&gt;sourcefile~io_base.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M707.5,-285.95C682.42,-293.79 650.83,-305.9 626,-322.76"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M624,-322.76C605.57,-335.27 597.29,-332.71 580,-346.76 555.52,-366.64 532.84,-395.27 518.97,-414.41"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="516,-412.54 513.07,-422.72 521.71,-416.59 516,-412.54"/>
+</g>
+<!-- sourcefile~io_base.f90&#45;&gt;sourcefile~common.f90~3 -->
+<g id="sourcefile~~xcompact.f90~~EfferentGraph_edge182" class="edge">
+<title>sourcefile~io_base.f90&#45;&gt;sourcefile~common.f90~3</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M467.5,-446.66C435.59,-458.98 389.36,-481.03 360,-513.76"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pansourcefilexcompactf90EfferentGraph = svgPanZoom('#sourcefilexcompactf90EfferentGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#EfferentGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="EfferentGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a file to a file which it depends on. A file
+is dependent upon another if the latter must be compiled before the former
+can be.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+<br>
+      <section>
+        <h2><span class="anchor" id="src"></span>Source Code</h2>
+        <div class="hl codehilite"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="k">program </span><span class="n">xcompact</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="w">  </span><span class="k">use </span><span class="n">mpi</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a>
+<a id="ln-4" name="ln-4" href="#ln-4"></a><span class="w">  </span><span class="k">use </span><span class="n">m_allocator</span>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="w">  </span><span class="k">use </span><span class="n">m_base_backend</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="w">  </span><span class="k">use </span><span class="n">m_base_case</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">base_case_t</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="w">  </span><span class="k">use </span><span class="n">m_common</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="n">get_argument</span><span class="p">,</span><span class="w"> </span><span class="n">VERT</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="w">  </span><span class="k">use </span><span class="n">m_config</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">domain_config_t</span><span class="p">,</span><span class="w"> </span><span class="n">solver_config_t</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="w">  </span><span class="k">use </span><span class="n">m_mesh</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="w">  </span><span class="k">use </span><span class="n">m_case_channel</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">case_channel_t</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="w">  </span><span class="k">use </span><span class="n">m_case_generic</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">case_generic_t</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="w">  </span><span class="k">use </span><span class="n">m_case_tgv</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">case_tgv_t</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="cp">#ifdef CUDA</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="w">  </span><span class="k">use </span><span class="n">m_cuda_allocator</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="w">  </span><span class="k">use </span><span class="n">m_cuda_backend</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="w">  </span><span class="k">use </span><span class="n">m_cuda_common</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">SZ</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="cp">#else</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="w">  </span><span class="k">use </span><span class="n">m_omp_backend</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="w">  </span><span class="k">use </span><span class="n">m_omp_common</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">SZ</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a><span class="cp">#endif</span>
+<a id="ln-22" name="ln-22" href="#ln-22"></a>
+<a id="ln-23" name="ln-23" href="#ln-23"></a><span class="w">  </span><span class="k">implicit none</span>
+<a id="ln-24" name="ln-24" href="#ln-24"></a>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="k">  class</span><span class="p">(</span><span class="n">base_backend_t</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">backend</span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">allocator_t</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">allocator</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">allocator_t</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">host_allocator</span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">mesh_t</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mesh</span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">base_case_t</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">flow_case</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="cp">#ifdef CUDA</span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">cuda_backend_t</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cuda_backend</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">cuda_allocator_t</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cuda_allocator</span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ndevs</span><span class="p">,</span><span class="w"> </span><span class="n">devnum</span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="cp">#else</span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">omp_backend_t</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">omp_backend</span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="cp">#endif</span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">allocator_t</span><span class="p">),</span><span class="w"> </span><span class="k">target</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">omp_allocator</span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">t_start</span><span class="p">,</span><span class="w"> </span><span class="n">t_end</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">domain_config_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">domain_cfg</span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">solver_config_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">solver_cfg</span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">  </span><span class="kt">character</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">backend_name</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="n">nrank</span><span class="p">,</span><span class="w"> </span><span class="n">nproc</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">  </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">use_2decomp</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">  </span><span class="k">call </span><span class="n">MPI_Init</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">  </span><span class="k">call </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">nrank</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">  </span><span class="k">call </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">nproc</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="k">    print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Parallel run with&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">nproc</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ranks&#39;</span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">    </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Data precision is&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dp</span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">  </span><span class="k">end if</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="cp">#ifdef CUDA</span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudaGetDeviceCount</span><span class="p">(</span><span class="n">ndevs</span><span class="p">)</span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudaSetDevice</span><span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">nrank</span><span class="p">,</span><span class="w"> </span><span class="n">ndevs</span><span class="p">))</span><span class="w"> </span><span class="c">! round-robin</span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudaGetDevice</span><span class="p">(</span><span class="n">devnum</span><span class="p">)</span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">  </span><span class="n">backend_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;CUDA&quot;</span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="cp">#else</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">  </span><span class="n">backend_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;OMP&quot;</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="cp">#endif</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">  </span><span class="k">call </span><span class="n">domain_cfg</span><span class="p">%</span><span class="k">read</span><span class="p">(</span><span class="n">nml_file</span><span class="o">=</span><span class="n">get_argument</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">  </span><span class="k">call </span><span class="n">solver_cfg</span><span class="p">%</span><span class="k">read</span><span class="p">(</span><span class="n">nml_file</span><span class="o">=</span><span class="n">get_argument</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">product</span><span class="p">(</span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">nproc_dir</span><span class="p">)</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">nproc</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;nproc_dir specified in the input file does &amp;</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="s1">                              &amp;not match the total number of ranks, falling &amp;</span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="s1">                              &amp;back to a 1D decomposition along Z-dir instead.&#39;</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">    </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">nproc_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nproc</span><span class="p">]</span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">  </span><span class="k">end if</span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">  </span><span class="c">! Decide whether 2decomp is used or not</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">  </span><span class="n">use_2decomp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver_cfg</span><span class="p">%</span><span class="n">poisson_solver_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;FFT&#39;</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">                </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">trim</span><span class="p">(</span><span class="n">backend_name</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;OMP&#39;</span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">  </span><span class="n">mesh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mesh_t</span><span class="p">(</span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">dims_global</span><span class="p">,</span><span class="w"> </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">nproc_dir</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">                </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">L_global</span><span class="p">,</span><span class="w"> </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">BC_x</span><span class="p">,</span><span class="w"> </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">BC_y</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">                </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">BC_z</span><span class="p">,</span><span class="w"> </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">stretching</span><span class="p">,</span><span class="w"> </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">beta</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">                </span><span class="n">use_2decomp</span><span class="o">=</span><span class="n">use_2decomp</span><span class="p">)</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">  </span><span class="c">! get local vertex dimensions</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="w">  </span><span class="n">dims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mesh</span><span class="p">%</span><span class="n">get_dims</span><span class="p">(</span><span class="n">VERT</span><span class="p">)</span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="cp">#ifdef CUDA</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">  </span><span class="n">cuda_allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cuda_allocator_t</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span><span class="w"> </span><span class="n">SZ</span><span class="p">)</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="w">  </span><span class="n">allocator</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">cuda_allocator</span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;CUDA allocator instantiated&#39;</span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">  </span><span class="n">omp_allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">allocator_t</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span><span class="w"> </span><span class="n">SZ</span><span class="p">)</span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">  </span><span class="n">host_allocator</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">omp_allocator</span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">  </span><span class="n">cuda_backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cuda_backend_t</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="w"> </span><span class="n">allocator</span><span class="p">)</span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">  </span><span class="n">backend</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">cuda_backend</span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;CUDA backend instantiated&#39;</span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="cp">#else</span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a><span class="w">  </span><span class="n">omp_allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">allocator_t</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span><span class="w"> </span><span class="n">SZ</span><span class="p">)</span>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">  </span><span class="n">allocator</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">omp_allocator</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">  </span><span class="n">host_allocator</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">omp_allocator</span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;OpenMP allocator instantiated&#39;</span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">  </span><span class="n">omp_backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">omp_backend_t</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="w"> </span><span class="n">allocator</span><span class="p">)</span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a><span class="w">  </span><span class="n">backend</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">omp_backend</span>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;OpenMP backend instantiated&#39;</span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="cp">#endif</span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Flow case: &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">flow_case_name</span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="w">  </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="n">domain_cfg</span><span class="p">%</span><span class="n">flow_case_name</span><span class="p">))</span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;channel&#39;</span><span class="p">)</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">    </span><span class="k">allocate</span><span class="w"> </span><span class="p">(</span><span class="n">case_channel_t</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">flow_case</span><span class="p">)</span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">    </span><span class="n">flow_case</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">case_channel_t</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span><span class="w"> </span><span class="n">mesh</span><span class="p">,</span><span class="w"> </span><span class="n">host_allocator</span><span class="p">)</span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;generic&#39;</span><span class="p">)</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">    </span><span class="k">allocate</span><span class="w"> </span><span class="p">(</span><span class="n">case_generic_t</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">flow_case</span><span class="p">)</span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">    </span><span class="n">flow_case</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">case_generic_t</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span><span class="w"> </span><span class="n">mesh</span><span class="p">,</span><span class="w"> </span><span class="n">host_allocator</span><span class="p">)</span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;tgv&#39;</span><span class="p">)</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">    </span><span class="k">allocate</span><span class="w"> </span><span class="p">(</span><span class="n">case_tgv_t</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">flow_case</span><span class="p">)</span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">    </span><span class="n">flow_case</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">case_tgv_t</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span><span class="w"> </span><span class="n">mesh</span><span class="p">,</span><span class="w"> </span><span class="n">host_allocator</span><span class="p">)</span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">  </span><span class="k">case </span><span class="n">default</span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">    </span><span class="k">error stop</span><span class="w"> </span><span class="s1">&#39;Undefined flow_case.&#39;</span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">  </span><span class="k">end select</span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="k">  if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;solver instantiated&#39;</span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">  </span><span class="k">call </span><span class="nb">cpu_time</span><span class="p">(</span><span class="n">t_start</span><span class="p">)</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">  </span><span class="k">call </span><span class="n">flow_case</span><span class="p">%</span><span class="n">run</span><span class="p">()</span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">  </span><span class="k">call </span><span class="nb">cpu_time</span><span class="p">(</span><span class="n">t_end</span><span class="p">)</span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Time: &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">t_end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t_start</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">  </span><span class="k">call </span><span class="n">MPI_Finalize</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a>
+<a id="ln-137" name="ln-137" href="#ln-137"></a><span class="k">end program </span><span class="n">xcompact</span>
+</pre></div>
+
+      </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              x3d2
+ was developed by Xcompact3d Team<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
