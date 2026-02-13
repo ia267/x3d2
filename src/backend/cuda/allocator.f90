@@ -24,22 +24,7 @@ module m_cuda_allocator
     procedure :: set_shape => set_shape_cuda
   end type cuda_field_t
 
-  interface cuda_field_t
-    module procedure cuda_field_init
-  end interface cuda_field_t
-
 contains
-
-  function cuda_field_init(ngrid, next, id) result(f)
-    integer, intent(in) :: ngrid, id
-    type(cuda_field_t), pointer, intent(in) :: next
-    type(cuda_field_t) :: f
-
-    allocate (f%p_data_d(ngrid))
-    f%refcount = 0
-    f%next => next
-    f%id = id
-  end function cuda_field_init
 
   subroutine fill_cuda(self, c)
     implicit none
@@ -80,12 +65,15 @@ contains
 
   function create_cuda_block(self, next) result(ptr)
     class(cuda_allocator_t), intent(inout) :: self
-    type(cuda_field_t), pointer, intent(in) :: next
+    class(field_t), pointer, intent(in) :: next
     type(cuda_field_t), pointer :: newblock
     class(field_t), pointer :: ptr
-    allocate (newblock)
     self%next_id = self%next_id + 1
-    newblock = cuda_field_t(self%ngrid, next, id=self%next_id)
+    allocate (newblock)
+    allocate (newblock%p_data_d(self%ngrid))
+    newblock%refcount = 0
+    newblock%next => next
+    newblock%id = self%next_id
     ptr => newblock
   end function create_cuda_block
 

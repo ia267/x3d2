@@ -88,7 +88,7 @@ program test_reorder
   allocator => cuda_allocator
   print *, 'CUDA allocator instantiated'
 
-  cuda_backend = cuda_backend_t(mesh, allocator)
+  call cuda_backend%init(mesh, allocator)
   backend => cuda_backend
   print *, 'CUDA backend instantiated'
 #else

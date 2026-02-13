@@ -66,75 +66,71 @@ module m_cuda_backend
     procedure :: copy_data_to_f => copy_data_to_f_cuda
     procedure :: copy_f_to_data => copy_f_to_data_cuda
     procedure :: init_poisson_fft => init_cuda_poisson_fft
+    procedure :: init
     procedure :: transeq_cuda_dist
     procedure :: transeq_cuda_thom
     procedure :: tds_solve_dist
   end type cuda_backend_t
 
-  interface cuda_backend_t
-    module procedure init
-  end interface cuda_backend_t
-
 contains
 
-  function init(mesh, allocator) result(backend)
+  subroutine init(self, mesh, allocator)
     implicit none
 
+    class(cuda_backend_t), intent(inout) :: self
     type(mesh_t), target, intent(inout) :: mesh
     class(allocator_t), target, intent(inout) :: allocator
-    type(cuda_backend_t) :: backend
 
-    type(cuda_poisson_fft_t) :: cuda_poisson_fft
     integer :: n_groups
 
-    call backend%base_init()
+    call self%base_init()
 
     select type (allocator)
     type is (cuda_allocator_t)
       ! class level access to the allocator
-      backend%allocator => allocator
+      self%allocator => allocator
     end select
-    backend%mesh => mesh
+    self%mesh => mesh
 
-    backend%xthreads = dim3(SZ, 1, 1)
-    backend%xblocks = dim3(backend%allocator%get_n_groups(DIR_X), 1, 1)
-    backend%ythreads = dim3(SZ, 1, 1)
-    backend%yblocks = dim3(backend%allocator%get_n_groups(DIR_Y), 1, 1)
-    backend%zthreads = dim3(SZ, 1, 1)
-    backend%zblocks = dim3(backend%allocator%get_n_groups(DIR_Z), 1, 1)
+    self%xthreads = dim3(SZ, 1, 1)
+    self%xblocks = dim3(self%allocator%get_n_groups(DIR_X), 1, 1)
+    self%ythreads = dim3(SZ, 1, 1)
+    self%yblocks = dim3(self%allocator%get_n_groups(DIR_Y), 1, 1)
+    self%zthreads = dim3(SZ, 1, 1)
+    self%zblocks = dim3(self%allocator%get_n_groups(DIR_Z), 1, 1)
 
     ! Buffer size should be big enough for the largest MPI exchange.
-    n_groups = maxval([backend%allocator%get_n_groups(DIR_X), &
-                       backend%allocator%get_n_groups(DIR_Y), &
-                       backend%allocator%get_n_groups(DIR_Z)])
+    n_groups = maxval([self%allocator%get_n_groups(DIR_X), &
+                       self%allocator%get_n_groups(DIR_Y), &
+                       self%allocator%get_n_groups(DIR_Z)])
 
-    allocate (backend%u_send_s_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%u_send_e_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%u_recv_s_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%u_recv_e_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%v_send_s_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%v_send_e_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%v_recv_s_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%v_recv_e_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%w_send_s_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%w_send_e_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%w_recv_s_dev(SZ, backend%n_halo, n_groups))
-    allocate (backend%w_recv_e_dev(SZ, backend%n_halo, n_groups))
+    allocate (self%u_send_s_dev(SZ, self%n_halo, n_groups))
+    allocate (self%u_send_e_dev(SZ, self%n_halo, n_groups))
+    allocate (self%u_recv_s_dev(SZ, self%n_halo, n_groups))
+    allocate (self%u_recv_e_dev(SZ, self%n_halo, n_groups))
+    allocate (self%v_send_s_dev(SZ, self%n_halo, n_groups))
+    allocate (self%v_send_e_dev(SZ, self%n_halo, n_groups))
+    allocate (self%v_recv_s_dev(SZ, self%n_halo, n_groups))
+    allocate (self%v_recv_e_dev(SZ, self%n_halo, n_groups))
+    allocate (self%w_send_s_dev(SZ, self%n_halo, n_groups))
+    allocate (self%w_send_e_dev(SZ, self%n_halo, n_groups))
+    allocate (self%w_recv_s_dev(SZ, self%n_halo, n_groups))
+    allocate (self%w_recv_e_dev(SZ, self%n_halo, n_groups))
 
-    allocate (backend%du_send_s_dev(SZ, 1, n_groups))
-    allocate (backend%du_send_e_dev(SZ, 1, n_groups))
-    allocate (backend%du_recv_s_dev(SZ, 1, n_groups))
-    allocate (backend%du_recv_e_dev(SZ, 1, n_groups))
-    allocate (backend%dud_send_s_dev(SZ, 1, n_groups))
-    allocate (backend%dud_send_e_dev(SZ, 1, n_groups))
-    allocate (backend%dud_recv_s_dev(SZ, 1, n_groups))
-    allocate (backend%dud_recv_e_dev(SZ, 1, n_groups))
-    allocate (backend%d2u_send_s_dev(SZ, 1, n_groups))
-    allocate (backend%d2u_send_e_dev(SZ, 1, n_groups))
-    allocate (backend%d2u_recv_s_dev(SZ, 1, n_groups))
-    allocate (backend%d2u_recv_e_dev(SZ, 1, n_groups))
+    allocate (self%du_send_s_dev(SZ, 1, n_groups))
+    allocate (self%du_send_e_dev(SZ, 1, n_groups))
+    allocate (self%du_recv_s_dev(SZ, 1, n_groups))
+    allocate (self%du_recv_e_dev(SZ, 1, n_groups))
+    allocate (self%dud_send_s_dev(SZ, 1, n_groups))
+    allocate (self%dud_send_e_dev(SZ, 1, n_groups))
+    allocate (self%dud_recv_s_dev(SZ, 1, n_groups))
+    allocate (self%dud_recv_e_dev(SZ, 1, n_groups))
+    allocate (self%d2u_send_s_dev(SZ, 1, n_groups))
+    allocate (self%d2u_send_e_dev(SZ, 1, n_groups))
+    allocate (self%d2u_recv_s_dev(SZ, 1, n_groups))
+    allocate (self%d2u_recv_e_dev(SZ, 1, n_groups))
 
-  end function init
+  end subroutine init
 
   subroutine alloc_cuda_tdsops( &
     self, tdsops, n_tds, delta, operation, scheme, bc_start, bc_end, &
@@ -158,9 +154,10 @@ contains
 
     select type (tdsops)
     type is (cuda_tdsops_t)
-      tdsops = cuda_tdsops_t(n_tds, delta, operation, scheme, bc_start, &
-                             bc_end, stretch, stretch_correct, n_halo, &
-                             from_to, sym, c_nu, nu0_nu)
+      call tdsops%cuda_tdsops_init(n_tds, delta, operation, scheme, &
+                                   bc_start, bc_end, stretch, &
+                                   stretch_correct, n_halo, &
+                                   from_to, sym, c_nu, nu0_nu)
     end select
 
   end subroutine alloc_cuda_tdsops
@@ -1018,7 +1015,7 @@ contains
 
     select type (poisson_fft => self%poisson_fft)
     type is (cuda_poisson_fft_t)
-      poisson_fft = cuda_poisson_fft_t(mesh, xdirps, ydirps, zdirps, lowmem)
+      call poisson_fft%init(mesh, xdirps, ydirps, zdirps, lowmem)
     end select
 
   end subroutine init_cuda_poisson_fft

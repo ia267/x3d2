@@ -93,7 +93,7 @@ program xcompact
   omp_allocator = allocator_t(dims, SZ)
   host_allocator => omp_allocator
 
-  cuda_backend = cuda_backend_t(mesh, allocator)
+  call cuda_backend%init(mesh, allocator)
   backend => cuda_backend
   if (nrank == 0) print *, 'CUDA backend instantiated'
 #else

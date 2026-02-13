@@ -68,7 +68,7 @@ program test_vecadd
   allocator => cuda_allocator
   host_allocator = allocator_t(mesh%get_dims(VERT), SZ)
 
-  cuda_backend = cuda_backend_t(mesh, allocator)
+  call cuda_backend%init(mesh, allocator)
   backend => cuda_backend
 #else
   omp_allocator = allocator_t(mesh%get_dims(VERT), SZ)

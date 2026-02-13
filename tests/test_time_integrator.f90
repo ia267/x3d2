@@ -85,7 +85,7 @@ program test_omp_adamsbashforth
   allocator => cuda_allocator
   if (nrank == 0) print *, 'CUDA allocator instantiated'
 
-  cuda_backend = cuda_backend_t(mesh, allocator)
+  call cuda_backend%init(mesh, allocator)
   backend => cuda_backend
   if (nrank == 0) print *, 'CUDA backend instantiated'
 #else

@@ -53,6 +53,7 @@ module m_cuda_poisson_fft
     !> Standard cuFFT storage for single-GPU mode
     complex(dp), device, allocatable, dimension(:, :, :) :: c_dev
   contains
+    procedure :: init
     procedure :: fft_forward => fft_forward_cuda
     procedure :: fft_backward => fft_backward_cuda
     procedure :: fft_postprocess_000 => fft_postprocess_000_cuda
@@ -61,9 +62,6 @@ module m_cuda_poisson_fft
     procedure :: undo_periodicity_y => undo_periodicity_y_cuda
   end type cuda_poisson_fft_t
 
-  interface cuda_poisson_fft_t
-    module procedure init
-  end interface cuda_poisson_fft_t
 
   ! Explicit C interfaces for cuFFT functions that nvfortran has trouble with
   interface
@@ -84,7 +82,7 @@ module m_cuda_poisson_fft
     end function cufftExecC2R_C
   end interface
 
-  private :: init, create_fft_plan
+  private :: create_fft_plan
 
 contains
 
@@ -147,15 +145,13 @@ contains
 
   end subroutine create_fft_plan
 
-  function init(mesh, xdirps, ydirps, zdirps, lowmem) &
-    result(poisson_fft)
+  subroutine init(self, mesh, xdirps, ydirps, zdirps, lowmem)
     implicit none
 
+    class(cuda_poisson_fft_t), intent(inout) :: self
     type(mesh_t), intent(in) :: mesh
     type(dirps_t), intent(in) :: xdirps, ydirps, zdirps
     logical, optional, intent(in) :: lowmem
-
-    type(cuda_poisson_fft_t) :: poisson_fft
 
     integer :: nx, ny, nz
 
@@ -179,85 +175,85 @@ contains
     n_sp_st(2) = dims_loc(2)/mesh%par%nproc_dir(3)*mesh%par%nrank_dir(3)
     n_sp_st(3) = 0
 
-    call poisson_fft%base_init(mesh, xdirps, ydirps, zdirps, n_spec, n_sp_st)
+    call self%base_init(mesh, xdirps, ydirps, zdirps, n_spec, n_sp_st)
 
-    nx = poisson_fft%nx_glob
-    ny = poisson_fft%ny_glob
-    nz = poisson_fft%nz_glob
+    nx = self%nx_glob
+    ny = self%ny_glob
+    nz = self%nz_glob
 
-    allocate (poisson_fft%waves_dev(poisson_fft%nx_spec, &
-                                    poisson_fft%ny_spec, &
-                                    poisson_fft%nz_spec))
-    poisson_fft%waves_dev = poisson_fft%waves
+    allocate (self%waves_dev(self%nx_spec, &
+                             self%ny_spec, &
+                             self%nz_spec))
+    self%waves_dev = self%waves
 
-    allocate (poisson_fft%ax_dev(nx), poisson_fft%bx_dev(nx))
-    allocate (poisson_fft%ay_dev(ny), poisson_fft%by_dev(ny))
-    allocate (poisson_fft%az_dev(nz), poisson_fft%bz_dev(nz))
-    poisson_fft%ax_dev = poisson_fft%ax; poisson_fft%bx_dev = poisson_fft%bx
-    poisson_fft%ay_dev = poisson_fft%ay; poisson_fft%by_dev = poisson_fft%by
-    poisson_fft%az_dev = poisson_fft%az; poisson_fft%bz_dev = poisson_fft%bz
+    allocate (self%ax_dev(nx), self%bx_dev(nx))
+    allocate (self%ay_dev(ny), self%by_dev(ny))
+    allocate (self%az_dev(nz), self%bz_dev(nz))
+    self%ax_dev = self%ax; self%bx_dev = self%bx
+    self%ay_dev = self%ay; self%by_dev = self%by
+    self%az_dev = self%az; self%bz_dev = self%bz
 
     ! will store the a matrix coefficients in GPU memory if (.not. lowmem)
     ! and do a device-to-device copy at each iter. Otherwise copy from host.
     ! lowmem is .false. by default
-    if (present(lowmem)) poisson_fft%lowmem = lowmem
+    if (present(lowmem)) self%lowmem = lowmem
 
     ! Try cuFFTMp (multi-GPU) first, with automatic fallback to cuFFT if not supported
-    poisson_fft%use_cufftmp = .true.
+    self%use_cufftmp = .true.
 
     ! if stretching in y is 'centred' or 'top-bottom'
-    if (poisson_fft%stretched_y .and. poisson_fft%stretched_y_sym) then
-      poisson_fft%a_odd_re_dev = poisson_fft%a_odd_re
-      poisson_fft%a_odd_im_dev = poisson_fft%a_odd_im
-      poisson_fft%a_even_re_dev = poisson_fft%a_even_re
-      poisson_fft%a_even_im_dev = poisson_fft%a_even_im
-      if (.not. poisson_fft%lowmem) then
-        poisson_fft%store_a_odd_re_dev = poisson_fft%a_odd_re
-        poisson_fft%store_a_odd_im_dev = poisson_fft%a_odd_im
-        poisson_fft%store_a_even_re_dev = poisson_fft%a_even_re
-        poisson_fft%store_a_even_im_dev = poisson_fft%a_even_im
+    if (self%stretched_y .and. self%stretched_y_sym) then
+      self%a_odd_re_dev = self%a_odd_re
+      self%a_odd_im_dev = self%a_odd_im
+      self%a_even_re_dev = self%a_even_re
+      self%a_even_im_dev = self%a_even_im
+      if (.not. self%lowmem) then
+        self%store_a_odd_re_dev = self%a_odd_re
+        self%store_a_odd_im_dev = self%a_odd_im
+        self%store_a_even_re_dev = self%a_even_re
+        self%store_a_even_im_dev = self%a_even_im
       end if
     !! if stretching in y is 'bottom'
-    else if (poisson_fft%stretched_y .and. &
-             (.not. poisson_fft%stretched_y_sym)) then
-      poisson_fft%a_re_dev = poisson_fft%a_re
-      poisson_fft%a_im_dev = poisson_fft%a_im
-      if (.not. poisson_fft%lowmem) then
-        poisson_fft%store_a_re_dev = poisson_fft%a_re
-        poisson_fft%store_a_im_dev = poisson_fft%a_im
+    else if (self%stretched_y .and. &
+             (.not. self%stretched_y_sym)) then
+      self%a_re_dev = self%a_re
+      self%a_im_dev = self%a_im
+      if (.not. self%lowmem) then
+        self%store_a_re_dev = self%a_re
+        self%store_a_im_dev = self%a_im
       end if
     end if
 
     ! Create forward FFT plan with automatic cuFFTMp detection/fallback
     if (is_sp) then
-      call create_fft_plan(poisson_fft%plan3D_fw, &
-                           poisson_fft%use_cufftmp, &
+      call create_fft_plan(self%plan3D_fw, &
+                           self%use_cufftmp, &
                            nx, ny, nz, CUFFT_R2C, &
                            mesh%par%is_root(), 'Forward')
     else
-      call create_fft_plan(poisson_fft%plan3D_fw, &
-                           poisson_fft%use_cufftmp, &
+      call create_fft_plan(self%plan3D_fw, &
+                           self%use_cufftmp, &
                            nx, ny, nz, CUFFT_D2Z, &
                            mesh%par%is_root(), 'Forward')
     end if
 
     ! Create backward FFT plan with automatic cuFFTMp detection/fallback
     if (is_sp) then
-      call create_fft_plan(poisson_fft%plan3D_bw, &
-                           poisson_fft%use_cufftmp, &
+      call create_fft_plan(self%plan3D_bw, &
+                           self%use_cufftmp, &
                            nx, ny, nz, CUFFT_C2R, &
                            mesh%par%is_root(), 'Backward')
     else
-      call create_fft_plan(poisson_fft%plan3D_bw, &
-                           poisson_fft%use_cufftmp, &
+      call create_fft_plan(self%plan3D_bw, &
+                           self%use_cufftmp, &
                            nx, ny, nz, CUFFT_Z2D, &
                            mesh%par%is_root(), 'Backward')
     end if
 
     ! Allocate storage - cuFFTMp uses xtdesc, single-GPU uses c_dev
-    if (poisson_fft%use_cufftmp) then
+    if (self%use_cufftmp) then
       ! allocate storage for cuFFTMp
-      ierr = cufftXtMalloc(poisson_fft%plan3D_fw, poisson_fft%xtdesc, &
+      ierr = cufftXtMalloc(self%plan3D_fw, self%xtdesc, &
                            CUFFT_XT_FORMAT_INPLACE)
       if (ierr /= 0) then
         write (stderr, *), 'cuFFT Error Code: ', ierr
@@ -265,21 +261,21 @@ contains
       end if
     else
       ! allocate storage for single-GPU cuFFT
-      allocate (poisson_fft%c_dev(poisson_fft%nx_spec, &
-                                  poisson_fft%ny_spec, &
-                                  poisson_fft%nz_spec))
+      allocate (self%c_dev(self%nx_spec, &
+                           self%ny_spec, &
+                           self%nz_spec))
     end if
 
     ! Print final status
     if (mesh%par%is_root()) then
-      if (poisson_fft%use_cufftmp) then
+      if (self%use_cufftmp) then
         print *, 'Using cuFFTMp for multi-GPU FFT'
       else
         print *, 'Using cuFFT for single-GPU FFT'
       end if
     end if
 
-  end function init
+  end subroutine init
 
   subroutine fft_forward_cuda(self, f)
     implicit none

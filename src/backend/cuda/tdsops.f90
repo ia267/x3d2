@@ -20,23 +20,20 @@ module m_cuda_tdsops
     real(dp), device, allocatable :: coeffs_dev(:), &
                                      coeffs_s_dev(:, :), coeffs_e_dev(:, :)
   contains
+    procedure :: cuda_tdsops_init
   end type cuda_tdsops_t
-
-  interface cuda_tdsops_t
-    module procedure cuda_tdsops_init
-  end interface cuda_tdsops_t
 
 contains
 
-  function cuda_tdsops_init( &
-    n_tds, delta, operation, scheme, bc_start, bc_end, &
+  subroutine cuda_tdsops_init( &
+    self, n_tds, delta, operation, scheme, bc_start, bc_end, &
     stretch, stretch_correct, n_halo, from_to, sym, c_nu, nu0_nu &
-    ) result(tdsops)
-    !! Constructor function for the cuda_tdsops_t class.
+    )
+    !! Initialiser for the cuda_tdsops_t class.
     !! See tdsops_t for details.
     implicit none
 
-    type(cuda_tdsops_t) :: tdsops !! return value of the function
+    class(cuda_tdsops_t), intent(inout) :: self
 
     integer, intent(in) :: n_tds
     real(dp), intent(in) :: delta
@@ -50,44 +47,44 @@ contains
 
     integer :: n, n_stencil
 
-    tdsops%tdsops_t = tdsops_init(n_tds, delta, operation, scheme, bc_start, &
-                                  bc_end, stretch, stretch_correct, n_halo, &
-                                  from_to, sym, c_nu, nu0_nu)
+    self%tdsops_t = tdsops_init(n_tds, delta, operation, scheme, bc_start, &
+                                bc_end, stretch, stretch_correct, n_halo, &
+                                from_to, sym, c_nu, nu0_nu)
 
-    n = tdsops%n_rhs
-    allocate (tdsops%dist_fw_dev(n), tdsops%dist_bw_dev(n))
-    allocate (tdsops%dist_sa_dev(n), tdsops%dist_sc_dev(n))
-    allocate (tdsops%dist_af_dev(n))
-    allocate (tdsops%thom_f_dev(n), tdsops%thom_s_dev(n))
-    allocate (tdsops%thom_w_dev(n), tdsops%thom_p_dev(n))
+    n = self%n_rhs
+    allocate (self%dist_fw_dev(n), self%dist_bw_dev(n))
+    allocate (self%dist_sa_dev(n), self%dist_sc_dev(n))
+    allocate (self%dist_af_dev(n))
+    allocate (self%thom_f_dev(n), self%thom_s_dev(n))
+    allocate (self%thom_w_dev(n), self%thom_p_dev(n))
 
-    allocate (tdsops%stretch_dev(tdsops%n_tds))
-    allocate (tdsops%stretch_correct_dev(tdsops%n_tds))
+    allocate (self%stretch_dev(self%n_tds))
+    allocate (self%stretch_correct_dev(self%n_tds))
 
-    n_stencil = 2*tdsops%n_halo + 1
-    allocate (tdsops%coeffs_dev(n_stencil))
-    allocate (tdsops%coeffs_s_dev(n_stencil, tdsops%n_halo))
-    allocate (tdsops%coeffs_e_dev(n_stencil, tdsops%n_halo))
+    n_stencil = 2*self%n_halo + 1
+    allocate (self%coeffs_dev(n_stencil))
+    allocate (self%coeffs_s_dev(n_stencil, self%n_halo))
+    allocate (self%coeffs_e_dev(n_stencil, self%n_halo))
 
-    tdsops%dist_fw_dev(:) = tdsops%dist_fw(:)
-    tdsops%dist_bw_dev(:) = tdsops%dist_bw(:)
-    tdsops%dist_sa_dev(:) = tdsops%dist_sa(:)
-    tdsops%dist_sc_dev(:) = tdsops%dist_sc(:)
-    tdsops%dist_af_dev(:) = tdsops%dist_af(:)
+    self%dist_fw_dev(:) = self%dist_fw(:)
+    self%dist_bw_dev(:) = self%dist_bw(:)
+    self%dist_sa_dev(:) = self%dist_sa(:)
+    self%dist_sc_dev(:) = self%dist_sc(:)
+    self%dist_af_dev(:) = self%dist_af(:)
 
-    tdsops%thom_f_dev(:) = tdsops%thom_f(:)
-    tdsops%thom_s_dev(:) = tdsops%thom_s(:)
-    tdsops%thom_w_dev(:) = tdsops%thom_w(:)
-    tdsops%thom_p_dev(:) = tdsops%thom_p(:)
+    self%thom_f_dev(:) = self%thom_f(:)
+    self%thom_s_dev(:) = self%thom_s(:)
+    self%thom_w_dev(:) = self%thom_w(:)
+    self%thom_p_dev(:) = self%thom_p(:)
 
-    tdsops%stretch_dev(:) = tdsops%stretch(:)
-    tdsops%stretch_correct_dev(:) = tdsops%stretch_correct(:)
+    self%stretch_dev(:) = self%stretch(:)
+    self%stretch_correct_dev(:) = self%stretch_correct(:)
 
-    tdsops%coeffs_dev(:) = tdsops%coeffs(:)
-    tdsops%coeffs_s_dev(:, :) = tdsops%coeffs_s(:, :)
-    tdsops%coeffs_e_dev(:, :) = tdsops%coeffs_e(:, :)
+    self%coeffs_dev(:) = self%coeffs(:)
+    self%coeffs_s_dev(:, :) = self%coeffs_s(:, :)
+    self%coeffs_e_dev(:, :) = self%coeffs_e(:, :)
 
-  end function cuda_tdsops_init
+  end subroutine cuda_tdsops_init
 
 end module m_cuda_tdsops
 

@@ -5,7 +5,7 @@ program test_thom
   use m_common, only: dp, nbytes, pi, BC_PERIODIC, BC_NEUMANN, BC_DIRICHLET, BC_HALO
   use m_cuda_common, only: SZ
   use m_cuda_exec_thom, only: exec_thom_tds_compact
-  use m_cuda_tdsops, only: cuda_tdsops_t, cuda_tdsops_init
+  use m_cuda_tdsops, only: cuda_tdsops_t
 
   implicit none
 
@@ -53,9 +53,9 @@ program test_thom
   u_dev = u
 
   ! preprocess the operator and coefficient arrays
-  tdsops = cuda_tdsops_init(n, dx_per, operation='second-deriv', &
-                            scheme='compact6', &
-                            bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
+  call tdsops%cuda_tdsops_init(n, dx_per, operation='second-deriv', &
+                               scheme='compact6', &
+                               bc_start=BC_PERIODIC, bc_end=BC_PERIODIC)
 
   blocks = dim3(n_block, 1, 1)
   threads = dim3(SZ, 1, 1)
@@ -89,9 +89,9 @@ program test_thom
   u_dev = u
 
   ! preprocess the operator and coefficient arrays
-  tdsops = cuda_tdsops_init(n, dx, & 
-                            operation='second-deriv', scheme='compact6', &
-                            bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET)
+  call tdsops%cuda_tdsops_init(n, dx, &
+                               operation='second-deriv', scheme='compact6', &
+                               bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET)
 
   call cpu_time(tstart)
   do i = 1, n_iters
