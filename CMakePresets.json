@@ -1,0 +1,221 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "gnu-debug",
+      "displayName": "GNU Debug",
+      "description": "GNU compiler, debug build with OpenMP backend",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_Fortran_COMPILER": "mpif90",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "WITH_2DECOMPFFT": "ON"
+      }
+    },
+    {
+      "name": "gnu-release",
+      "displayName": "GNU Release",
+      "description": "GNU compiler, optimised release build with OpenMP backend",
+      "inherits": "gnu-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "gnu-debug-adios2",
+      "displayName": "GNU Debug + ADIOS2",
+      "description": "GNU compiler, debug build with OpenMP backend and ADIOS2 I/O",
+      "inherits": "gnu-debug",
+      "cacheVariables": {
+        "WITH_ADIOS2": "ON"
+      }
+    },
+    {
+      "name": "gnu-release-adios2",
+      "displayName": "GNU Release + ADIOS2",
+      "description": "GNU compiler, optimised release build with OpenMP backend and ADIOS2 I/O",
+      "inherits": "gnu-debug-adios2",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "nvhpc-debug",
+      "displayName": "NVHPC Debug",
+      "description": "NVHPC compiler, debug build with CUDA backend",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build-cuda",
+      "cacheVariables": {
+        "CMAKE_Fortran_COMPILER": "mpif90",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "WITH_2DECOMPFFT": "OFF"
+      }
+    },
+    {
+      "name": "nvhpc-release",
+      "displayName": "NVHPC Release",
+      "description": "NVHPC compiler, optimised release build with CUDA backend",
+      "inherits": "nvhpc-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "nvhpc-debug-adios2",
+      "displayName": "NVHPC Debug + ADIOS2",
+      "description": "NVHPC compiler, debug build with CUDA backend and ADIOS2 I/O",
+      "inherits": "nvhpc-debug",
+      "cacheVariables": {
+        "WITH_ADIOS2": "ON"
+      }
+    },
+    {
+      "name": "nvhpc-release-adios2",
+      "displayName": "NVHPC Release + ADIOS2",
+      "description": "NVHPC compiler, optimised release build with CUDA backend and ADIOS2 I/O",
+      "inherits": "nvhpc-debug-adios2",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "cray-debug",
+      "displayName": "Cray Debug",
+      "description": "Cray compiler, debug build",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build-cray",
+      "cacheVariables": {
+        "CMAKE_Fortran_COMPILER": "ftn",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "WITH_2DECOMPFFT": "ON"
+      }
+    },
+    {
+      "name": "cray-release",
+      "displayName": "Cray Release",
+      "description": "Cray compiler, optimised release build",
+      "inherits": "cray-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "cray-debug-adios2",
+      "displayName": "Cray Debug + ADIOS2",
+      "description": "Cray compiler, debug build with ADIOS2 I/O",
+      "inherits": "cray-debug",
+      "cacheVariables": {
+        "WITH_ADIOS2": "ON"
+      }
+    },
+    {
+      "name": "cray-release-adios2",
+      "displayName": "Cray Release + ADIOS2",
+      "description": "Cray compiler, optimised release build with ADIOS2 I/O",
+      "inherits": "cray-debug-adios2",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "gnu-debug",
+      "configurePreset": "gnu-debug"
+    },
+    {
+      "name": "gnu-release",
+      "configurePreset": "gnu-release"
+    },
+    {
+      "name": "gnu-debug-adios2",
+      "configurePreset": "gnu-debug-adios2"
+    },
+    {
+      "name": "gnu-release-adios2",
+      "configurePreset": "gnu-release-adios2"
+    },
+    {
+      "name": "nvhpc-debug",
+      "configurePreset": "nvhpc-debug"
+    },
+    {
+      "name": "nvhpc-release",
+      "configurePreset": "nvhpc-release"
+    },
+    {
+      "name": "nvhpc-debug-adios2",
+      "configurePreset": "nvhpc-debug-adios2"
+    },
+    {
+      "name": "nvhpc-release-adios2",
+      "configurePreset": "nvhpc-release-adios2"
+    },
+    {
+      "name": "cray-debug",
+      "configurePreset": "cray-debug"
+    },
+    {
+      "name": "cray-release",
+      "configurePreset": "cray-release"
+    },
+    {
+      "name": "cray-debug-adios2",
+      "configurePreset": "cray-debug-adios2"
+    },
+    {
+      "name": "cray-release-adios2",
+      "configurePreset": "cray-release-adios2"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "gnu-debug",
+      "configurePreset": "gnu-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "gnu-debug-adios2",
+      "configurePreset": "gnu-debug-adios2",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "nvhpc-debug",
+      "configurePreset": "nvhpc-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "nvhpc-debug-adios2",
+      "configurePreset": "nvhpc-debug-adios2",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "cray-debug",
+      "configurePreset": "cray-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "cray-debug-adios2",
+      "configurePreset": "cray-debug-adios2",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

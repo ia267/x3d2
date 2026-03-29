@@ -111,6 +111,9 @@ This should create a binary file called ``xcompact`` within ``build/src/`` direc
 
 A successful installation should indicate 100% tests passed.
 
+Alternatively, you can use CMake presets (see `Building with CMake Presets`_
+below) which simplify the configure, build, and test steps.
+
 
 Installing on macOS
 -------------------
@@ -199,3 +202,87 @@ This should create a binary file called ``xcompact`` within ``build/src/`` direc
    make test
 
 A successful installation should indicate 100% tests passed.
+
+Alternatively, you can use CMake presets (see `Building with CMake Presets`_
+below) which simplify the configure, build, and test steps.
+
+
+Building with CMake Presets
+---------------------------
+
+x3d2 provides a ``CMakePresets.json`` file that bundles the compiler,
+build type, and feature flags into named presets. This avoids having to
+remember individual ``-D`` flags and ensures consistent builds.
+
+Listing available presets
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   cmake --list-presets
+
+Available presets
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Preset
+     - Description
+   * - ``gnu-debug``
+     - GNU compiler, debug build with OpenMP backend
+   * - ``gnu-release``
+     - GNU compiler, optimised release build with OpenMP backend
+   * - ``gnu-debug-adios2``
+     - GNU compiler, debug build with OpenMP backend and ADIOS2
+   * - ``gnu-release-adios2``
+     - GNU compiler, optimised release build with OpenMP backend and ADIOS2
+   * - ``nvhpc-debug``
+     - NVHPC compiler, debug build with CUDA backend
+   * - ``nvhpc-release``
+     - NVHPC compiler, optimised release build with CUDA backend
+   * - ``nvhpc-debug-adios2``
+     - NVHPC compiler, debug build with CUDA backend and ADIOS2
+   * - ``nvhpc-release-adios2``
+     - NVHPC compiler, optimised release build with CUDA backend and ADIOS2
+   * - ``cray-debug``
+     - Cray compiler, debug build
+   * - ``cray-release``
+     - Cray compiler, optimised release build
+   * - ``cray-debug-adios2``
+     - Cray compiler, debug build with ADIOS2
+   * - ``cray-release-adios2``
+     - Cray compiler, optimised release build with ADIOS2
+
+Usage
+~~~~~
+
+To configure, build, and test using a preset:
+
+.. code-block:: bash
+
+   # Configure
+   cmake --preset gnu-debug
+
+   # Build
+   cmake --build --preset gnu-debug
+
+   # Run tests
+   ctest --preset gnu-debug
+
+Replace ``gnu-debug`` with any preset name from the table above.
+
+.. note::
+
+   Each preset defines its own build directory (e.g. ``build/`` for GNU,
+   ``build-cuda/`` for NVHPC, ``build-cray/`` for Cray), so multiple
+   configurations can coexist without interfering with each other.
+
+.. note::
+
+   The ``nvhpc-*`` presets use ``mpif90`` as the Fortran compiler, which is
+   an MPI wrapper that delegates to whichever Fortran compiler is in your
+   environment. Ensure the NVIDIA HPC SDK is in your ``PATH`` before using
+   these presets so that ``mpif90`` resolves to ``nvfortran``. See the
+   `NVIDIA HPC SDK`_ section above for environment setup instructions.
