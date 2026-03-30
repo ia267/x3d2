@@ -27,7 +27,7 @@ program test_poisson
 
   use m_allocator, only: allocator_t, field_t
   use m_base_backend, only: base_backend_t
-  use m_common, only: dp, pi, DIR_C, DIR_X, DIR_Y, DIR_Z, VERT, CELL, &
+  use m_common, only: dp, pi, is_sp, DIR_C, DIR_X, DIR_Y, DIR_Z, VERT, CELL, &
                       RDR_C2Z, RDR_C2X, RDR_Z2X
   use m_mesh, only: mesh_t
   use m_solver, only: allocate_tdsops
@@ -59,7 +59,7 @@ program test_poisson
   integer, parameter :: NUM_CONFIGS = 4
   integer, parameter :: TOTAL_TESTS = NUM_CONFIGS*NUM_TESTS
 
-  real(dp), parameter :: ERROR_TOLERANCE = 1.0e-11_dp
+  real(dp), parameter :: ERROR_TOLERANCE = merge(1.0e-6_dp, 1.0e-11_dp, is_sp)
 
   integer :: nrank, nproc, ierr
   integer :: ic, idx

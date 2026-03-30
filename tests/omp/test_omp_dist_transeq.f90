@@ -2,7 +2,7 @@ program test_transeq
   use iso_fortran_env, only: stderr => error_unit
   use mpi
 
-  use m_common, only: dp, pi, MPI_X3D2_DP, BC_PERIODIC
+  use m_common, only: dp, pi, is_sp, MPI_X3D2_DP, BC_PERIODIC
   use m_omp_common, only: SZ
   use m_omp_exec_dist, only: exec_dist_transeq_compact
   use m_omp_sendrecv, only: sendrecv_fields
@@ -29,7 +29,8 @@ program test_transeq
   integer :: nrank, nproc, pprev, pnext
   integer :: ierr
 
-  real(dp) :: dx, dx_per, nu, norm_du, tol = 1d-8
+  real(dp) :: dx, dx_per, nu, norm_du
+  real(dp) :: tol = merge(1.0e-2_dp, 1.0e-8_dp, is_sp)
 
   call MPI_Init(ierr)
   call MPI_Comm_rank(MPI_COMM_WORLD, nrank, ierr)

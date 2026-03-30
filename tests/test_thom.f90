@@ -6,7 +6,7 @@ program test_thom
 #else
   use omp_lib
 #endif
-  use m_common, only: dp, nbytes, pi, BC_PERIODIC, BC_NEUMANN, BC_DIRICHLET, BC_HALO
+  use m_common, only: dp, nbytes, pi, is_sp, BC_PERIODIC, BC_NEUMANN, BC_DIRICHLET, BC_HALO
 #ifdef CUDA
   use m_cuda_common, only: SZ
   use m_cuda_exec_thom, only: exec_thom_tds_compact
@@ -120,7 +120,7 @@ program test_thom
 #else
   call checkperf(tend - tstart, n_iters, ndof, 3.0_dp)
 #endif
-  call checkerr(u, du, 1.0e-8_dp)
+  call checkerr(u, du, merge(1.0e-2_dp, 1.0e-8_dp, is_sp))
 
   !! Dirichlet case
   print *, "=== Testing Dirichlet case ==="
@@ -173,7 +173,7 @@ program test_thom
 #else
   call checkperf(tend - tstart, n_iters, ndof, 3.0_dp)
 #endif
-  call checkerr(u, du, 1.0e-8_dp)
+  call checkerr(u, du, merge(1.0e-2_dp, 1.0e-8_dp, is_sp))
 
   if (allpass) then
       print *, 'ALL TESTS PASSED SUCCESSFULLY.'

@@ -3,7 +3,7 @@ program test_omp_tridiag
   use mpi
   use omp_lib
 
-  use m_common, only: dp, pi, MPI_X3D2_DP, &
+  use m_common, only: dp, pi, is_sp, MPI_X3D2_DP, &
                       BC_PERIODIC, BC_NEUMANN, BC_DIRICHLET, BC_HALO
   use m_omp_common, only: SZ
   use m_omp_sendrecv, only: sendrecv_fields
@@ -41,8 +41,16 @@ program test_omp_tridiag
   real(dp), dimension(3) :: L_global
   integer, dimension(3) :: dims_global, nproc_dir
 
-  real(dp) :: dx, dx_per, dx_pi, norm_du, tol = 1d-8, tstart, tend
+  real(dp) :: dx, dx_per, dx_pi, norm_du, tstart, tend
+  real(dp) :: tol_2deriv, tol_1deriv, tol_interp, tol_stagder, tol_hypervisc
   real(dp) :: achievedBW, deviceBW, achievedBWmax, achievedBWmin
+
+  ! Set per-operation tolerances based on precision
+  tol_2deriv = merge(1.0e-2_dp, 1.0e-8_dp, is_sp)
+  tol_1deriv = merge(1.0e-4_dp, 1.0e-8_dp, is_sp)
+  tol_interp = merge(1.0e-6_dp, 1.0e-8_dp, is_sp)
+  tol_stagder = merge(1.0e-4_dp, 1.0e-8_dp, is_sp)
+  tol_hypervisc = merge(1.0e-0_dp, 1.0e-8_dp, is_sp)
 
   call MPI_Init(ierr)
   call MPI_Comm_rank(MPI_COMM_WORLD, nrank, ierr)
@@ -116,7 +124,7 @@ program test_omp_tridiag
   if (nrank == 0) print *, 'error norm second-deriv periodic', norm_du
 
   if (nrank == 0) then
-    if (norm_du > tol) then
+    if (norm_du > tol_2deriv) then
       allpass = .false.
       write (stderr, '(a)') 'Check 2nd derivatives, periodic BCs... failed'
     else
@@ -141,7 +149,7 @@ program test_omp_tridiag
   if (nrank == 0) print *, 'error norm first-deriv periodic', norm_du
 
   if (nrank == 0) then
-    if (norm_du > tol) then
+    if (norm_du > tol_1deriv) then
       allpass = .false.
       write (stderr, '(a)') 'Check 1st derivatives, periodic BCs... failed'
     else
@@ -178,7 +186,7 @@ program test_omp_tridiag
   if (nrank == 0) print *, 'error norm first deriv dir-neu', norm_du
 
   if (nrank == 0) then
-    if (norm_du > tol) then
+    if (norm_du > tol_1deriv) then
       allpass = .false.
       write (stderr, '(a)') 'Check 1st derivatives, dir-neu... failed'
     else
@@ -214,7 +222,7 @@ program test_omp_tridiag
   if (nrank == 0) print *, 'error norm interpolate v2p', norm_du
 
   if (nrank == 0) then
-    if (norm_du > tol) then
+    if (norm_du > tol_interp) then
       allpass = .false.
       write (stderr, '(a)') 'Check interpolation "v2p"... failed'
     else
@@ -243,7 +251,7 @@ program test_omp_tridiag
   if (nrank == 0) print *, 'error norm interpolate p2v', norm_du
 
   if (nrank == 0) then
-    if (norm_du > tol) then
+    if (norm_du > tol_interp) then
       allpass = .false.
       write (stderr, '(a)') 'Check interpolation "p2v"... failed'
     else
@@ -274,7 +282,7 @@ program test_omp_tridiag
   if (nrank == 0) print *, 'error norm stag derivative v2p', norm_du
 
   if (nrank == 0) then
-    if (norm_du > tol) then
+    if (norm_du > tol_stagder) then
       allpass = .false.
       write (stderr, '(a)') 'Check stag derivative "v2p"... failed'
     else
@@ -303,7 +311,7 @@ program test_omp_tridiag
   if (nrank == 0) print *, 'error norm stag derivative p2v', norm_du
 
   if (nrank == 0) then
-    if (norm_du > tol) then
+    if (norm_du > tol_stagder) then
       allpass = .false.
       write (stderr, '(a)') 'Check stag derivative "p2v"... failed'
     else
@@ -331,7 +339,7 @@ program test_omp_tridiag
   if (nrank == 0) print *, 'error norm hyperviscous', norm_du
 
   if (nrank == 0) then
-    if (norm_du > tol) then
+    if (norm_du > tol_hypervisc) then
       allpass = .false.
       write (stderr, '(a)') 'Check 2nd ders, hyperviscous, dir-neu... failed'
     else

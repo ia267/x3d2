@@ -3,7 +3,7 @@ program test_cuda_tridiag
   use cudafor
   use mpi
 
-  use m_common, only: dp, pi, MPI_X3D2_DP, &
+  use m_common, only: dp, pi, is_sp, MPI_X3D2_DP, &
                       BC_PERIODIC, BC_NEUMANN, BC_DIRICHLET, BC_HALO
   use m_cuda_common, only: SZ
   use m_cuda_exec_dist, only: exec_dist_tds_compact
@@ -30,7 +30,8 @@ program test_cuda_tridiag
   integer :: ierr, ndevs, devnum, memClockRt, memBusWidth
 
   type(dim3) :: blocks, threads
-  real(dp) :: dx, dx_per, norm_du, tol = 1d-8, tstart, tend
+  real(dp) :: dx, dx_per, norm_du, tstart, tend
+  real(dp) :: tol = merge(1.0e-2_dp, 1.0e-8_dp, is_sp)
   real(dp) :: achievedBW, deviceBW, achievedBWmax, achievedBWmin
 
   call MPI_Init(ierr)

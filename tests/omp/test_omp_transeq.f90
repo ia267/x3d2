@@ -3,7 +3,7 @@ program test_omp_transeq
   use mpi
 
   use m_allocator, only: allocator_t, field_t
-  use m_common, only: dp, pi, MPI_X3D2_DP, DIR_X, DIR_Y, DIR_Z, VERT
+  use m_common, only: dp, pi, is_sp, MPI_X3D2_DP, DIR_X, DIR_Y, DIR_Z, VERT
   use m_omp_common, only: SZ
   use m_omp_sendrecv, only: sendrecv_fields
   use m_omp_backend, only: omp_backend_t, transeq_x_omp, base_backend_t
@@ -26,7 +26,8 @@ program test_omp_transeq
   integer :: nrank, nproc
   integer :: ierr
 
-  real(dp) :: dx_per, nu, norm_du, tol = 1d-8, tstart, tend
+  real(dp) :: dx_per, nu, norm_du, tstart, tend
+  real(dp) :: tol = merge(1.0e-2_dp, 1.0e-8_dp, is_sp)
 
   class(base_backend_t), pointer :: backend
   class(allocator_t), pointer :: allocator
