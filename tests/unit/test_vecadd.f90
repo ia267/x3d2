@@ -10,14 +10,7 @@ program test_vecadd
   use m_mesh, only: mesh_t
   use m_allocator, only: allocator_t, field_t
   use m_base_backend, only: base_backend_t
-#ifdef CUDA
-  use m_cuda_common, only: SZ
-  use m_cuda_allocator, only: cuda_allocator_t
-  use m_cuda_backend, only: cuda_backend_t
-#else
-  use m_omp_common, only: SZ
-  use m_omp_backend, only: omp_backend_t
-#endif
+  use m_backend_env, only: backend_env_t
 
   implicit none
 
@@ -25,18 +18,11 @@ program test_vecadd
   character(len=5), dimension(3), parameter :: dirnames = &
                                                ["DIR_X", "DIR_Y", "DIR_Z"]
 
-  class(mesh_t), allocatable :: mesh
+  type(mesh_t), target :: mesh
+  type(backend_env_t), target :: env
   class(allocator_t), pointer :: allocator => null()
+  type(allocator_t), pointer :: host_allocator => null()
   class(base_backend_t), pointer :: backend => null()
-#ifdef CUDA
-  type(cuda_allocator_t), target :: cuda_allocator
-  type(allocator_t), target :: host_allocator
-  type(cuda_backend_t), target :: cuda_backend
-#else
-  type(allocator_t), target :: omp_allocator
-  type(allocator_t), pointer :: host_allocator
-  type(omp_backend_t), target :: omp_backend
-#endif
   class(field_t), pointer :: a => null()
   class(field_t), pointer :: b => null()
   class(field_t), pointer :: c => null()
@@ -63,21 +49,10 @@ program test_vecadd
 
   mesh = mesh_t(dims_global, nproc_dir, L_global, BC_x, BC_y, BC_z)
 
-#ifdef CUDA
-  cuda_allocator = cuda_allocator_t(mesh%get_dims(VERT), SZ)
-  allocator => cuda_allocator
-  host_allocator = allocator_t(mesh%get_dims(VERT), SZ)
-
-  cuda_backend = cuda_backend_t(mesh, allocator)
-  backend => cuda_backend
-#else
-  omp_allocator = allocator_t(mesh%get_dims(VERT), SZ)
-  allocator => omp_allocator
-  host_allocator => omp_allocator
-
-  omp_backend = omp_backend_t(mesh, allocator)
-  backend => omp_backend
-#endif
+  call env%init(mesh, separate_host_allocator=.true.)
+  allocator => env%allocator
+  host_allocator => env%host_allocator
+  backend => env%backend
 
   test_pass = .true.
 
@@ -284,4 +259,3 @@ contains
   end subroutine initialise_data
 
 end program test_vecadd
-

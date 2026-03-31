@@ -1,50 +1,28 @@
 program xcompact
   use mpi
 
-  use m_allocator
-  use m_base_backend
   use m_base_case, only: base_case_t
-  use m_common, only: pi, get_argument, VERT
+  use m_common, only: dp, get_argument
   use m_config, only: domain_config_t, solver_config_t
+  use m_backend_env, only: backend_env_t, backend_is_cuda
   use m_mesh
   use m_case_channel, only: case_channel_t
   use m_case_cylinder, only: case_cylinder_t
   use m_case_generic, only: case_generic_t
   use m_case_tgv, only: case_tgv_t
 
-#ifdef CUDA
-  use m_cuda_allocator
-  use m_cuda_backend
-  use m_cuda_common, only: SZ
-#else
-  use m_omp_backend
-  use m_omp_common, only: SZ
-#endif
-
   implicit none
 
-  class(base_backend_t), pointer :: backend
-  class(allocator_t), pointer :: allocator
-  type(allocator_t), pointer :: host_allocator
   type(mesh_t), target :: mesh
+  type(backend_env_t), target :: backend_env
   class(base_case_t), allocatable :: flow_case
-
-#ifdef CUDA
-  type(cuda_backend_t), target :: cuda_backend
-  type(cuda_allocator_t), target :: cuda_allocator
-  integer :: ndevs, devnum
-#else
-  type(omp_backend_t), target :: omp_backend
-#endif
-
-  type(allocator_t), target :: omp_allocator
 
   real(dp) :: t_start, t_end
 
   type(domain_config_t) :: domain_cfg
   type(solver_config_t) :: solver_cfg
   character(32) :: backend_name
-  integer :: dims(3), nrank, nproc, ierr
+  integer :: nrank, nproc, ierr
   logical :: use_2decomp
 
   call MPI_Init(ierr)
@@ -56,14 +34,11 @@ program xcompact
     print *, 'Data precision is', dp
   end if
 
-#ifdef CUDA
-  ierr = cudaGetDeviceCount(ndevs)
-  ierr = cudaSetDevice(mod(nrank, ndevs)) ! round-robin
-  ierr = cudaGetDevice(devnum)
-  backend_name = "CUDA"
-#else
-  backend_name = "OMP"
-#endif
+  if (backend_is_cuda) then
+    backend_name = 'CUDA'
+  else
+    backend_name = 'OMP'
+  end if
 
   call domain_cfg%read(nml_file=get_argument(1))
   call solver_cfg%read(nml_file=get_argument(1))
@@ -84,45 +59,31 @@ program xcompact
                 domain_cfg%BC_z, domain_cfg%stretching, domain_cfg%beta, &
                 use_2decomp=use_2decomp)
 
-  ! get local vertex dimensions
-  dims = mesh%get_dims(VERT)
-#ifdef CUDA
-  cuda_allocator = cuda_allocator_t(dims, SZ)
-  allocator => cuda_allocator
-  if (nrank == 0) print *, 'CUDA allocator instantiated'
-
-  omp_allocator = allocator_t(dims, SZ)
-  host_allocator => omp_allocator
-
-  cuda_backend = cuda_backend_t(mesh, allocator)
-  backend => cuda_backend
-  if (nrank == 0) print *, 'CUDA backend instantiated'
-#else
-  omp_allocator = allocator_t(dims, SZ)
-  allocator => omp_allocator
-  host_allocator => omp_allocator
-  if (nrank == 0) print *, 'OpenMP allocator instantiated'
-
-  omp_backend = omp_backend_t(mesh, allocator)
-  backend => omp_backend
-  if (nrank == 0) print *, 'OpenMP backend instantiated'
-#endif
+  call backend_env%init(mesh)
+  if (nrank == 0) then
+    print *, trim(backend_env%backend_name), 'allocator instantiated'
+    print *, trim(backend_env%backend_name), 'backend instantiated'
+  end if
 
   if (nrank == 0) print *, 'Flow case: ', domain_cfg%flow_case_name
 
   select case (trim(domain_cfg%flow_case_name))
   case ('channel')
     allocate (case_channel_t :: flow_case)
-    flow_case = case_channel_t(backend, mesh, host_allocator)
+    flow_case = case_channel_t(backend_env%backend, mesh, &
+                               backend_env%host_allocator)
   case ('cylinder')
     allocate (case_cylinder_t :: flow_case)
-    flow_case = case_cylinder_t(backend, mesh, host_allocator)
+    flow_case = case_cylinder_t(backend_env%backend, mesh, &
+                                backend_env%host_allocator)
   case ('generic')
     allocate (case_generic_t :: flow_case)
-    flow_case = case_generic_t(backend, mesh, host_allocator)
+    flow_case = case_generic_t(backend_env%backend, mesh, &
+                               backend_env%host_allocator)
   case ('tgv')
     allocate (case_tgv_t :: flow_case)
-    flow_case = case_tgv_t(backend, mesh, host_allocator)
+    flow_case = case_tgv_t(backend_env%backend, mesh, &
+                           backend_env%host_allocator)
   case default
     error stop 'Undefined flow_case.'
   end select

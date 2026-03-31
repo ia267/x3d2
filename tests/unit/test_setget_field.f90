@@ -5,28 +5,15 @@ program test_setget_field
   use m_allocator, only: allocator_t, field_t
   use m_base_backend, only: base_backend_t
   use m_common, only: dp, DIR_C, DIR_X, DIR_Y, DIR_Z, VERT
-#ifdef CUDA
-  use m_cuda_allocator, only: cuda_allocator_t
-  use m_cuda_backend, only: cuda_backend_t
-  use m_cuda_common, only: SZ
-#else
-  use m_omp_backend, only: omp_backend_t
-  use m_omp_common, only: SZ
-#endif
+  use m_backend_env, only: backend_env_t
   use m_mesh, only: mesh_t
 
   implicit none
 
+  type(backend_env_t), target :: env
   class(allocator_t), pointer :: allocator
   class(base_backend_t), pointer :: backend
-#ifdef CUDA
-  type(cuda_allocator_t), target :: cuda_allocator
-  type(cuda_backend_t), target :: cuda_backend
-#else
-  type(allocator_t), target :: omp_allocator
-  type(omp_backend_t), target :: omp_backend
-#endif
-  type(mesh_t) :: mesh
+  type(mesh_t), target :: mesh
 
   class(field_t), pointer :: fld, fld_c
   real(dp), dimension(:, :, :), allocatable :: arr
@@ -41,16 +28,9 @@ program test_setget_field
                 ["periodic", "periodic"], &
                 ["periodic", "periodic"])
 
-#ifdef CUDA
-  cuda_allocator = cuda_allocator_t(mesh%get_dims(VERT), SZ)
-  allocator => cuda_allocator
-#else
-  omp_allocator = allocator_t(mesh%get_dims(VERT), SZ)
-  allocator => omp_allocator
-
-  omp_backend = omp_backend_t(mesh, allocator)
-  backend => omp_backend
-#endif
+  call env%init(mesh)
+  allocator => env%allocator
+  backend => env%backend
 
   fld => backend%allocator%get_block(DIR_X, VERT)
   fld_c => backend%allocator%get_block(DIR_C, VERT)

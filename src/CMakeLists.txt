@@ -83,6 +83,8 @@ if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI" OR
   list(APPEND BACKENDSRC backend/cuda/backend.f90)
 endif()
 
+list(APPEND BACKENDSRC backend/backend_env.f90)
+
 # Decide whether 2decomp&fft is supported by the build
 find_package(decomp2d)
 

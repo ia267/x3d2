@@ -6,27 +6,18 @@ program test_sum_intox
 
   use m_allocator
   use m_base_backend
-#ifdef CUDA
-  use m_cuda_common, only: SZ
-#else
-  use m_omp_backend
-  use m_omp_common, only: SZ
-#endif
+  use m_backend_env, only: backend_env_t, backend_sz
 
   implicit none
 
   integer, parameter :: nx = 17, ny = 32, nz = 59
   real(dp), parameter :: lx = 1.618, ly = 3.141529, lz = 1.729
 
+  type(backend_env_t), target :: env
   class(base_backend_t), pointer :: backend
   class(allocator_t), pointer :: allocator
-#ifdef CUDA
-#else
-  type(omp_backend_t), target :: omp_backend
-  type(allocator_t), target :: omp_allocator
-#endif
 
-  type(mesh_t) :: mesh
+  type(mesh_t), target :: mesh
 
   character(len=20) :: BC_x(2), BC_y(2), BC_z(2)
   integer :: nrank, nproc
@@ -47,13 +38,9 @@ program test_sum_intox
                 [lx, ly, lz], &
                 BC_x, BC_y, BC_z)
 
-#ifdef CUDA
-#else
-  omp_allocator = allocator_t(mesh%get_dims(VERT), SZ)
-  allocator => omp_allocator
-  omp_backend = omp_backend_t(mesh, allocator)
-  backend => omp_backend
-#endif
+  call env%init(mesh)
+  allocator => env%allocator
+  backend => env%backend
 
   call runtest("YintoX", DIR_Y)
   call runtest("ZintoX", DIR_Z)
@@ -97,10 +84,10 @@ contains
     do k = 1, dims(3)
       do j = 1, dims(2)
         do i = 1, dims(1)
-          call get_index_dir(ii, jj, kk, i, j, k, DIR_X, SZ, &
+          call get_index_dir(ii, jj, kk, i, j, k, DIR_X, backend_sz, &
                              dims(1), dims(2), dims(3))
           a%data(ii, jj, kk) = ctr
-          call get_index_dir(ii, jj, kk, i, j, k, dir_from, SZ, &
+          call get_index_dir(ii, jj, kk, i, j, k, dir_from, backend_sz, &
                              dims(1), dims(2), dims(3))
           b%data(ii, jj, kk) = -ctr
           ctr = ctr + 1

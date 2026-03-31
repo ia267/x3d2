@@ -4,30 +4,22 @@ program test_scalar_product
   !! Given two fields, a and b, computes s = a_i * b_i where repeated indices
   !! imply summation.
 
-  use m_common, only: DIR_X, DIR_Y, DIR_Z, DIR_C
+  use m_common, only: DIR_X, DIR_Y, DIR_Z, DIR_C, VERT
 
   use m_allocator
   use m_base_backend
-#ifdef CUDA
-#else
-  use m_omp_backend
-  use m_omp_common, only: SZ
-#endif
+  use m_backend_env, only: backend_env_t
 
   implicit none
 
   integer, parameter :: nx = 17, ny = 32, nz = 59
   real(dp), parameter :: lx = 1.618, ly = 3.141529, lz = 1.729
 
+  type(backend_env_t), target :: env
   class(base_backend_t), pointer :: backend
   class(allocator_t), pointer :: allocator
-#ifdef CUDA
-#else
-  type(omp_backend_t), target :: omp_backend
-  type(allocator_t), target :: omp_allocator
-#endif
 
-  type(mesh_t) :: mesh
+  type(mesh_t), target :: mesh
 
   character(len=20) :: BC_x(2), BC_y(2), BC_z(2)
 
@@ -56,13 +48,9 @@ program test_scalar_product
                 [lx, ly, lz], &
                 BC_x, BC_y, BC_z)
 
-#ifdef CUDA
-#else
-  omp_allocator = allocator_t(mesh%get_dims(VERT), SZ)
-  allocator => omp_allocator
-  omp_backend = omp_backend_t(mesh, allocator)
-  backend => omp_backend
-#endif
+  call env%init(mesh)
+  allocator => env%allocator
+  backend => env%backend
 
   do i = 1, 4
     call runtest(test(i), dir(i))
