@@ -6,14 +6,14 @@ program test_sum_intox
 
   use m_allocator
   use m_base_backend
-  use m_backend_env, only: backend_env_t, backend_sz
+  use m_backend_runtime, only: backend_runtime_t, backend_sz
 
   implicit none
 
   integer, parameter :: nx = 17, ny = 32, nz = 59
   real(dp), parameter :: lx = 1.618, ly = 3.141529, lz = 1.729
 
-  type(backend_env_t), target :: env
+  type(backend_runtime_t), target :: runtime
   class(base_backend_t), pointer :: backend
   class(allocator_t), pointer :: allocator
 
@@ -38,9 +38,9 @@ program test_sum_intox
                 [lx, ly, lz], &
                 BC_x, BC_y, BC_z)
 
-  call env%init(mesh)
-  allocator => env%allocator
-  backend => env%backend
+  call runtime%init(mesh)
+  allocator => runtime%allocator
+  backend => runtime%backend
 
   call runtest("YintoX", DIR_Y)
   call runtest("ZintoX", DIR_Z)

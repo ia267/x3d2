@@ -6,7 +6,7 @@ program test_omp_adamsbashforth
   use m_mesh, only: mesh_t
   use m_allocator, only: allocator_t
   use m_base_backend, only: base_backend_t
-  use m_backend_env, only: backend_env_t
+  use m_backend_runtime, only: backend_runtime_t
   use m_time_integrator, only: time_intg_t
   use m_field, only: flist_t
 
@@ -26,7 +26,7 @@ program test_omp_adamsbashforth
   real(dp), dimension(3) :: L_global
   character(len=20) :: BC_x(2), BC_y(2), BC_z(2)
 
-  type(backend_env_t), target :: env
+  type(backend_runtime_t), target :: runtime
   class(base_backend_t), pointer :: backend
   class(allocator_t), pointer :: allocator
   type(mesh_t), target :: mesh
@@ -54,12 +54,12 @@ program test_omp_adamsbashforth
 
   if (.not. is_sp) dt0 = 0.01_dp
 
-  call env%init(mesh)
-  allocator => env%allocator
-  backend => env%backend
+  call runtime%init(mesh)
+  allocator => runtime%allocator
+  backend => runtime%backend
   if (nrank == 0) then
-    print *, trim(env%backend_name), 'allocator instantiated'
-    print *, trim(env%backend_name), 'backend instantiated'
+    print *, trim(runtime%backend_name), 'allocator instantiated'
+    print *, trim(runtime%backend_name), 'backend instantiated'
   end if
 
   ! allocate memory

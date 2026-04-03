@@ -4,7 +4,7 @@ program xcompact
   use m_base_case, only: base_case_t
   use m_common, only: dp, get_argument
   use m_config, only: domain_config_t, solver_config_t
-  use m_backend_env, only: backend_env_t, backend_is_cuda
+  use m_backend_runtime, only: backend_runtime_t, backend_is_cuda
   use m_mesh
   use m_case_channel, only: case_channel_t
   use m_case_cylinder, only: case_cylinder_t
@@ -14,7 +14,7 @@ program xcompact
   implicit none
 
   type(mesh_t), target :: mesh
-  type(backend_env_t), target :: backend_env
+  type(backend_runtime_t), target :: backend_runtime
   class(base_case_t), allocatable :: flow_case
 
   real(dp) :: t_start, t_end
@@ -59,10 +59,10 @@ program xcompact
                 domain_cfg%BC_z, domain_cfg%stretching, domain_cfg%beta, &
                 use_2decomp=use_2decomp)
 
-  call backend_env%init(mesh)
+  call backend_runtime%init(mesh)
   if (nrank == 0) then
-    print *, trim(backend_env%backend_name), 'allocator instantiated'
-    print *, trim(backend_env%backend_name), 'backend instantiated'
+    print *, trim(backend_runtime%backend_name), 'allocator instantiated'
+    print *, trim(backend_runtime%backend_name), 'backend instantiated'
   end if
 
   if (nrank == 0) print *, 'Flow case: ', domain_cfg%flow_case_name
@@ -70,20 +70,20 @@ program xcompact
   select case (trim(domain_cfg%flow_case_name))
   case ('channel')
     allocate (case_channel_t :: flow_case)
-    flow_case = case_channel_t(backend_env%backend, mesh, &
-                               backend_env%host_allocator)
+    flow_case = case_channel_t(backend_runtime%backend, mesh, &
+                               backend_runtime%host_allocator)
   case ('cylinder')
     allocate (case_cylinder_t :: flow_case)
-    flow_case = case_cylinder_t(backend_env%backend, mesh, &
-                                backend_env%host_allocator)
+    flow_case = case_cylinder_t(backend_runtime%backend, mesh, &
+                                backend_runtime%host_allocator)
   case ('generic')
     allocate (case_generic_t :: flow_case)
-    flow_case = case_generic_t(backend_env%backend, mesh, &
-                               backend_env%host_allocator)
+    flow_case = case_generic_t(backend_runtime%backend, mesh, &
+                               backend_runtime%host_allocator)
   case ('tgv')
     allocate (case_tgv_t :: flow_case)
-    flow_case = case_tgv_t(backend_env%backend, mesh, &
-                           backend_env%host_allocator)
+    flow_case = case_tgv_t(backend_runtime%backend, mesh, &
+                           backend_runtime%host_allocator)
   case default
     error stop 'Undefined flow_case.'
   end select

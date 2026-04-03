@@ -1,9 +1,8 @@
-module m_backend_env
+module m_backend_runtime
   use mpi
 
   use m_allocator, only: allocator_t
   use m_base_backend, only: base_backend_t
-  use m_common, only: VERT
   use m_mesh, only: mesh_t
 
 #ifdef CUDA
@@ -26,7 +25,7 @@ module m_backend_env
   logical, parameter :: backend_is_cuda = .false.
 #endif
 
-  type :: backend_env_t
+  type :: backend_runtime_t
     class(base_backend_t), pointer :: backend => null()
     class(allocator_t), pointer :: allocator => null()
     type(allocator_t), pointer :: host_allocator => null()
@@ -41,12 +40,12 @@ module m_backend_env
     type(allocator_t) :: host_allocator_storage
   contains
     procedure :: init
-  end type backend_env_t
+  end type backend_runtime_t
 
 contains
 
   subroutine init(self, mesh, separate_host_allocator)
-    class(backend_env_t), target, intent(inout) :: self
+    class(backend_runtime_t), target, intent(inout) :: self
     type(mesh_t), target, intent(inout) :: mesh
     logical, optional, intent(in) :: separate_host_allocator
 
@@ -57,7 +56,7 @@ contains
     integer :: ierr, nrank, ndevs, devnum
 #endif
 
-    dims = mesh%get_dims(VERT)
+    dims = mesh%grid%vert_dims
     need_separate_host_allocator = .false.
     if (present(separate_host_allocator)) then
       need_separate_host_allocator = separate_host_allocator
@@ -67,7 +66,7 @@ contains
     call MPI_Comm_rank(MPI_COMM_WORLD, nrank, ierr)
     ierr = cudaGetDeviceCount(ndevs)
     if (ndevs < 1) then
-      error stop 'backend_env_t%init: no CUDA devices available'
+      error stop 'backend_runtime_t%init: no CUDA devices available'
     end if
     ierr = cudaSetDevice(mod(nrank, ndevs))
     ierr = cudaGetDevice(devnum)
@@ -97,4 +96,4 @@ contains
 
   end subroutine init
 
-end module m_backend_env
+end module m_backend_runtime

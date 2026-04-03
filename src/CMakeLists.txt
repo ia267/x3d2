@@ -83,8 +83,6 @@ if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI" OR
   list(APPEND BACKENDSRC backend/cuda/backend.f90)
 endif()
 
-list(APPEND BACKENDSRC backend/backend_env.f90)
-
 # Decide whether 2decomp&fft is supported by the build
 find_package(decomp2d)
 
@@ -101,13 +99,19 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 
 # Create the main library
 add_library(x3d2 STATIC ${SRC})
-target_include_directories(x3d2 INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
+set_target_properties(x3d2 PROPERTIES
+  Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules/x3d2")
+target_include_directories(x3d2 INTERFACE
+  ${CMAKE_CURRENT_BINARY_DIR}/modules/x3d2)
 
 add_library(x3d2_backends STATIC ${BACKENDSRC})
-target_include_directories(x3d2_backends INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
+set_target_properties(x3d2_backends PROPERTIES
+  Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules/x3d2_backends")
+target_include_directories(x3d2_backends INTERFACE
+  ${CMAKE_CURRENT_BINARY_DIR}/modules/x3d2_backends)
 target_link_libraries(x3d2_backends PRIVATE x3d2)
 
-add_executable(xcompact xcompact.f90)
+add_executable(xcompact xcompact.f90 backend/backend_runtime.f90)
 target_link_libraries(xcompact PRIVATE x3d2)
 target_link_libraries(xcompact PRIVATE x3d2_backends)
 

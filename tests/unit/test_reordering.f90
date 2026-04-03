@@ -9,7 +9,7 @@ program test_reorder
                       RDR_X2Y, RDR_X2Z, RDR_Y2X, RDR_Y2Z, RDR_Z2X, RDR_Z2Y, &
                       DIR_X, DIR_Y, DIR_Z, DIR_C, VERT
 
-  use m_backend_env, only: backend_env_t, backend_sz
+  use m_backend_runtime, only: backend_runtime_t, backend_sz
   use m_ordering, only: get_index_dir, get_index_ijk
   use m_mesh, only: mesh_t
 
@@ -28,7 +28,7 @@ program test_reorder
 
   real(dp) :: dx, dx_per
 
-  type(backend_env_t), target :: env
+  type(backend_runtime_t), target :: runtime
   class(base_backend_t), pointer :: backend
   type(mesh_t), target :: mesh
   class(allocator_t), pointer :: allocator
@@ -57,12 +57,12 @@ program test_reorder
 
   mesh = mesh_t(dims_global, nproc_dir, L_global, BC_x, BC_y, BC_z)
 
-  call env%init(mesh)
-  allocator => env%allocator
-  backend => env%backend
+  call runtime%init(mesh)
+  allocator => runtime%allocator
+  backend => runtime%backend
   if (nrank == 0) then
-    print *, trim(env%backend_name), 'allocator instantiated'
-    print *, trim(env%backend_name), 'backend instantiated'
+    print *, trim(runtime%backend_name), 'allocator instantiated'
+    print *, trim(runtime%backend_name), 'backend instantiated'
   end if
 
   if (nrank == 0) print *, 'Parallel run with', nproc, 'ranks'

@@ -5,12 +5,12 @@ program test_setget_field
   use m_allocator, only: allocator_t, field_t
   use m_base_backend, only: base_backend_t
   use m_common, only: dp, DIR_C, DIR_X, DIR_Y, DIR_Z, VERT
-  use m_backend_env, only: backend_env_t
+  use m_backend_runtime, only: backend_runtime_t
   use m_mesh, only: mesh_t
 
   implicit none
 
-  type(backend_env_t), target :: env
+  type(backend_runtime_t), target :: runtime
   class(allocator_t), pointer :: allocator
   class(base_backend_t), pointer :: backend
   type(mesh_t), target :: mesh
@@ -28,9 +28,9 @@ program test_setget_field
                 ["periodic", "periodic"], &
                 ["periodic", "periodic"])
 
-  call env%init(mesh)
-  allocator => env%allocator
-  backend => env%backend
+  call runtime%init(mesh)
+  allocator => runtime%allocator
+  backend => runtime%backend
 
   fld => backend%allocator%get_block(DIR_X, VERT)
   fld_c => backend%allocator%get_block(DIR_C, VERT)

@@ -26,6 +26,7 @@ program test_poisson
   use mpi
 
   use m_allocator, only: allocator_t, field_t
+  use m_backend_runtime, only: backend_runtime_t, backend_is_cuda
   use m_base_backend, only: base_backend_t
   use m_common, only: dp, pi, DIR_C, DIR_X, DIR_Y, DIR_Z, VERT, CELL, &
                       RDR_C2Z, RDR_C2X, RDR_Z2X
@@ -33,17 +34,6 @@ program test_poisson
   use m_solver, only: allocate_tdsops
   use m_tdsops, only: dirps_t
   use m_vector_calculus, only: vector_calculus_t
-
-#ifdef CUDA
-  use cudafor
-
-  use m_cuda_allocator, only: cuda_allocator_t
-  use m_cuda_backend, only: cuda_backend_t
-  use m_cuda_common, only: SZ
-#else
-  use m_omp_backend, only: omp_backend_t
-  use m_omp_common, only: SZ
-#endif
 
   implicit none
 
@@ -64,7 +54,6 @@ program test_poisson
   integer :: nrank, nproc, ierr
   integer :: ic, idx
   logical :: allpass
-  character(32) :: backend_name
 
   ! Per-config results for final summary
   logical :: all_results(NUM_TESTS, NUM_CONFIGS)
@@ -83,18 +72,6 @@ program test_poisson
   call MPI_Comm_size(MPI_COMM_WORLD, nproc, ierr)
 
   if (nrank == 0) print *, 'Parallel run with', nproc, 'ranks'
-
-#ifdef CUDA
-  block
-    integer :: ndevs, devnum
-    ierr = cudaGetDeviceCount(ndevs)
-    ierr = cudaSetDevice(mod(nrank, ndevs))
-    ierr = cudaGetDevice(devnum)
-  end block
-  backend_name = "CUDA"
-#else
-  backend_name = "OMP"
-#endif
 
   config_labels = ['000', '010', '100', '110']
 
@@ -187,19 +164,11 @@ contains
     character(len=*), intent(in) :: BC_x(2), BC_y(2), BC_z(2)
 
     class(base_backend_t), pointer :: backend
-    class(allocator_t), pointer :: allocator
     type(allocator_t), pointer :: host_allocator
+    type(backend_runtime_t), target :: runtime
     type(mesh_t), target :: mesh
     type(dirps_t), pointer :: xdirps, ydirps, zdirps
     type(vector_calculus_t) :: vector_calculus
-
-#ifdef CUDA
-    type(cuda_backend_t), target :: cuda_backend
-    type(cuda_allocator_t), target :: cuda_allocator
-#else
-    type(omp_backend_t), target :: omp_backend
-#endif
-    type(allocator_t), target :: omp_allocator
 
     integer :: nproc_dir(3)
     real(dp) :: L_global(3)
@@ -226,34 +195,15 @@ contains
     nproc_dir = [1, 1, nproc]
     L_global = [1.0_dp, 1.0_dp, 1.0_dp]
 
-    ! Decide whether 2decomp is used
-#ifdef CUDA
-    use_2decomp = .false.
-#else
-    use_2decomp = .true.
-#endif
+    use_2decomp = .not. backend_is_cuda
 
     mesh = mesh_t(dims_global, nproc_dir, L_global, &
                   BC_x, BC_y, BC_z, &
                   use_2decomp=use_2decomp)
 
-#ifdef CUDA
-    cuda_allocator = cuda_allocator_t(mesh%get_dims(VERT), SZ)
-    allocator => cuda_allocator
-
-    omp_allocator = allocator_t(mesh%get_dims(VERT), SZ)
-    host_allocator => omp_allocator
-
-    cuda_backend = cuda_backend_t(mesh, allocator)
-    backend => cuda_backend
-#else
-    omp_allocator = allocator_t(mesh%get_dims(VERT), SZ)
-    allocator => omp_allocator
-    host_allocator => omp_allocator
-
-    omp_backend = omp_backend_t(mesh, allocator)
-    backend => omp_backend
-#endif
+    call runtime%init(mesh, separate_host_allocator=backend_is_cuda)
+    backend => runtime%backend
+    host_allocator => runtime%host_allocator
 
     ! Setup tdsops directly (like test_fft.f90)
     allocate (xdirps, ydirps, zdirps)
