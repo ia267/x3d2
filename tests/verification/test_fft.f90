@@ -35,6 +35,7 @@ program test_fft
   logical :: use_2decomp
   real(dp), allocatable, dimension(:, :, :) :: input_data, output_data
 
+  ! Tolerance table:  SP+CUDA 1e-6 | SP+OMP 1e-5 | DP 1e-10
   real(dp), parameter :: tol = merge(merge(1e-06_dp, 1e-05_dp, backend_is_cuda), &
                                      1e-10_dp, is_sp)
 

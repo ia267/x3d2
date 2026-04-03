@@ -26,6 +26,11 @@ module m_backend_runtime
 #endif
 
   type :: backend_runtime_t
+    !! Convenience wrapper that creates the correct backend and allocator
+    !! for the current build.  The pointer components (backend, allocator,
+    !! host_allocator) alias concrete members of this same object, so
+    !! instances must be declared with the TARGET attribute and must
+    !! never be copied or assigned - the pointers would dangle.
     class(base_backend_t), pointer :: backend => null()
     class(allocator_t), pointer :: allocator => null()
     type(allocator_t), pointer :: host_allocator => null()
@@ -74,6 +79,10 @@ contains
     self%backend_name = 'CUDA'
     self%cuda_allocator = cuda_allocator_t(dims, SZ)
     self%allocator => self%cuda_allocator
+    ! CUDA always needs a separate host allocator because the main
+    ! allocator lives in device memory.  The solver and case objects
+    ! (xcompact.f90) unconditionally pass host_allocator, so it must
+    ! be valid regardless of whether the caller requested one.
     self%host_allocator_storage = allocator_t(dims, SZ)
     self%host_allocator => self%host_allocator_storage
     self%cuda_backend = cuda_backend_t(mesh, self%allocator)
