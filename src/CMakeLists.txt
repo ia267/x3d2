@@ -19,6 +19,7 @@ set(SRC
   backend/backend.f90
   turbine/turbine_model.f90
   turbine/turbine_dummy.f90
+  turbine/adm.f90
   backend/omp/common.f90
   backend/omp/kernels/distributed.f90
   backend/omp/kernels/spectral_processing.f90
@@ -117,10 +118,13 @@ target_link_libraries(xcompact PRIVATE x3d2_backends)
 if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI" OR
    ${CMAKE_Fortran_COMPILER_ID} STREQUAL "NVHPC")
   set(CMAKE_Fortran_FLAGS "-cpp -cuda")
+  # Note: -Ktrap=fp traps FP exceptions process-wide. On some NVIDIA GPUs
+  # (e.g. RTX A4000) it turns a benign divide-by-zero inside cuFFTMp's PTX-JIT
+  # compiler (during Poisson FFT plan creation) into a fatal SIGFPE, crashing
+  # every FFT-based case on the CUDA debug build. It's a JIT quirk, not a cuFFTMp
+  # or x3d2 bug. If you hit that, remove -Ktrap=fp in your local working copy
+  # (do not commit the removal).
   set(CMAKE_Fortran_FLAGS_DEBUG "-g -O0 -traceback -Mbounds -Mchkptr -Ktrap=fp")
-  # Note: -Ktrap=fp traps FP exceptions process-wide. On some NVIDIA GPUs (for example RTX A4000)
-  # it was giving a divide-by-zero inside cuFFTMp's PTX-JIT compiler during Poisson FFT plan creation
-  # This is a JIT quirk (not an issue with cuFFTMp or bug in x3d2). Remove this flag if you encounter this error
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fast")
   target_link_options(x3d2 INTERFACE "-cuda")
   target_link_options(x3d2 INTERFACE "-cudalib=cufftmp")
