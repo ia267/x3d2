@@ -1,0 +1,53 @@
+&domain_settings
+! Flow case
+flow_case_name = 'foil'
+
+! Global domain length
+! x = streamwise (inflow/outflow), y = lift-normal far-field, z = spanwise
+L_global = 161.97202797d0, 60.11421911d0,  37.0d0
+
+! Global number of cells in each direction
+! dims_global = 1878, 697, 429
+dims_global = 950, 350, 215
+
+! Domain decomposition in each direction
+! Non-periodic FFT Poisson is single-rank only -> keep 1, 1, 1
+nproc_dir = 1, 1, 1
+
+! BC options are 'periodic' | 'neumann' | 'dirichlet'
+! x/y non-periodic + z periodic maps to the FFT 110 solver (CUDA only)
+BC_x = 'dirichlet', 'dirichlet'
+BC_y = 'dirichlet', 'dirichlet'
+BC_z = 'periodic', 'periodic'
+
+! Stretching options: 'uniform' (default) | 'centred' | 'top-bottom' | 'bottom'
+stretching(2) = 'uniform'
+beta(2) = 1.0d0
+/End
+
+&solver_params
+!Re = 12615582d0
+Re = 150d0
+time_intg = 'RK3' ! 'AB[1-4]' | 'RK[1-4]'
+dt = 0.002d0
+n_iters = 50000
+n_output = 100
+poisson_solver_type = 'FFT' ! 'FFT' | 'CG'
+der1st_scheme = 'compact6'
+der2nd_scheme = 'compact6' ! 'compact6' | 'compact6-hyperviscous'
+interpl_scheme = 'classic' ! 'classic' | 'optimised' | 'aggressive'
+stagder_scheme = 'compact6'
+ibm_on = .true.
+/End
+&checkpoint_params
+checkpoint_freq = 10000
+snapshot_freq = 500
+keep_checkpoint = F
+checkpoint_prefix = "checkpoint"
+snapshot_prefix = "snapshot"
+restart_from_checkpoint = F
+restart_file = "checkpoint_000010.bp"
+output_stride = 2, 2, 2
+snapshot_single_precision = T
+/End
+

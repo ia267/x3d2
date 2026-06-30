@@ -30,6 +30,7 @@ set(SRC
   case/cylinder.f90
   case/generic.f90
   case/tgv.f90
+  case/foil.f90
   module/ibm.f90
 )
 set(CUDASRC
