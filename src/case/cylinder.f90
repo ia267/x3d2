@@ -117,13 +117,15 @@ contains
     real(dp) :: flow_rate_in_max_discard, flow_rate_out_max_discard
     real(dp) :: fl_sums(2), ny_nz
     real(dp) :: dx, gdt
+    integer :: gdims(3)
 
     dims = self%solver%mesh%get_dims(VERT)
     nx = dims(1)
     dx = self%solver%mesh%geo%d(1)
-    ! NOTE: preserved from original -- uses local ny*nz, not global. If the
-    ! y-z plane is decomposed, this is not the true per-cell flow rate.
-    ny_nz = real(dims(2)*dims(3), dp)
+    ! Use global y-z plane size so the flow-rate average is correct
+    ! regardless of MPI decomposition in y or z.
+    gdims = self%solver%mesh%get_global_dims(VERT)
+    ny_nz = real(gdims(2)*gdims(3), dp)
     gdt = self%solver%time_integrator%gdt
 
     call self%solver%backend%slice_max_sum( &
