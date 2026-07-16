@@ -129,6 +129,7 @@ contains
 
       ! Get a block on the device and move the data
       ibm%ep1 => ibm%backend%allocator%get_block(DIR_X)
+      call ibm%ep1%set_data_loc(VERT)
       call ibm%backend%set_field_data(ibm%ep1, ep1%data)
 
       ! Free memory
