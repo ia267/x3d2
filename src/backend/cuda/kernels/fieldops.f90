@@ -383,6 +383,26 @@ contains
     end if
   end subroutine field_set_x_face_from_field
 
+  attributes(global) subroutine add_scalar_x_face(f, c, i_plane, nx, ny, nz)
+    implicit none
+    real(dp), device, intent(inout), dimension(:, :, :) :: f
+    real(dp), value, intent(in) :: c
+    integer, value, intent(in) :: i_plane, nx, ny, nz
+    integer :: i, b, n_mod, n_y_blocks, y_block, i_max
+
+    i = threadIdx%x + (blockIdx%x - 1)*blockDim%x
+    b = blockIdx%y
+    n_mod = mod(ny - 1, SZ) + 1
+    n_y_blocks = (ny - 1)/SZ + 1
+    y_block = (b - 1)/nz + 1
+    if (y_block == n_y_blocks) then
+      i_max = n_mod
+    else
+      i_max = SZ
+    end if
+    if (i <= i_max) f(i, i_plane, b) = f(i, i_plane, b) + c
+  end subroutine add_scalar_x_face
+
   attributes(global) subroutine volume_integral(s, f, n, n_i_pad, n_j)
     implicit none
 
