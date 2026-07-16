@@ -58,55 +58,32 @@ contains
     implicit none
 
     class(case_foil_t) :: self
-
-    ! Sample the convective-outflow parameters from solver%u once per
-    ! substep and cache them on self, so apply_BC (later in the substep)
-    ! can read them. No writes to solver%u/v/w here.
-    call self%compute_outflow_params(self%out_vel, self%flow_rate_diff)
   end subroutine define_BC_foil
 
   ! ==========================================================================
-  ! Compute outflow convective velocity number and inlet/outlet flow-rate
-  ! imbalance from solver%u. Mirrors the cylinder case. Single rank here,
-  ! but the MPI reductions are kept so the logic stays correct if the
-  ! constraint is lifted later.
+  ! Compute the explicit convective-outflow coefficient from the
+  ! post-integration streamwise maximum on the outlet plane.
   ! ==========================================================================
-  subroutine compute_outflow_params(self, out_vel, flow_rate_diff)
+  subroutine compute_outflow_params(self, out_vel)
     implicit none
     class(case_foil_t) :: self
-    real(dp), intent(out) :: out_vel, flow_rate_diff
+    real(dp), intent(out) :: out_vel
 
     integer :: dims(3), nx, ierr
-    real(dp) :: uxmax, uxmax_discard
-    real(dp) :: flow_rate_in, flow_rate_out
-    real(dp) :: flow_rate_in_max_discard, flow_rate_out_max_discard
-    real(dp) :: fl_sums(2), ny_nz
+    real(dp) :: uxmax, sum_discard
     real(dp) :: dx, gdt
 
     dims = self%solver%mesh%get_dims(VERT)
     nx = dims(1)
     dx = self%solver%mesh%geo%d(1)
-    ny_nz = real(dims(2)*dims(3), dp)
     gdt = self%solver%time_integrator%gdt
 
     call self%solver%backend%slice_max_sum( &
-      uxmax, uxmax_discard, self%solver%u, nx - 1)
-    call self%solver%backend%slice_max_sum( &
-      flow_rate_in_max_discard, flow_rate_in, self%solver%u, 1)
-    call self%solver%backend%slice_max_sum( &
-      flow_rate_out_max_discard, flow_rate_out, self%solver%u, nx)
+      uxmax, sum_discard, self%solver%u, nx - 1)
 
     call MPI_Allreduce(MPI_IN_PLACE, uxmax, 1, MPI_X3D2_DP, &
                        MPI_MAX, MPI_COMM_WORLD, ierr)
-    fl_sums(1) = flow_rate_in
-    fl_sums(2) = flow_rate_out
-    call MPI_Allreduce(MPI_IN_PLACE, fl_sums, 2, MPI_X3D2_DP, MPI_SUM, &
-                       MPI_COMM_WORLD, ierr)
-    flow_rate_in = fl_sums(1)/ny_nz
-    flow_rate_out = fl_sums(2)/ny_nz
-
     out_vel = uxmax*gdt/dx
-    flow_rate_diff = flow_rate_in - flow_rate_out
   end subroutine compute_outflow_params
 
   subroutine initial_conditions_foil(self)
@@ -185,24 +162,51 @@ contains
     class(case_foil_t) :: self
     class(field_t), intent(inout) :: u, v, w
 
-    ! Streamwise x-faces: free-stream inflow + convective outflow.
-    call self%solver%backend%field_set_face( &
-      u, u_inflow, self%out_vel, X_FACE, &
-      bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET, &
-      flow_rate_diff=self%flow_rate_diff)
-    call self%solver%backend%field_set_face( &
-      v, 0._dp, self%out_vel, X_FACE, &
-      bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET, &
-      flow_rate_diff=self%flow_rate_diff)
-    call self%solver%backend%field_set_face( &
-      w, 0._dp, self%out_vel, X_FACE, &
-      bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET, &
-      flow_rate_diff=self%flow_rate_diff)
+    integer :: dims(3), gdims(3), nx, ierr
+    real(dp) :: out_vel, inlet_outlet_sums(2), max_discard, flow_correction
+    real(dp) :: ny_nz
 
-    ! Lift-normal y-faces: free-stream far-field (Dirichlet both sides).
-    call self%solver%backend%field_set_face(u, u_inflow, u_inflow, Y_FACE)
-    call self%solver%backend%field_set_face(v, 0._dp, 0._dp, Y_FACE)
-    call self%solver%backend%field_set_face(w, 0._dp, 0._dp, Y_FACE)
+    ! Compute convection from the velocity just produced by the time step;
+    ! do not use a value sampled before transport/integration.
+    call self%compute_outflow_params(out_vel)
+    self%out_vel = out_vel
+    ! Streamwise x-faces: free-stream inflow + convective outflow, without
+    ! an embedded mass correction. The correction below is applied only after
+    ! the convective update, as a uniform outlet-u shift.
+    call self%solver%backend%field_set_face( &
+      u, u_inflow, out_vel, X_FACE, &
+      bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET)
+    call self%solver%backend%field_set_face( &
+      v, 0._dp, out_vel, X_FACE, &
+      bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET)
+    call self%solver%backend%field_set_face( &
+      w, 0._dp, out_vel, X_FACE, &
+      bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET)
+
+    ! Enforce exact streamwise mass balance after convection. This is the
+    ! Incompact3d bxxn = bxxn - ut + ut1 operation, and must affect u only.
+    dims = self%solver%mesh%get_dims(VERT)
+    gdims = self%solver%mesh%get_global_dims(VERT)
+    nx = dims(1)
+    ny_nz = real(gdims(2)*gdims(3), dp)
+    call self%solver%backend%slice_max_sum( &
+      max_discard, inlet_outlet_sums(1), u, 1)
+    call self%solver%backend%slice_max_sum( &
+      max_discard, inlet_outlet_sums(2), u, nx)
+    call MPI_Allreduce(MPI_IN_PLACE, inlet_outlet_sums, 2, MPI_X3D2_DP, &
+                       MPI_SUM, MPI_COMM_WORLD, ierr)
+    flow_correction = (inlet_outlet_sums(1) - inlet_outlet_sums(2))/ny_nz
+    self%flow_rate_diff = flow_correction
+    call self%solver%backend%field_add_const_x_face( &
+      u, flow_correction, at_end=.true.)
+
+    ! Lift-normal far field is imposed only when y is non-periodic. This
+    ! keeps the foil_100 diagnostic genuinely periodic in y.
+    if (.not. self%solver%mesh%grid%periodic_BC(2)) then
+      call self%solver%backend%field_set_face(u, u_inflow, u_inflow, Y_FACE)
+      call self%solver%backend%field_set_face(v, 0._dp, 0._dp, Y_FACE)
+      call self%solver%backend%field_set_face(w, 0._dp, 0._dp, Y_FACE)
+    end if
 
   end subroutine apply_BC_foil
 
