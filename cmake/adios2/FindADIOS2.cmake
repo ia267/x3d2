@@ -18,6 +18,27 @@
 #   ADIOS2_ROOT_DIR - Directory where ADIOS2 is installed (when USE_SYSTEM_ADIOS2=ON)
 option(USE_SYSTEM_ADIOS2 "Use system-installed ADIOS2" OFF)
 set(ADIOS2_ROOT_DIR "" CACHE PATH "Directory where ADIOS2 is installed (optional)")
+
+# 'native' (auto-detect the GPU(s) present on the build host) needs CMake
+# >= 3.24, but currently x3d2 supports CMake back to 3.11 (see
+# cmake_minimum_version in the top-level CMakeLists.txt). Fall back to a
+# fixed architecture on older CMake so configure doesn't emit a bogus
+# '-arch=native' to nvcc.
+if(CMAKE_VERSION VERSION_LESS 3.24)
+  set(_adios2_cuda_arch_default "80")
+  message(STATUS "CMake ${CMAKE_VERSION} < 3.24: 'native' CUDA architecture "
+    "detection is unavailable, so ADIOS2_CUDA_ARCHITECTURES defaults to "
+    "'${_adios2_cuda_arch_default}' (A100). Override with "
+    "-DADIOS2_CUDA_ARCHITECTURES=<SM number(s)> if building for a different GPU.")
+else()
+  set(_adios2_cuda_arch_default "native")
+endif()
+set(ADIOS2_CUDA_ARCHITECTURES "${_adios2_cuda_arch_default}" CACHE STRING
+  "CUDA architectures used when building the bundled ADIOS2 with CUDA support. \
+Defaults to 'native' (auto-detect the GPU(s) present on the build host) on CMake >= 3.24, \
+or '80' (A100) on older CMake where 'native' isn't supported; \
+override with explicit SM numbers (e.g. '80', '90', or a semicolon list '80;90') when building on a \
+host without the target GPU visible, e.g. a login/build node.")
 set(adios2_git_tag "v2.10.2")
 string(REPLACE "/" "-" adios2_git_tag_dir "${adios2_git_tag}")
 
