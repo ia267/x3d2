@@ -31,8 +31,9 @@ module m_config
   end type domain_config_t
 
   type, extends(base_config_t) :: solver_config_t
-    real(dp) :: Re, dt
+    real(dp) :: Re, dt, outlet_sponge_width, outlet_sponge_strength
     logical :: ibm_on
+    logical :: outlet_mass_correction, outlet_sponge
     real(dp), dimension(:), allocatable :: pr_species
     integer :: n_iters, n_output, n_species
     logical :: lowmem_transeq, lowmem_fft
@@ -156,8 +157,10 @@ contains
 
     integer :: unit
 
-    real(dp) :: Re, dt
-    logical :: ibm_on = .false.
+    real(dp) :: Re, dt, outlet_sponge_width = 0._dp, &
+                outlet_sponge_strength = 1._dp
+    logical :: ibm_on = .false., outlet_mass_correction = .true., &
+               outlet_sponge = .true.
     real(dp), dimension(n_species_max) :: pr_species = 1._dp
     integer :: n_iters, n_output, n_species = 0
     !> triggers the low memory implementations
@@ -170,7 +173,9 @@ contains
     namelist /solver_params/ Re, dt, n_iters, n_output, poisson_solver_type, &
       n_species, pr_species, lowmem_transeq, lowmem_fft, &
       time_intg, der1st_scheme, der2nd_scheme, interpl_scheme, &
-      stagder_scheme, ibm_on
+      stagder_scheme, ibm_on, outlet_mass_correction, outlet_sponge, &
+      outlet_sponge_width, &
+      outlet_sponge_strength
 
     if (present(nml_file) .and. present(nml_string)) then
       error stop 'Reading solver config failed! &
@@ -191,6 +196,10 @@ contains
     self%n_iters = n_iters
     self%n_output = n_output
     self%ibm_on = ibm_on
+    self%outlet_mass_correction = outlet_mass_correction
+    self%outlet_sponge = outlet_sponge
+    self%outlet_sponge_width = outlet_sponge_width
+    self%outlet_sponge_strength = outlet_sponge_strength
     self%n_species = n_species
     if (n_species > 0) self%pr_species = pr_species(1:n_species)
     self%lowmem_transeq = lowmem_transeq

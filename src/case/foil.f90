@@ -34,6 +34,8 @@ module m_case_foil
     procedure :: postprocess => postprocess_foil
     procedure :: case_finalise => finalise_foil
     procedure :: compute_outflow_params
+    procedure :: init_sponge
+    procedure :: apply_sponge
   end type case_foil_t
 
   interface case_foil_t
@@ -58,6 +60,7 @@ contains
     implicit none
 
     class(case_foil_t) :: self
+
   end subroutine define_BC_foil
 
   ! ==========================================================================
@@ -91,28 +94,7 @@ contains
 
     class(case_foil_t) :: self
 
-    integer, dimension(3) :: dims
-    class(field_t), pointer :: sponge_host
-    integer :: i, l
-
-    dims = self%solver%mesh%get_dims(VERT)
-
-    ! Build the sponge coefficient: zero in the interior (no forcing) and
-    ! ramping up to one across the damping layer just upstream of the
-    ! x-outflow (largest i).
-    sponge_host => self%solver%host_allocator%get_block(DIR_C)
-    sponge_host%data = 0.0_dp
-    do l = 1, damping_layer_size
-      i = dims(1) - damping_layer_size + l
-      sponge_host%data(i, :, :) = &
-        1.0_dp - cos(pi*l/(damping_layer_size*2.0_dp))
-    end do
-
-    self%sponge_dev => self%solver%backend%allocator%get_block(DIR_X, VERT)
-    call self%sponge_dev%set_data_loc(VERT)
-    call self%solver%backend%set_field_data(self%sponge_dev, sponge_host%data)
-
-    call self%solver%host_allocator%release_block(sponge_host)
+    if (self%solver%outlet_sponge) call self%init_sponge()
 
     call self%solver%u%fill(u_inflow)
     call self%solver%v%fill(0._dp)
@@ -124,6 +106,45 @@ contains
 
   end subroutine initial_conditions_foil
 
+  subroutine init_sponge(self)
+    !! Build the persistent outlet sponge without changing the velocity.
+    !! It is needed both for fresh starts and restarts, where initial
+    !! conditions are deliberately skipped after checkpoint restoration.
+    class(case_foil_t) :: self
+
+    integer :: dims(3), i
+    real(dp) :: sponge_width, sponge_strength, sponge_start, s, coords(3)
+    class(field_t), pointer :: sponge_host
+
+    if (associated(self%sponge_dev)) return
+
+    dims = self%solver%mesh%get_dims(VERT)
+    sponge_width = self%solver%outlet_sponge_width
+    if (sponge_width <= 0._dp) then
+      sponge_width = real(damping_layer_size, dp)*self%solver%mesh%geo%d(1)
+    end if
+    sponge_strength = self%solver%outlet_sponge_strength
+    if (sponge_strength <= 0._dp) error stop 'Foil sponge strength must be positive.'
+    sponge_start = self%solver%mesh%geo%L(1) - sponge_width
+    if (sponge_start <= 0._dp) error stop 'Foil sponge width must be less than Lx.'
+
+    sponge_host => self%solver%host_allocator%get_block(DIR_C)
+    sponge_host%data = 0.0_dp
+    do i = 1, dims(1)
+      coords = self%solver%mesh%get_coordinates(i, 1, 1, VERT)
+      if (coords(1) > sponge_start) then
+        s = (coords(1) - sponge_start)/sponge_width
+        sponge_host%data(i, :, :) = sponge_strength*(1._dp - cos(0.5_dp*pi*s))
+      end if
+    end do
+
+    self%sponge_dev => self%solver%backend%allocator%get_block(DIR_X, VERT)
+    call self%sponge_dev%set_data_loc(VERT)
+    call self%solver%backend%set_field_data(self%sponge_dev, sponge_host%data)
+    call self%solver%host_allocator%release_block(sponge_host)
+
+  end subroutine init_sponge
+
   subroutine forcings_foil(self, du, dv, dw, iter)
     implicit none
 
@@ -131,23 +152,40 @@ contains
     class(field_t), intent(inout) :: du, dv, dw
     integer, intent(in) :: iter
 
-    class(field_t), pointer :: tmp
+    if (self%solver%outlet_sponge) then
+      ! Checkpoint restarts skip initial_conditions_foil, so reconstruct the
+      ! non-checkpointed sponge coefficient on first use.
+      call self%init_sponge()
 
-    ! Sponge layer: relax u towards u_inflow with strength sponge_dev,
-    ! i.e. du = du + sponge*(u_inflow - u).
-    tmp => self%solver%backend%allocator%get_block(DIR_X, VERT)
-
-    call tmp%fill(u_inflow)
-    ! tmp = u_inflow - u
-    call self%solver%backend%vecadd(-1._dp, self%solver%u, 1._dp, tmp)
-    ! tmp = sponge*(u_inflow - u)
-    call self%solver%backend%vecmult(tmp, self%sponge_dev)
-    ! du = du + tmp
-    call self%solver%backend%vecadd(1._dp, tmp, 1._dp, du)
-
-    call self%solver%backend%allocator%release_block(tmp)
+      ! Sponge layer: damp all velocity components towards the free stream.
+      ! Relaxing v and w as well as u prevents transverse wake fluctuations
+      ! from reaching the convective outlet undamped.
+      call self%apply_sponge(du, self%solver%u, u_inflow)
+      call self%apply_sponge(dv, self%solver%v, 0._dp)
+      call self%apply_sponge(dw, self%solver%w, 0._dp)
+    end if
 
   end subroutine forcings_foil
+
+  subroutine apply_sponge(self, dq, q, q_ref)
+    !! Add -sponge*(q-q_ref) to one momentum RHS component.
+    implicit none
+
+    class(case_foil_t) :: self
+    class(field_t), intent(inout) :: dq
+    class(field_t), intent(in) :: q
+    real(dp), intent(in) :: q_ref
+
+    class(field_t), pointer :: tmp
+
+    tmp => self%solver%backend%allocator%get_block(DIR_X, VERT)
+    call self%solver%backend%veccopy(tmp, q)
+    if (q_ref /= 0._dp) call self%solver%backend%field_shift(tmp, -q_ref)
+    call self%solver%backend%vecmult(tmp, self%sponge_dev)
+    call self%solver%backend%vecadd(-1._dp, tmp, 1._dp, dq)
+    call self%solver%backend%allocator%release_block(tmp)
+
+  end subroutine apply_sponge
 
   ! ==========================================================================
   ! Pre-correction (called per substep after the integrator step):
@@ -183,22 +221,26 @@ contains
       w, 0._dp, out_vel, X_FACE, &
       bc_start=BC_DIRICHLET, bc_end=BC_DIRICHLET)
 
-    ! Enforce exact streamwise mass balance after convection. This is the
-    ! Incompact3d bxxn = bxxn - ut + ut1 operation, and must affect u only.
-    dims = self%solver%mesh%get_dims(VERT)
-    gdims = self%solver%mesh%get_global_dims(VERT)
-    nx = dims(1)
-    ny_nz = real(gdims(2)*gdims(3), dp)
-    call self%solver%backend%slice_max_sum( &
-      max_discard, inlet_outlet_sums(1), u, 1)
-    call self%solver%backend%slice_max_sum( &
-      max_discard, inlet_outlet_sums(2), u, nx)
-    call MPI_Allreduce(MPI_IN_PLACE, inlet_outlet_sums, 2, MPI_X3D2_DP, &
-                       MPI_SUM, MPI_COMM_WORLD, ierr)
-    flow_correction = (inlet_outlet_sums(1) - inlet_outlet_sums(2))/ny_nz
-    self%flow_rate_diff = flow_correction
-    call self%solver%backend%field_add_const_x_face( &
-      u, flow_correction, at_end=.true.)
+    if (self%solver%outlet_mass_correction) then
+      ! Enforce exact streamwise mass balance after convection. This is the
+      ! Incompact3d bxxn = bxxn - ut + ut1 operation, and must affect u only.
+      dims = self%solver%mesh%get_dims(VERT)
+      gdims = self%solver%mesh%get_global_dims(VERT)
+      nx = dims(1)
+      ny_nz = real(gdims(2)*gdims(3), dp)
+      call self%solver%backend%slice_max_sum( &
+        max_discard, inlet_outlet_sums(1), u, 1)
+      call self%solver%backend%slice_max_sum( &
+        max_discard, inlet_outlet_sums(2), u, nx)
+      call MPI_Allreduce(MPI_IN_PLACE, inlet_outlet_sums, 2, MPI_X3D2_DP, &
+                         MPI_SUM, MPI_COMM_WORLD, ierr)
+      flow_correction = (inlet_outlet_sums(1) - inlet_outlet_sums(2))/ny_nz
+      self%flow_rate_diff = flow_correction
+      call self%solver%backend%field_add_const_x_face( &
+        u, flow_correction, at_end=.true.)
+    else
+      self%flow_rate_diff = 0._dp
+    end if
 
     ! Lift-normal far field is imposed only when y is non-periodic. This
     ! keeps the foil_100 diagnostic genuinely periodic in y.

@@ -71,6 +71,10 @@ module m_solver
     type(vector_calculus_t) :: vector_calculus
     type(ibm_t) :: ibm
     logical :: ibm_on
+    logical :: outlet_mass_correction = .true.
+    logical :: outlet_sponge = .true.
+    real(dp) :: outlet_sponge_width = 0._dp
+    real(dp) :: outlet_sponge_strength = 1._dp
     procedure(poisson_solver), pointer :: poisson => null()
     procedure(transport_equation), pointer :: transeq => null()
   contains
@@ -165,6 +169,10 @@ contains
     solver%n_iters = solver_cfg%n_iters
     solver%n_output = solver_cfg%n_output
     solver%ngrid = product(solver%mesh%get_global_dims(VERT))
+    solver%outlet_mass_correction = solver_cfg%outlet_mass_correction
+    solver%outlet_sponge = solver_cfg%outlet_sponge
+    solver%outlet_sponge_width = solver_cfg%outlet_sponge_width
+    solver%outlet_sponge_strength = solver_cfg%outlet_sponge_strength
 
     ! Allocate and set the tdsops
     call allocate_tdsops( &
