@@ -147,6 +147,7 @@ define_test(unit/test_statistics.f90 1 omp)
 define_test(unit/test_output_scalars.f90 1 omp)
 define_test(unit/test_les.f90 1 omp)
 define_test(unit/test_abl_diagnostics.f90 1 omp)
+define_test(unit/test_boundary_planes.f90 1 omp)
 
 if(WITH_ADIOS2)
   define_test(unit/test_adios2_read_write.f90 4 omp)
@@ -216,12 +217,13 @@ if((${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI" OR
   define_test(unit/test_kinetic_energy.f90 1 cuda)
   define_test(unit/test_cuda_allocator.f90 1 cuda)
   define_test(unit/test_cuda_reorder.f90 1 cuda)
+  define_test(unit/test_boundary_planes.f90 1 cuda)
 
   # CUDA verification tests
   define_verification_test(verification/test_thom.f90 1 cuda)
   define_verification_test(verification/test_time_integrator.f90 1 cuda)
   define_verification_test(verification/test_fft.f90 1 cuda)
-    define_verification_test(verification/test_poisson_bc.f90 1 cuda)
+  define_verification_test(verification/test_poisson_bc.f90 1 cuda)
   define_verification_test(verification/test_poisson_bc.f90 2 cuda --config 100)
   define_verification_test(verification/test_cuda_tridiag.f90 ${CMAKE_CTEST_NPROCS} cuda)
   define_verification_test(verification/test_cuda_penta.f90 ${CMAKE_CTEST_NPROCS} cuda)
