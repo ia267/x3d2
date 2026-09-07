@@ -13,6 +13,7 @@ module m_omp_backend
 
   use m_omp_common, only: SZ
   use m_omp_exec_dist, only: exec_dist_tds_compact, exec_dist_transeq_compact
+  use m_exec_thom, only: exec_thom_tds_compact
   use m_omp_sendrecv, only: sendrecv_fields
 
   implicit none
@@ -360,7 +361,12 @@ contains
       call du%set_data_loc(move_data_loc(u%data_loc, u%dir, tdsops%move))
     end if
 
-    call tds_solve_dist(self, du, u, tdsops)
+    if (tdsops%prefer_thomas) then
+      call exec_thom_tds_compact(du%data, u%data, tdsops, &
+                                 self%allocator%get_n_groups(u%dir))
+    else
+      call tds_solve_dist(self, du, u, tdsops)
+    end if
 
   end subroutine tds_solve_omp
 

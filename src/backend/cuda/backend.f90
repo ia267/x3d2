@@ -17,6 +17,7 @@ module m_cuda_backend
   use m_cuda_allocator, only: cuda_allocator_t, cuda_field_t
   use m_cuda_common, only: SZ
   use m_cuda_exec_dist, only: exec_dist_transeq_3fused, exec_dist_tds_compact
+  use m_cuda_exec_thom, only: exec_thom_tds_compact
   use m_cuda_poisson_fft, only: cuda_poisson_fft_t
   use m_cuda_sendrecv, only: sendrecv_fields, sendrecv_3fields
   use m_cuda_tdsops, only: cuda_tdsops_t
@@ -477,9 +478,39 @@ contains
       call du%set_data_loc(move_data_loc(u%data_loc, u%dir, tdsops%move))
     end if
 
-    call tds_solve_dist(self, du, u, tdsops, blocks, threads)
+    if (tdsops%prefer_thomas) then
+      call tds_solve_thom(self, du, u, tdsops, blocks, threads)
+    else
+      call tds_solve_dist(self, du, u, tdsops, blocks, threads)
+    end if
 
   end subroutine tds_solve_cuda
+
+  subroutine tds_solve_thom(self, du, u, tdsops, blocks, threads)
+    !! Serial Thomas solve along the whole line. Exact for any admissible
+    !! system, unlike the distributed solver, which truncates a neighbour's
+    !! influence at the subdomain edge.
+    implicit none
+
+    class(cuda_backend_t) :: self
+    class(field_t), intent(inout) :: du
+    class(field_t), intent(in) :: u
+    class(tdsops_t), intent(in) :: tdsops
+    type(dim3), intent(in) :: blocks, threads
+
+    real(dp), device, pointer, dimension(:, :, :) :: du_dev, u_dev
+
+    call resolve_field_t(du_dev, du)
+    call resolve_field_t(u_dev, u)
+
+    select type (tdsops)
+    type is (cuda_tdsops_t)
+      call exec_thom_tds_compact(du_dev, u_dev, tdsops, blocks, threads)
+    class default
+      error stop 'The Thomas solver requires a cuda_tdsops_t.'
+    end select
+
+  end subroutine tds_solve_thom
 
   subroutine tds_solve_dist(self, du, u, tdsops, blocks, threads)
     implicit none
