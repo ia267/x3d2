@@ -1,0 +1,2834 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="x3d2 is the current codename for what is to become Xcompact3d version 2.0.">
+    <meta name="author" content="Xcompact3d Team" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>m_memcheck_estimate &ndash; x3d2</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">x3d2 </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>m_memcheck_estimate
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.8% of total for modules and submodules.">174 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/estimate.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/estimate.f90.html'>estimate.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">m_memcheck_estimate</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#variable-n_halo">n_halo</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#variable-basis_measured">basis_measured</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#variable-basis_extrapolated">basis_extrapolated</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#variable-basis_formula">basis_formula</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#variable-basis_predicted">basis_predicted</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#variable-basis_name">basis_name</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#funcs-0"
+         aria-expanded="false" aria-controls="funcs-0">
+         <h4 class="card-header bg-primary text-white">Functions</h4>
+      </a>
+      <div id="funcs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#proc-to_gib">to_gib</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#proc-classify">classify</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#proc-num_gpus_unsupported_reason">num_gpus_unsupported_reason</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#proc-requested_unsupported_reason">requested_unsupported_reason</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#proc-fields_plus_halo_bytes_n">fields_plus_halo_bytes_n</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#subs-0"
+         aria-expanded="false" aria-controls="subs-0">
+         <h4 class="card-header bg-primary text-white">Subroutines</h4>
+      </a>
+      <div id="subs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#proc-prepare_probe">prepare_probe</a>
+            <a class="list-group-item" href="../module/m_memcheck_estimate.html#proc-estimate_for_num_gpus">estimate_for_num_gpus</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      <p>The per-GPU memory estimate of x3d2-memcheck.</p>
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='m_memory_estimate.html'>m_memory_estimate</a></li>
+                  <li class="list-inline-item"><a href='m_cuda_poisson_fft.html'>m_cuda_poisson_fft</a></li>
+                  <li class="list-inline-item"><a href='m_memcheck_context.html'>m_memcheck_context</a></li>
+                  <li class="list-inline-item"><a href='m_logger.html'>m_logger</a></li>
+                  <li class="list-inline-item"><a href='m_common.html'>m_common</a></li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: module~~m_memcheck_estimate~~UsesGraph Pages: 1 -->
+<svg id="modulem_memcheck_estimateUsesGraph" width="641pt" height="653pt"
+ viewBox="0.00 0.00 641.00 652.65" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~m_memcheck_estimate~~UsesGraph" class="graph" transform="scale(0.24 0.24) rotate(0) translate(4 2694.16)">
+<title>module~~m_memcheck_estimate~~UsesGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-2694.16 2646,-2694.16 2646,4 -4,4"/>
+<!-- module~m_memcheck_estimate -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node1" class="node">
+<title>module~m_memcheck_estimate</title>
+<polygon fill="none" stroke="black" points="2642,-702.16 2503,-702.16 2503,-678.16 2642,-678.16 2642,-702.16"/>
+<text text-anchor="middle" x="2572.5" y="-687.76" font-family="Helvetica,sans-Serif" font-size="10.50">m_memcheck_estimate</text>
+</g>
+<!-- module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node2" class="node">
+<title>module~m_common</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node2"><a xlink:href="../module/m_common.html" xlink:title="m_common">
+<polygon fill="#337ab7" stroke="#337ab7" points="309,-932.16 233,-932.16 233,-908.16 309,-908.16 309,-932.16"/>
+<text text-anchor="middle" x="271" y="-917.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_common</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_estimate&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge1" class="edge">
+<title>module~m_memcheck_estimate&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2567.04,-677.99C2537.34,-599.29 2359.77,-163.92 2050.5,-118.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2048.5,-118.16C1925.41,-71.81 1894.02,-42.16 1762.5,-42.16 1762.5,-42.16 1762.5,-42.16 978.5,-42.16 883.43,-42.16 853.08,-46.18 771,-94.16 750.92,-105.9 755.24,-120.69 735,-132.16 637.16,-187.63 592.71,-146.11 488,-187.16 470.75,-193.92 468.38,-199.51 452,-208.16 430.03,-219.76 417.35,-213.02 401.5,-232.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M399.5,-232.16C366.48,-269.42 363.66,-284.58 349,-332.16 283.4,-545.03 273.68,-818.08 272.25,-897.54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="268.74,-897.78 272.09,-907.83 275.74,-897.89 268.74,-897.78"/>
+</g>
+<!-- module~m_cuda_poisson_fft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node3" class="node">
+<title>module~m_cuda_poisson_fft</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node3"><a xlink:href="../module/m_cuda_poisson_fft.html" xlink:title="m_cuda_poisson_fft">
+<polygon fill="#337ab7" stroke="#337ab7" points="888,-2086.16 771,-2086.16 771,-2062.16 888,-2062.16 888,-2086.16"/>
+<text text-anchor="middle" x="829.5" y="-2071.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_cuda_poisson_fft</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_estimate&#45;&gt;module~m_cuda_poisson_fft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge2" class="edge">
+<title>module~m_memcheck_estimate&#45;&gt;module~m_cuda_poisson_fft</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2571.68,-702.36C2573.63,-848.93 2585.06,-2271.96 2299,-2544.16 2218.62,-2620.65 2160.42,-2583.28 2050.5,-2568.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2048.5,-2568.16C2003.29,-2562.08 2000.28,-2537.57 1960,-2516.16 1661.6,-2357.53 1525.58,-2413.81 1274,-2188.16"/>
+</g>
+<!-- module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node4" class="node">
+<title>module~m_logger</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node4"><a xlink:href="../module/m_logger.html" xlink:title="m_logger">
+<polygon fill="#337ab7" stroke="#337ab7" points="193,-1400.16 130,-1400.16 130,-1376.16 193,-1376.16 193,-1400.16"/>
+<text text-anchor="middle" x="161.5" y="-1385.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_logger</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_estimate&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge3" class="edge">
+<title>module~m_memcheck_estimate&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2048.5,-2568.16C1574.91,-2505.26 1458.25,-2690.16 980.5,-2690.16 980.5,-2690.16 980.5,-2690.16 399.5,-2690.16 302.01,-2690.16 273.47,-2638.91 229,-2552.16 175.01,-2446.83 164.16,-1562.3 162.69,-1410.34"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="166.19,-1410.3 162.6,-1400.33 159.19,-1410.36 166.19,-1410.3"/>
+</g>
+<!-- module~m_memcheck_context -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node5" class="node">
+<title>module~m_memcheck_context</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node5"><a xlink:href="../module/m_memcheck_context.html" xlink:title="m_memcheck_context">
+<polygon fill="#337ab7" stroke="#337ab7" points="2467,-702.16 2335,-702.16 2335,-678.16 2467,-678.16 2467,-702.16"/>
+<text text-anchor="middle" x="2401" y="-687.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_memcheck_context</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_estimate&#45;&gt;module~m_memcheck_context -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge4" class="edge">
+<title>module~m_memcheck_estimate&#45;&gt;module~m_memcheck_context</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2502.56,-690.16C2494.22,-690.16 2485.67,-690.16 2477.24,-690.16"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="2477.05,-686.66 2467.05,-690.16 2477.05,-693.66 2477.05,-686.66"/>
+</g>
+<!-- module~m_memory_estimate -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node6" class="node">
+<title>module~m_memory_estimate</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node6"><a xlink:href="../module/m_memory_estimate.html" xlink:title="m_memory_estimate">
+<polygon fill="#337ab7" stroke="#337ab7" points="1196,-626.16 1071,-626.16 1071,-602.16 1196,-602.16 1196,-626.16"/>
+<text text-anchor="middle" x="1133.5" y="-611.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_memory_estimate</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_estimate&#45;&gt;module~m_memory_estimate -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge5" class="edge">
+<title>module~m_memcheck_estimate&#45;&gt;module~m_memory_estimate</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M2048.5,-118.16C1922.57,-100.84 1889.61,-118.16 1762.5,-118.16 1762.5,-118.16 1762.5,-118.16 1595,-118.16 1407.72,-118.16 1336.03,-176.43 1232,-332.16 1168.18,-427.7 1266.01,-497.06 1196,-588.16 1193.53,-591.38 1190.58,-594.2 1187.34,-596.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1185.31,-593.82 1178.76,-602.15 1189.07,-599.72 1185.31,-593.82"/>
+</g>
+<!-- module~m_common&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge7" class="edge">
+<title>module~m_common&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M243.18,-932.32C237.68,-936.01 232.5,-940.6 229,-946.16 192.98,-1003.34 204.21,-1181.51 193,-1248.16 185.94,-1290.17 174.67,-1338.63 167.99,-1366.11"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="164.58,-1365.33 165.59,-1375.88 171.38,-1367 164.58,-1365.33"/>
+</g>
+<!-- m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node12" class="node">
+<title>m_mpi</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="74,-1351.16 20,-1351.16 20,-1327.16 74,-1327.16 74,-1351.16"/>
+<text text-anchor="middle" x="47" y="-1336.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_mpi</text>
+</g>
+<!-- module~m_common&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge6" class="edge">
+<title>module~m_common&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M244.04,-932.33C238.36,-936.05 232.9,-940.66 229,-946.16 153.07,-1053.36 259.3,-1145.35 162.5,-1234.16"/>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge13" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M797.16,-2062.04C788.41,-2058.12 779.09,-2053.41 771,-2048.16 753.04,-2036.51 753.73,-2026.52 735,-2016.16 676.66,-1983.89 656.44,-1986.87 591,-1974.16 549.45,-1966.09 431.15,-1985.36 401.5,-1955.16"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M399.5,-1955.16C279.61,-1825.57 366.11,-1736.87 349,-1561.16 325.73,-1322.2 366.44,-1256.23 313,-1022.16 306.39,-993.19 292.65,-961.73 282.9,-941.52"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="285.92,-939.73 278.36,-932.31 279.65,-942.83 285.92,-939.73"/>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge19" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M680,-2112.16C656.33,-2120.27 644.4,-2113.17 627,-2131.16 590.65,-2168.74 625.44,-2203.82 591,-2243.16 574.63,-2261.86 563.7,-2258.27 540.5,-2267.16"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M538.5,-2267.16C459.63,-2297.39 345.08,-2580.51 272,-2538.16"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M270,-2538.16C179.99,-2462.83 164.7,-1563.3 162.75,-1410.23"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="166.25,-1410.13 162.63,-1400.17 159.25,-1410.21 166.25,-1410.13"/>
+</g>
+<!-- cudafor -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node7" class="node">
+<title>cudafor</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="427.5,-2085.16 373.5,-2085.16 373.5,-2061.16 427.5,-2061.16 427.5,-2085.16"/>
+<text text-anchor="middle" x="400.5" y="-2070.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cudafor</text>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;cudafor -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge8" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;cudafor</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M775.1,-2086.17C747.11,-2092.93 712.42,-2102.04 682,-2112.16"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M680,-2112.16C641.53,-2124.96 631.02,-2098.64 591,-2092.16 538.04,-2083.59 476.1,-2078.25 437.82,-2075.49"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="437.91,-2071.99 427.68,-2074.78 437.42,-2078.97 437.91,-2071.99"/>
+</g>
+<!-- cufft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node8" class="node">
+<title>cufft</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="708,-2472.16 654,-2472.16 654,-2448.16 708,-2448.16 708,-2472.16"/>
+<text text-anchor="middle" x="681" y="-2457.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cufft</text>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;cufft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge9" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;cufft</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M823.43,-2086.26C813.24,-2110.7 789.62,-2167.75 771,-2216.16 739.66,-2297.63 704.82,-2395.42 689.7,-2438.25"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="686.32,-2437.32 686.29,-2447.92 692.92,-2439.65 686.32,-2437.32"/>
+</g>
+<!-- cufftXt -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node9" class="node">
+<title>cufftXt</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="708,-2164.16 654,-2164.16 654,-2140.16 708,-2140.16 708,-2164.16"/>
+<text text-anchor="middle" x="681" y="-2149.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cufftXt</text>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;cufftXt -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge10" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;cufftXt</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M798.68,-2086.28C789.6,-2090.33 779.72,-2095.11 771,-2100.16 753.92,-2110.05 751.92,-2116 735,-2126.16 729.41,-2129.52 723.32,-2132.81 717.33,-2135.87"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="715.48,-2132.88 708.08,-2140.45 718.59,-2139.15 715.48,-2132.88"/>
+</g>
+<!-- iso_c_binding -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node10" class="node">
+<title>iso_c_binding</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node10"><a xlink:href="http://fortranwiki.org/fortran/show/iso_c_binding" xlink:title="iso_c_binding">
+<polygon fill="#337ab7" stroke="#337ab7" points="313,-2243.16 229,-2243.16 229,-2219.16 313,-2219.16 313,-2243.16"/>
+<text text-anchor="middle" x="271" y="-2228.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_c_binding</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;iso_c_binding -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge11" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M680,-2112.16C656.33,-2120.27 645.63,-2114.45 627,-2131.16 599.77,-2155.58 616.98,-2179.42 591,-2205.16 573.35,-2222.65 565.13,-2225.83 540.5,-2229.16"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M538.5,-2229.16C464.2,-2239.21 377.17,-2237.34 323.31,-2234.61"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="323.49,-2231.12 313.32,-2234.07 323.12,-2238.11 323.49,-2231.12"/>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge12" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M824.44,-2061.77C813.23,-2028.46 779.65,-1934.88 735,-1866.16 645.31,-1728.13 549.77,-1742.75 488,-1590.16 411.48,-1401.12 506.63,-869.64 452,-673.16 407.56,-513.33 373.75,-215.13 272,-346.16"/>
+</g>
+<!-- module~m_cuda_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node15" class="node">
+<title>module~m_cuda_allocator</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node15"><a xlink:href="../module/m_cuda_allocator.html" xlink:title="m_cuda_allocator">
+<polygon fill="#337ab7" stroke="#337ab7" points="734.5,-1392.16 627.5,-1392.16 627.5,-1368.16 734.5,-1368.16 734.5,-1392.16"/>
+<text text-anchor="middle" x="681" y="-1377.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_cuda_allocator</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_cuda_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge14" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_cuda_allocator</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M827.17,-2061.96C818.94,-1987.36 774.09,-1592.13 735,-1477.16 725.5,-1449.21 708.28,-1419.83 696.05,-1400.82"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="698.92,-1398.82 690.5,-1392.38 693.07,-1402.66 698.92,-1398.82"/>
+</g>
+<!-- module~m_cuda_errors -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node16" class="node">
+<title>module~m_cuda_errors</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node16"><a xlink:href="../module/m_cuda_errors.html" xlink:title="m_cuda_errors">
+<polygon fill="#337ab7" stroke="#337ab7" points="585,-2125.16 494,-2125.16 494,-2101.16 585,-2101.16 585,-2125.16"/>
+<text text-anchor="middle" x="539.5" y="-2110.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_cuda_errors</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_cuda_errors -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge15" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_cuda_errors</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M680,-2112.16C653.12,-2121.11 621.68,-2122.08 595.46,-2120.51"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="595.54,-2117.01 585.31,-2119.76 595.03,-2123.99 595.54,-2117.01"/>
+</g>
+<!-- module~m_cuda_sendrecv -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node18" class="node">
+<title>module~m_cuda_sendrecv</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node18"><a xlink:href="../module/m_cuda_sendrecv.html" xlink:title="m_cuda_sendrecv">
+<polygon fill="#337ab7" stroke="#337ab7" points="735,-2084.16 627,-2084.16 627,-2060.16 735,-2060.16 735,-2084.16"/>
+<text text-anchor="middle" x="681" y="-2069.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_cuda_sendrecv</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_cuda_sendrecv -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge16" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_cuda_sendrecv</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M770.6,-2073.37C762.3,-2073.26 753.72,-2073.14 745.32,-2073.02"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="745.24,-2069.52 735.19,-2072.89 745.15,-2076.52 745.24,-2069.52"/>
+</g>
+<!-- module~m_cuda_spectral -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node19" class="node">
+<title>module~m_cuda_spectral</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node19"><a xlink:href="../module/m_cuda_spectral.html" xlink:title="m_cuda_spectral">
+<polygon fill="#337ab7" stroke="#337ab7" points="591,-2007.16 488,-2007.16 488,-1983.16 591,-1983.16 591,-2007.16"/>
+<text text-anchor="middle" x="539.5" y="-1992.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_cuda_spectral</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_cuda_spectral -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge17" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_cuda_spectral</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M784.45,-2062.07C733.42,-2048.08 649.35,-2025.02 594.45,-2009.96"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="595.12,-2006.51 584.55,-2007.24 593.27,-2013.26 595.12,-2006.51"/>
+</g>
+<!-- module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node20" class="node">
+<title>module~m_field</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node20"><a xlink:href="../module/m_field.html" xlink:title="m_field">
+<polygon fill="#337ab7" stroke="#337ab7" points="427.5,-1552.16 373.5,-1552.16 373.5,-1528.16 427.5,-1528.16 427.5,-1552.16"/>
+<text text-anchor="middle" x="400.5" y="-1537.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_field</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge18" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M815.61,-2061.71C803.25,-2049.35 784.51,-2029.51 771,-2010.16 751.43,-1982.12 754.23,-1970.44 735,-1942.16 714.62,-1912.18 710.86,-1902.09 682,-1880.16"/>
+</g>
+<!-- module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node21" class="node">
+<title>module~m_mesh</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node21"><a xlink:href="../module/m_mesh.html" xlink:title="m_mesh">
+<polygon fill="#337ab7" stroke="#337ab7" points="568.5,-1243.16 510.5,-1243.16 510.5,-1219.16 568.5,-1219.16 568.5,-1243.16"/>
+<text text-anchor="middle" x="539.5" y="-1228.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_mesh</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge20" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M826.97,-2062.11C815.08,-1968.65 737.9,-1362.76 735,-1359.16 719.3,-1339.68 697.63,-1359.7 682,-1340.16"/>
+</g>
+<!-- module~m_poisson_fft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node22" class="node">
+<title>module~m_poisson_fft</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node22"><a xlink:href="../module/m_poisson_fft.html" xlink:title="m_poisson_fft">
+<polygon fill="#337ab7" stroke="#337ab7" points="723.5,-1510.16 638.5,-1510.16 638.5,-1486.16 723.5,-1486.16 723.5,-1510.16"/>
+<text text-anchor="middle" x="681" y="-1495.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_poisson_fft</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_poisson_fft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge21" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_poisson_fft</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M826.4,-2061.96C818.86,-2018.16 792.48,-1864.77 771,-1738.16 754.87,-1643.07 792.65,-1601.48 735,-1524.16 732.72,-1521.1 729.99,-1518.39 726.98,-1515.98"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="728.74,-1512.95 718.49,-1510.28 724.84,-1518.76 728.74,-1512.95"/>
+</g>
+<!-- module~m_tdsops -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node23" class="node">
+<title>module~m_tdsops</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node23"><a xlink:href="../module/m_tdsops.html" xlink:title="m_tdsops">
+<polygon fill="#337ab7" stroke="#337ab7" points="571,-1163.16 508,-1163.16 508,-1139.16 571,-1139.16 571,-1163.16"/>
+<text text-anchor="middle" x="539.5" y="-1148.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_tdsops</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_poisson_fft&#45;&gt;module~m_tdsops -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge22" class="edge">
+<title>module~m_cuda_poisson_fft&#45;&gt;module~m_tdsops</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M828.14,-2062.1C825.38,-1976.64 806.03,-1462.18 735,-1326.16 696.84,-1253.08 615.03,-1195.66 570.64,-1168.43"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="572.39,-1165.4 562.02,-1163.24 568.78,-1171.4 572.39,-1165.4"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node11" class="node">
+<title>iso_fortran_env</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node11"><a xlink:href="http://fortranwiki.org/fortran/show/iso_fortran_env" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="94,-1449.16 0,-1449.16 0,-1425.16 94,-1425.16 94,-1449.16"/>
+<text text-anchor="middle" x="47" y="-1434.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+</g>
+<!-- module~m_logger&#45;&gt;iso_fortran_env -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge23" class="edge">
+<title>module~m_logger&#45;&gt;iso_fortran_env</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M132.69,-1400.27C118.36,-1406.51 100.68,-1414.21 85.19,-1420.96"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="83.65,-1417.81 75.88,-1425.02 86.44,-1424.23 83.65,-1417.81"/>
+</g>
+<!-- module~m_logger&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge24" class="edge">
+<title>module~m_logger&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M132.69,-1376.05C117.93,-1369.62 99.62,-1361.64 83.8,-1354.75"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="84.9,-1351.41 74.33,-1350.63 82.1,-1357.83 84.9,-1351.41"/>
+</g>
+<!-- module~m_memcheck_context&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge25" class="edge">
+<title>module~m_memcheck_context&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M2400.23,-678.04C2400.7,-614.58 2393.37,-321.71 2220,-270.16"/>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M2218,-270.16C2162.74,-253.73 2155.57,-233.81 2103,-210.16 1955.28,-143.69 1924.49,-80.16 1762.5,-80.16 1762.5,-80.16 1762.5,-80.16 978.5,-80.16 863.12,-80.16 846.23,-139.5 735,-170.16 698.66,-180.17 427.05,-204.45 401.5,-232.16"/>
+</g>
+<!-- module~m_memcheck_context&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge28" class="edge">
+<title>module~m_memcheck_context&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M2399.66,-702.51C2395.46,-845.12 2349.77,-2180.41 2103,-2468.16 2045.73,-2534.95 2002.38,-2519.88 1915,-2530.16"/>
+</g>
+<!-- module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node14" class="node">
+<title>module~m_config</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node14"><a xlink:href="../module/m_config.html" xlink:title="m_config">
+<polygon fill="#337ab7" stroke="#337ab7" points="1010,-512.16 949,-512.16 949,-488.16 1010,-488.16 1010,-512.16"/>
+<text text-anchor="middle" x="979.5" y="-497.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_config</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_context&#45;&gt;module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge26" class="edge">
+<title>module~m_memcheck_context&#45;&gt;module~m_config</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M2218,-270.16C2088.66,-232.66 2049.67,-270.16 1915,-270.16 1915,-270.16 1915,-270.16 1595,-270.16 1404.95,-270.16 1339.76,-339.62 1232,-496.16 1195.81,-548.72 1240.07,-589 1196,-635.16 1176.24,-655.85 1163.1,-653.56 1134.5,-654.16"/>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M1132.5,-654.16C1103.91,-653.05 1093.95,-652.24 1071,-635.16 1030.71,-605.17 1002.69,-551.61 989.36,-521.76"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="992.44,-520.06 985.26,-512.27 986.01,-522.84 992.44,-520.06"/>
+</g>
+<!-- module~m_cuda_memcheck_device -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node17" class="node">
+<title>module~m_cuda_memcheck_device</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node17"><a xlink:href="../module/m_cuda_memcheck_device.html" xlink:title="m_cuda_memcheck_device">
+<polygon fill="#337ab7" stroke="#337ab7" points="2299,-702.16 2139,-702.16 2139,-678.16 2299,-678.16 2299,-702.16"/>
+<text text-anchor="middle" x="2219" y="-687.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_cuda_memcheck_device</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_context&#45;&gt;module~m_cuda_memcheck_device -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge27" class="edge">
+<title>module~m_memcheck_context&#45;&gt;module~m_cuda_memcheck_device</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M2334.76,-690.16C2326.45,-690.16 2317.82,-690.16 2309.21,-690.16"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="2309.12,-686.66 2299.12,-690.16 2309.12,-693.66 2309.12,-686.66"/>
+</g>
+<!-- module~m_memcheck_context&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge29" class="edge">
+<title>module~m_memcheck_context&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M2218,-270.16C2023.84,-212.43 2239.93,-561.9 2103,-711.16 2068.89,-748.35 2025.81,-708.44 1996,-749.16 1926.85,-843.63 1989.75,-1688.94 1960,-1802.16 1928.68,-1921.36 1936.08,-1982.14 1832,-2048.16 1721.25,-2118.41 1639.41,-2137.09 1537,-2055.16 1480.08,-2009.63 1551.23,-1947.98 1501,-1895.16 1470.16,-1862.73 1448.34,-1874.21 1404,-1868.16 1328.26,-1857.81 1308.3,-1863.48 1232,-1868.16 1188.42,-1870.83 1178.14,-1881.37 1134.5,-1880.16"/>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M1132.5,-1880.16C1015.76,-1857.07 995.11,-1807.58 924,-1712.16 898.75,-1678.28 914.28,-1657.25 888,-1624.16 848.36,-1574.23 805.65,-1594.68 771,-1541.16 726.19,-1471.94 788.81,-1421.64 735,-1359.16 718.67,-1340.2 697.65,-1359.68 682,-1340.16"/>
+</g>
+<!-- module~m_memory_estimate&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge31" class="edge">
+<title>module~m_memory_estimate&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M1090.36,-602.06C1083.19,-598.51 1076.34,-593.95 1071,-588.16 1036.41,-550.65 1070.78,-515.53 1035,-479.16 1017.01,-460.87 1005.68,-465.07 980.5,-460.16"/>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M978.5,-460.16C912.44,-447.29 897.24,-419.48 830.5,-428.16"/>
+</g>
+<!-- module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node13" class="node">
+<title>module~m_allocator</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node13"><a xlink:href="../module/m_allocator.html" xlink:title="m_allocator">
+<polygon fill="#337ab7" stroke="#337ab7" points="577.5,-894.16 501.5,-894.16 501.5,-870.16 577.5,-870.16 577.5,-894.16"/>
+<text text-anchor="middle" x="539.5" y="-879.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_allocator</text>
+</a>
+</g>
+</g>
+<!-- module~m_memory_estimate&#45;&gt;module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge30" class="edge">
+<title>module~m_memory_estimate&#45;&gt;module~m_allocator</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M978.5,-460.16C952.89,-458.74 943.04,-461.97 924,-479.16 895.96,-504.48 909.73,-525.26 888,-556.16 832.85,-634.56 813.91,-653.75 735,-708.16 713.71,-722.84 701.91,-715.66 682,-732.16"/>
+</g>
+<!-- module~m_memory_estimate&#45;&gt;module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge32" class="edge">
+<title>module~m_memory_estimate&#45;&gt;module~m_config</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M1097.83,-602.15C1088.75,-598.3 1079.21,-593.61 1071,-588.16 1041.92,-568.87 1014,-539.52 997.05,-520.1"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="999.65,-517.76 990.48,-512.44 994.33,-522.31 999.65,-517.76"/>
+</g>
+<!-- module~m_time_integrator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node24" class="node">
+<title>module~m_time_integrator</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node24"><a xlink:href="../module/m_time_integrator.html" xlink:title="m_time_integrator">
+<polygon fill="#337ab7" stroke="#337ab7" points="1035,-970.16 924,-970.16 924,-946.16 1035,-946.16 1035,-970.16"/>
+<text text-anchor="middle" x="979.5" y="-955.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_time_integrator</text>
+</a>
+</g>
+</g>
+<!-- module~m_memory_estimate&#45;&gt;module~m_time_integrator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge33" class="edge">
+<title>module~m_memory_estimate&#45;&gt;module~m_time_integrator</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M1132.15,-626.17C1130.22,-671.75 1117.58,-836.39 1035,-932.16 1032.23,-935.37 1028.97,-938.22 1025.45,-940.74"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="1023.53,-937.81 1016.85,-946.03 1027.2,-943.77 1023.53,-937.81"/>
+</g>
+<!-- module~m_allocator&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge34" class="edge">
+<title>module~m_allocator&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M501.43,-887.04C463.21,-892.12 401.9,-900.41 349,-908.16 339.36,-909.57 329.06,-911.14 319.22,-912.66"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="318.53,-909.23 309.19,-914.22 319.61,-916.14 318.53,-909.23"/>
+</g>
+<!-- module~m_allocator&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge35" class="edge">
+<title>module~m_allocator&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M535.57,-894.21C526.97,-929.96 501.56,-1038.67 488,-1130.16 475.43,-1214.94 500,-1443.15 452,-1514.16 448.14,-1519.87 442.63,-1524.4 436.65,-1527.97"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="435.01,-1524.87 427.69,-1532.53 438.19,-1531.11 435.01,-1524.87"/>
+</g>
+<!-- module~m_config&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge36" class="edge">
+<title>module~m_config&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00ff55" stroke-dasharray="5,2" d="M951.89,-488.14C942.93,-483.91 932.94,-479.01 924,-474.16 883.29,-452.08 876.43,-422.19 830.5,-428.16"/>
+</g>
+<!-- module~m_config&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge37" class="edge">
+<title>module~m_config&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#00ff55" stroke-dasharray="5,2" d="M970.32,-512.35C958.11,-531.18 935.36,-568.84 924,-604.16 888.82,-713.54 926.57,-751.93 888,-860.16 854.33,-954.65 802.94,-958.07 771,-1053.16 746.25,-1126.86 784.65,-1341.33 735,-1401.16 710.32,-1430.91 440.11,-1501.92 401.5,-1500.16"/>
+<path fill="none" stroke="#00ff55" stroke-dasharray="5,2" d="M399.5,-1500.16C342.92,-1496.98 324.72,-1520.92 272,-1500.16"/>
+</g>
+<!-- module~m_cuda_allocator&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge39" class="edge">
+<title>module~m_cuda_allocator&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M654.79,-1368.12C645.96,-1363.81 635.99,-1358.86 627,-1354.16 610.78,-1345.68 607.22,-1342.64 591,-1334.16 484.8,-1278.59 421.45,-1310.64 349,-1215.16 296.26,-1145.65 337.39,-1105.94 313,-1022.16 304.69,-993.63 291.33,-962.07 282.12,-941.73"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="285.22,-940.07 277.86,-932.44 278.85,-942.99 285.22,-940.07"/>
+</g>
+<!-- module~m_cuda_allocator&#45;&gt;module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge38" class="edge">
+<title>module~m_cuda_allocator&#45;&gt;module~m_allocator</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M676.3,-1368.1C667.51,-1339.42 644.79,-1264.81 627,-1202.16 595.3,-1090.52 559.87,-956.2 546.25,-904.21"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="549.6,-903.19 543.69,-894.4 542.83,-904.96 549.6,-903.19"/>
+</g>
+<!-- module~m_cuda_allocator&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge40" class="edge">
+<title>module~m_cuda_allocator&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M655.34,-1392.2C618.09,-1410.74 545.7,-1448.13 488,-1486.16 471.08,-1497.31 469.08,-1503.25 452,-1514.16 446.99,-1517.36 441.55,-1520.49 436.15,-1523.41"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="434.43,-1520.36 427.19,-1528.09 437.67,-1526.56 434.43,-1520.36"/>
+</g>
+<!-- module~m_cuda_allocator&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge41" class="edge">
+<title>module~m_cuda_allocator&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M645.71,-1368.1C638.84,-1364.45 632.15,-1359.86 627,-1354.16 596.16,-1320.05 621.51,-1291.57 591,-1257.16 587.24,-1252.92 582.62,-1249.27 577.72,-1246.16"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="579.15,-1242.95 568.71,-1241.14 575.74,-1249.07 579.15,-1242.95"/>
+</g>
+<!-- module~m_cuda_errors&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge43" class="edge">
+<title>module~m_cuda_errors&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M525.43,-2125.26C502.47,-2145.37 452.47,-2184.14 401.5,-2191.16"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M399.5,-2191.16C289.05,-2206.36 275.19,-2108.63 229,-2007.16 179.03,-1897.39 165.65,-1508.61 163.04,-1410.68"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="166.53,-1410.36 162.77,-1400.45 159.53,-1410.54 166.53,-1410.36"/>
+</g>
+<!-- module~m_cuda_errors&#45;&gt;cudafor -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge42" class="edge">
+<title>module~m_cuda_errors&#45;&gt;cudafor</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M497.4,-2101.16C478.38,-2095.6 455.98,-2089.07 437.62,-2083.71"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="438.46,-2080.31 427.88,-2080.86 436.5,-2087.02 438.46,-2080.31"/>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge48" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M2216.68,-677.9C2207.75,-601.52 2149.11,-194.16 1915,-194.16 1915,-194.16 1915,-194.16 1595,-194.16 1327.64,-194.16 582.06,-148.98 401.5,-346.16"/>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M399.5,-346.16C323.15,-430.36 283.15,-802.39 274.04,-897.8"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="270.55,-897.52 273.1,-907.8 277.52,-898.17 270.55,-897.52"/>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;module~m_cuda_poisson_fft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge50" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;module~m_cuda_poisson_fft</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1595,-2150.16C1482.53,-2060.78 1396.7,-2262.88 1274,-2188.16"/>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1272,-2188.16C1185.35,-2110.2 1280.94,-2016.97 1196,-1937.16 1142.42,-1886.81 1108.03,-1907.66 1035,-1899.16 986,-1893.45 963.9,-1870.15 924,-1899.16 882.05,-1929.65 913.9,-1965.22 888,-2010.16 878.46,-2026.72 864.09,-2042.72 852.1,-2054.57"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="849.43,-2052.28 844.64,-2061.73 854.28,-2057.33 849.43,-2052.28"/>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge51" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M2048.5,-2454.16C1998.94,-2501.12 1982.64,-2520.85 1915,-2530.16"/>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1913,-2530.16C1815.8,-2543.53 1557.42,-2482.79 1471.5,-2530.16"/>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;module~m_memory_estimate -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge52" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;module~m_memory_estimate</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M2214.17,-677.92C2194.17,-616.64 2095.66,-346.16 1915,-346.16 1915,-346.16 1915,-346.16 1595,-346.16 1415.7,-346.16 1354.08,-390.84 1232,-522.16 1209.25,-546.63 1220.77,-565.74 1196,-588.16 1192.12,-591.67 1187.71,-594.75 1183.06,-597.44"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="1181.2,-594.46 1173.91,-602.15 1184.4,-600.68 1181.2,-594.46"/>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;cudafor -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge44" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;cudafor</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1376,-2576.16C1271.56,-2600.92 1241.83,-2576.16 1134.5,-2576.16 1134.5,-2576.16 1134.5,-2576.16 978.5,-2576.16 938.04,-2576.16 658.84,-2506.12 627,-2481.16 592.11,-2453.8 451.73,-2174.34 412.02,-2094.41"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="415.07,-2092.69 407.49,-2085.28 408.8,-2095.8 415.07,-2092.69"/>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;cufft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge45" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;cufft</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1913,-2454.16C1701.05,-2459.71 1630.94,-2424 1440,-2516.16 1405.47,-2532.83 1416.09,-2571.75 1378,-2576.16"/>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1376,-2576.16C1334.01,-2579.7 1076.06,-2419.62 1035,-2410.16 920.78,-2383.84 782.38,-2423.82 718.08,-2446.41"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="716.64,-2443.21 708.41,-2449.88 719,-2449.8 716.64,-2443.21"/>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;cufftXt -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge46" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;cufftXt</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M2048.5,-2454.16C2002.77,-2491.97 1974.33,-2454.16 1915,-2454.16"/>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1913,-2454.16C1713.89,-2454.16 1670.61,-2378.16 1471.5,-2378.16 1471.5,-2378.16 1471.5,-2378.16 1272,-2378.16 1041.51,-2378.16 969.68,-2361.01 771,-2244.16 739.82,-2225.82 712.32,-2193.62 696.41,-2172.59"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="699.08,-2170.31 690.33,-2164.33 693.45,-2174.46 699.08,-2170.31"/>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge53" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M2217.86,-702.42C2216.05,-852.67 2194.53,-2335.07 2050.5,-2454.16"/>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M2048.5,-2454.16C2001.89,-2492.7 1644.21,-2187.96 1597,-2150.16"/>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1595,-2150.16C1567.42,-2124.41 1554.99,-2121.33 1537,-2088.16 1505.14,-2029.41 1549.98,-1987.63 1501,-1942.16 1379.93,-1829.75 1299.6,-1885.98 1134.5,-1880.16"/>
+</g>
+<!-- module~m_base_case -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node26" class="node">
+<title>module~m_base_case</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node26"><a xlink:href="../module/m_base_case.html" xlink:title="m_base_case">
+<polygon fill="#337ab7" stroke="#337ab7" points="2091.5,-702.16 2007.5,-702.16 2007.5,-678.16 2091.5,-678.16 2091.5,-702.16"/>
+<text text-anchor="middle" x="2049.5" y="-687.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_base_case</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;module~m_base_case -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge47" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;module~m_base_case</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M2138.66,-690.16C2126.23,-690.16 2113.67,-690.16 2102.08,-690.16"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="2101.74,-686.66 2091.74,-690.16 2101.74,-693.66 2101.74,-686.66"/>
+</g>
+<!-- module~m_cuda_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node27" class="node">
+<title>module~m_cuda_common</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node27"><a xlink:href="../module/m_cuda_common.html" xlink:title="m_cuda_common">
+<polygon fill="#337ab7" stroke="#337ab7" points="2103,-782.16 1996,-782.16 1996,-758.16 2103,-758.16 2103,-782.16"/>
+<text text-anchor="middle" x="2049.5" y="-767.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_cuda_common</text>
+</a>
+</g>
+</g>
+<!-- module~m_cuda_memcheck_device&#45;&gt;module~m_cuda_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge49" class="edge">
+<title>module~m_cuda_memcheck_device&#45;&gt;module~m_cuda_common</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M2192.56,-702.31C2163.86,-716.02 2117.03,-738.38 2085.04,-753.66"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="2083.15,-750.69 2075.63,-758.16 2086.16,-757.01 2083.15,-750.69"/>
+</g>
+<!-- module~m_cuda_sendrecv&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge56" class="edge">
+<title>module~m_cuda_sendrecv&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M644.37,-2060.08C616.47,-2051.27 576.5,-2040.05 540.5,-2035.16"/>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M538.5,-2035.16C475.39,-2026.58 445.24,-2039.45 401.5,-1993.16"/>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M399.5,-1993.16C382.43,-1975.1 362.67,-1989.91 349,-1969.16 291.07,-1881.23 334.96,-1125.14 313,-1022.16 306.8,-993.1 292.98,-961.66 283.1,-941.48"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="286.09,-939.65 278.48,-932.28 279.84,-942.79 286.09,-939.65"/>
+</g>
+<!-- module~m_cuda_sendrecv&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge58" class="edge">
+<title>module~m_cuda_sendrecv&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M650.96,-2084.28C642.89,-2088.2 634.34,-2092.91 627,-2098.16 608.59,-2111.32 610.42,-2122.55 591,-2134.16 515.51,-2179.29 487.67,-2208.76 401.5,-2191.16"/>
+</g>
+<!-- module~m_cuda_sendrecv&#45;&gt;cudafor -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge54" class="edge">
+<title>module~m_cuda_sendrecv&#45;&gt;cudafor</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M538.5,-2035.16C501.53,-2030.13 460.44,-2044.3 433,-2056.74"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="431.45,-2053.6 423.89,-2061.03 434.43,-2059.93 431.45,-2053.6"/>
+</g>
+<!-- module~m_cuda_sendrecv&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge55" class="edge">
+<title>module~m_cuda_sendrecv&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M399.5,-1993.16C382.43,-1975.1 364.78,-1988.36 349,-1969.16 295.51,-1904.06 224.7,-1177.33 162.5,-1234.16"/>
+</g>
+<!-- module~m_cuda_sendrecv&#45;&gt;module~m_cuda_errors -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge57" class="edge">
+<title>module~m_cuda_sendrecv&#45;&gt;module~m_cuda_errors</title>
+<path fill="none" stroke="#0054ff" stroke-dasharray="5,2" d="M638.9,-2084.24C624.13,-2088.58 607.29,-2093.53 591.77,-2098.09"/>
+<polygon fill="#0054ff" stroke="#0054ff" points="590.4,-2094.85 581.79,-2101.02 592.37,-2101.56 590.4,-2094.85"/>
+</g>
+<!-- module~m_cuda_spectral&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge60" class="edge">
+<title>module~m_cuda_spectral&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M487.81,-1985.74C454.06,-1978.49 413.74,-1967.62 401.5,-1955.16"/>
+</g>
+<!-- module~m_cuda_spectral&#45;&gt;cudafor -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge59" class="edge">
+<title>module~m_cuda_spectral&#45;&gt;cudafor</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M514.18,-2007.27C505.82,-2011.54 496.44,-2016.46 488,-2021.16 468.24,-2032.17 446.41,-2045.3 429.63,-2055.61"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="427.54,-2052.79 420.87,-2061.02 431.22,-2058.74 427.54,-2052.79"/>
+</g>
+<!-- module~m_field&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge62" class="edge">
+<title>module~m_field&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#5400ff" stroke-dasharray="5,2" d="M391.52,-1527.89C379.9,-1509.33 358.64,-1472.6 349,-1438.16 298.96,-1259.45 356.08,-1202.67 313,-1022.16 306.1,-993.26 292.43,-961.78 282.77,-941.55"/>
+<polygon fill="#5400ff" stroke="#5400ff" points="285.81,-939.78 278.28,-932.33 279.51,-942.85 285.81,-939.78"/>
+</g>
+<!-- module~m_field&#45;&gt;iso_c_binding -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge61" class="edge">
+<title>module~m_field&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#5400ff" stroke-dasharray="5,2" d="M391.5,-1552.25C380.06,-1570.18 359.26,-1605.27 349,-1638.16 281.94,-1853.05 273.24,-2129.35 272.15,-2208.86"/>
+<polygon fill="#5400ff" stroke="#5400ff" points="268.64,-2209.09 272.03,-2219.13 275.64,-2209.17 268.64,-2209.09"/>
+</g>
+<!-- module~m_mesh&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge64" class="edge">
+<title>module~m_mesh&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M512.09,-1219.14C504.11,-1215.09 495.48,-1210.29 488,-1205.16 470.34,-1193.05 470.23,-1184.38 452,-1173.16 431.44,-1160.5 421.48,-1166.71 401.5,-1153.16"/>
+</g>
+<!-- module~m_mesh&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge66" class="edge">
+<title>module~m_mesh&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M399.5,-1310.16C308.64,-1355.83 370.27,-1526.34 272,-1500.16"/>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M270,-1500.16C223.44,-1487.75 189.48,-1438.05 173.23,-1409.19"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="176.25,-1407.42 168.41,-1400.29 170.09,-1410.75 176.25,-1407.42"/>
+</g>
+<!-- module~m_mesh&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge63" class="edge">
+<title>module~m_mesh&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M518.93,-1243.4C492.69,-1259.59 444.43,-1288.58 401.5,-1310.16"/>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M399.5,-1310.16C359.42,-1330.3 355.14,-1273.53 313,-1258.16 249.37,-1234.95 212.41,-1188.37 162.5,-1234.16"/>
+</g>
+<!-- module~m_mesh&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge65" class="edge">
+<title>module~m_mesh&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M533.64,-1243.47C524.13,-1267.82 502.72,-1323.91 488,-1372.16 469,-1434.43 492.52,-1463.2 452,-1514.16 447.89,-1519.33 442.48,-1523.57 436.73,-1527.02"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="434.79,-1524.08 427.54,-1531.8 438.03,-1530.28 434.79,-1524.08"/>
+</g>
+<!-- module~m_mesh_content -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node28" class="node">
+<title>module~m_mesh_content</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node28"><a xlink:href="../module/m_mesh_content.html" xlink:title="m_mesh_content">
+<polygon fill="#337ab7" stroke="#337ab7" points="452,-1206.16 349,-1206.16 349,-1182.16 452,-1182.16 452,-1206.16"/>
+<text text-anchor="middle" x="400.5" y="-1191.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_mesh_content</text>
+</a>
+</g>
+</g>
+<!-- module~m_mesh&#45;&gt;module~m_mesh_content -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge67" class="edge">
+<title>module~m_mesh&#45;&gt;module~m_mesh_content</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M510.45,-1223.58C494.72,-1219.34 474.56,-1213.89 455.87,-1208.84"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="456.54,-1205.4 445.97,-1206.17 454.71,-1212.16 456.54,-1205.4"/>
+</g>
+<!-- module~m_poisson_fft&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge68" class="edge">
+<title>module~m_poisson_fft&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M638.43,-1489.48C566.21,-1472.03 418.65,-1425.37 349,-1324.16 310.69,-1268.48 329.75,-1087.64 313,-1022.16 305.64,-993.37 292.06,-961.87 282.56,-941.61"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="285.61,-939.88 278.14,-932.36 279.3,-942.9 285.61,-939.88"/>
+</g>
+<!-- module~m_poisson_fft&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge70" class="edge">
+<title>module~m_poisson_fft&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M638.43,-1497.36C610.66,-1497.17 573.34,-1497.58 540.5,-1500.16"/>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M538.5,-1500.16C477.8,-1504.94 462.33,-1502.93 401.5,-1500.16"/>
+</g>
+<!-- module~m_poisson_fft&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge69" class="edge">
+<title>module~m_poisson_fft&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M538.5,-1500.16C503.08,-1502.95 464.36,-1515.16 437.14,-1525.37"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="435.74,-1522.16 427.67,-1529.02 438.26,-1528.69 435.74,-1522.16"/>
+</g>
+<!-- module~m_poisson_fft&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge71" class="edge">
+<title>module~m_poisson_fft&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M673.19,-1485.97C662.99,-1467.65 643.2,-1431.88 627,-1401.16 598.98,-1348.04 567.24,-1284.86 551.12,-1252.53"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="554.05,-1250.57 546.46,-1243.18 547.79,-1253.69 554.05,-1250.57"/>
+</g>
+<!-- module~m_poisson_fft&#45;&gt;module~m_tdsops -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge72" class="edge">
+<title>module~m_poisson_fft&#45;&gt;module~m_tdsops</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M671.64,-1485.89C659.87,-1468.04 638.56,-1433.51 627,-1401.16 597.93,-1319.81 628.35,-1288.05 591,-1210.16 583.87,-1195.29 572.03,-1181.16 561.6,-1170.46"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="563.92,-1167.84 554.34,-1163.31 559.01,-1172.82 563.92,-1167.84"/>
+</g>
+<!-- module~m_tdsops&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge73" class="edge">
+<title>module~m_tdsops&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M507.88,-1160.95C478.07,-1168.48 432.8,-1174.39 401.5,-1153.16"/>
+</g>
+<!-- module~m_tdsops&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge74" class="edge">
+<title>module~m_tdsops&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M525.06,-1163.34C508.81,-1177.51 480.12,-1200.81 452,-1215.16 377.25,-1253.3 343.39,-1228.06 272,-1272.16"/>
+</g>
+<!-- module~m_time_integrator&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge77" class="edge">
+<title>module~m_time_integrator&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff0055" stroke-dasharray="5,2" d="M949.05,-946.07C940.67,-942.12 931.73,-937.38 924,-932.16 877.22,-900.54 878.42,-876.02 830.5,-846.16"/>
+<path fill="none" stroke="#ff0055" stroke-dasharray="5,2" d="M828.5,-846.16C768.71,-808.9 789.67,-762.6 735,-718.16 714.94,-701.85 706.98,-700.84 682,-694.16"/>
+</g>
+<!-- module~m_time_integrator&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge79" class="edge">
+<title>module~m_time_integrator&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff0055" stroke-dasharray="5,2" d="M923.87,-959.84C765.1,-965.29 312.42,-985.23 272,-1036.16"/>
+</g>
+<!-- module~m_time_integrator&#45;&gt;module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge75" class="edge">
+<title>module~m_time_integrator&#45;&gt;module~m_allocator</title>
+<path fill="none" stroke="#ff0055" stroke-dasharray="5,2" d="M828.5,-846.16C773.24,-811.73 747.06,-848.75 682,-846.16"/>
+</g>
+<!-- module~m_time_integrator&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge78" class="edge">
+<title>module~m_time_integrator&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#ff0055" stroke-dasharray="5,2" d="M966.64,-970.3C926.19,-1011.95 794.91,-1149.6 771,-1205.16 715.47,-1334.19 822.27,-1409.09 735,-1519.16 719.45,-1538.77 703.16,-1524.8 682,-1538.16"/>
+<path fill="none" stroke="#ff0055" stroke-dasharray="5,2" d="M680,-1538.16C641.12,-1563.61 503.61,-1551.97 437.51,-1544.59"/>
+<polygon fill="#ff0055" stroke="#ff0055" points="437.87,-1541.11 427.54,-1543.45 437.08,-1548.06 437.87,-1541.11"/>
+</g>
+<!-- module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node25" class="node">
+<title>module~m_base_backend</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node25"><a xlink:href="../module/m_base_backend.html" xlink:title="m_base_backend">
+<polygon fill="#337ab7" stroke="#337ab7" points="882,-1354.16 777,-1354.16 777,-1330.16 882,-1330.16 882,-1354.16"/>
+<text text-anchor="middle" x="829.5" y="-1339.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_base_backend</text>
+</a>
+</g>
+</g>
+<!-- module~m_time_integrator&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge76" class="edge">
+<title>module~m_time_integrator&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#ff0055" stroke-dasharray="5,2" d="M973.27,-970.34C963.24,-993.89 940.79,-1047.36 924,-1093.16 906.44,-1141.06 905.7,-1154.31 888,-1202.16 872.32,-1244.55 851.75,-1293.19 839.94,-1320.53"/>
+<polygon fill="#ff0055" stroke="#ff0055" points="836.64,-1319.35 835.87,-1329.91 843.06,-1322.13 836.64,-1319.35"/>
+</g>
+<!-- module~m_base_backend&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge82" class="edge">
+<title>module~m_base_backend&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M827.28,-1330.12C822.85,-1293.43 804.04,-1182.7 735,-1136.16 643.95,-1074.78 596.88,-1115.93 488,-1130.16 448.56,-1135.31 434.42,-1175.49 401.5,-1153.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M399.5,-1153.16C360.81,-1126.46 302.86,-994.47 280.88,-941.86"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="284.05,-940.35 276.98,-932.45 277.58,-943.03 284.05,-940.35"/>
+</g>
+<!-- module~m_base_backend&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge84" class="edge">
+<title>module~m_base_backend&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M538.5,-1576.16C469.96,-1563.87 471.06,-1503.32 401.5,-1500.16"/>
+</g>
+<!-- module~m_base_backend&#45;&gt;iso_c_binding -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge80" class="edge">
+<title>module~m_base_backend&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M826.81,-1354.27C820.61,-1395.59 796.17,-1533.65 735,-1628.16 609.01,-1822.82 473.09,-1783.28 349,-1979.16 300.94,-2055.02 281.31,-2162.73 274.77,-2208.82"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="271.27,-2208.54 273.41,-2218.92 278.21,-2209.47 271.27,-2208.54"/>
+</g>
+<!-- module~m_base_backend&#45;&gt;module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge81" class="edge">
+<title>module~m_base_backend&#45;&gt;module~m_allocator</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M825.55,-1330.02C816.24,-1293.15 785.11,-1179.98 735,-1098.16 684.68,-1016 601.24,-936.25 562.06,-901.01"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="564.2,-898.22 554.4,-894.18 559.54,-903.45 564.2,-898.22"/>
+</g>
+<!-- module~m_base_backend&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge83" class="edge">
+<title>module~m_base_backend&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M820.62,-1354.32C808.74,-1373.05 786,-1410.34 771,-1444.16 750.48,-1490.41 774.15,-1520.11 735,-1552.16 667.6,-1607.33 626.01,-1592.74 540.5,-1576.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M538.5,-1576.16C503.84,-1569.95 465.08,-1559.42 437.66,-1551.35"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="438.32,-1547.89 427.74,-1548.39 436.32,-1554.6 438.32,-1547.89"/>
+</g>
+<!-- module~m_base_backend&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge85" class="edge">
+<title>module~m_base_backend&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M680,-1188.16C640.89,-1172.03 593.47,-1195.22 565.21,-1213.31"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="563.12,-1210.49 556.74,-1218.95 567,-1216.32 563.12,-1210.49"/>
+</g>
+<!-- module~m_base_backend&#45;&gt;module~m_poisson_fft -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge86" class="edge">
+<title>module~m_base_backend&#45;&gt;module~m_poisson_fft</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M822.36,-1354.44C809.32,-1379.47 776.62,-1436.99 735,-1472.16 731.04,-1475.51 726.58,-1478.54 721.96,-1481.27"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="720.13,-1478.28 713,-1486.11 723.46,-1484.44 720.13,-1478.28"/>
+</g>
+<!-- module~m_base_backend&#45;&gt;module~m_tdsops -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge87" class="edge">
+<title>module~m_base_backend&#45;&gt;module~m_tdsops</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M816.13,-1330.14C803.81,-1317.79 784.8,-1297.67 771,-1278.16 751.7,-1250.88 759.49,-1234.89 735,-1212.16 716.05,-1194.57 705.9,-1198.02 682,-1188.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M680,-1188.16C647.82,-1174.89 609.48,-1165.12 581.14,-1158.97"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="581.69,-1155.51 571.19,-1156.86 580.25,-1162.36 581.69,-1155.51"/>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge91" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M2007.22,-695.41C1951.14,-701.37 1848.03,-708.09 1762.5,-690.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1760.5,-690.16C1662.18,-665.82 1726.22,-560.18 1655,-488.16 1534.06,-365.86 1480.81,-347.09 1314,-305.16 1041.01,-236.54 960.75,-307.06 682,-346.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M680,-346.16C618.17,-348.86 444.27,-301.42 401.5,-346.16"/>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge95" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M2032.88,-702.31C2020.35,-713.09 2003.64,-730.06 1996,-749.16 1909.01,-966.54 2019.51,-1575.71 1960,-1802.16 1860.97,-2179.01 1792.09,-2308.7 1471.5,-2530.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1469.5,-2530.16C1436.27,-2551.48 1439.66,-2573.22 1404,-2590.16 1232.17,-2671.78 1170.73,-2652.16 980.5,-2652.16 980.5,-2652.16 980.5,-2652.16 680,-2652.16 491.72,-2652.16 416.39,-2659 272,-2538.16"/>
+</g>
+<!-- module~m_base_case&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge88" class="edge">
+<title>module~m_base_case&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M2042.68,-677.96C1997.81,-585.92 1697.46,-4.16 1274,-4.16 1274,-4.16 1274,-4.16 978.5,-4.16 885.66,-4.16 854.47,12.48 771,-28.16 720.42,-52.78 737.09,-106.79 682,-118.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M680,-118.16C595.51,-134.2 569.28,-114.06 488,-142.16 445.6,-156.81 437.25,-167.07 401.5,-194.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M399.5,-194.16C379.33,-208.68 367.41,-201.47 349,-218.16 299.81,-262.75 319.29,-299.57 272,-346.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M270,-346.16C128.4,-485.66 291,-1082.5 162.5,-1234.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M160.5,-1234.16C132.54,-1267.16 94.94,-1300.42 71.09,-1320.41"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="68.72,-1317.82 63.26,-1326.9 73.19,-1323.21 68.72,-1317.82"/>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge89" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_allocator</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1760.5,-690.16C1688.21,-672.53 1713.15,-606.59 1655,-560.16 1552.71,-478.5 1507.48,-479.34 1378,-460.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1376,-460.16C1344.89,-452.99 1314.6,-370.51 1314,-370.16 1227.61,-319.25 1112.17,-359.26 924,-446.16 847.97,-481.27 817.6,-486.57 771,-556.16 732.37,-613.85 779.14,-654.58 735,-708.16 718.56,-728.12 699.92,-713.52 682,-732.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M680,-732.16C637,-779.18 585.86,-833.85 559.04,-862.44"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="556.44,-860.09 552.14,-869.78 561.54,-864.88 556.44,-860.09"/>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge92" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_config</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1376,-460.16C1332.36,-452.44 1263.46,-566.94 1232,-598.16 1215.71,-614.32 1215.57,-623.18 1196,-635.16 1171.6,-650.1 1163.1,-653.36 1134.5,-654.16"/>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge93" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1760.5,-2034.16C1701.35,-2079.3 1718.45,-2125.28 1655,-2164.16 1430.59,-2301.66 1325.74,-2328.28 1071,-2262.16 923.3,-2223.82 888.06,-2193.06 771,-2095.16 751.62,-2078.95 753.66,-2068.19 735,-2051.16 692.2,-2012.11 674.68,-2011.08 627,-1978.16 588.29,-1951.43 572.76,-1951.4 540.5,-1917.16"/>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge96" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M2011.24,-702.25C2005.24,-705.81 1999.77,-710.36 1996,-716.16 1943,-797.76 1982.21,-1496.42 1960,-1591.16 1910.8,-1801.04 1975.7,-2002.26 1762.5,-2034.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1760.5,-2034.16C1750.27,-2042.04 1545.75,-1979.66 1537,-1970.16 1481.71,-1910.17 1556.66,-1849.81 1501,-1790.16 1429.65,-1713.69 1378.58,-1728.16 1274,-1728.16 1274,-1728.16 1274,-1728.16 1132.5,-1728.16 1036.43,-1728.16 997.78,-1732.68 924,-1671.16 895.6,-1647.48 908.06,-1627.22 888,-1596.16 844.18,-1528.33 811.53,-1527 771,-1457.16 747.71,-1417.03 767.94,-1391.84 735,-1359.16 717.24,-1341.53 697.63,-1359.7 682,-1340.16"/>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge90" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1760.5,-690.16C1735.18,-683.86 1559.55,-749.04 1537,-762.16 1294.16,-903.37 1248.67,-971.57 1071,-1189.16 1051.33,-1213.25 1059.12,-1229.53 1035,-1249.16 1015.1,-1265.35 1003.76,-1257.35 980.5,-1268.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M978.5,-1268.16C955.26,-1277.39 946.93,-1272.17 924,-1282.16 898.62,-1293.22 872.32,-1310.73 854.09,-1323.99"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="851.79,-1321.35 845.84,-1330.11 855.96,-1326.97 851.79,-1321.35"/>
+</g>
+<!-- module~m_io_manager -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node29" class="node">
+<title>module~m_io_manager</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node29"><a xlink:href="../module/m_io_manager.html" xlink:title="m_io_manager">
+<polygon fill="#337ab7" stroke="#337ab7" points="1960,-1582.16 1868,-1582.16 1868,-1558.16 1960,-1558.16 1960,-1582.16"/>
+<text text-anchor="middle" x="1914" y="-1567.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_io_manager</text>
+</a>
+</g>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_io_manager -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge94" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_io_manager</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M2011.75,-702.26C2005.63,-705.82 1999.98,-710.38 1996,-716.16 1947.44,-786.72 1920.74,-1420.14 1915.83,-1547.8"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="1912.33,-1547.82 1915.45,-1557.95 1919.32,-1548.09 1912.33,-1547.82"/>
+</g>
+<!-- module~m_monitoring -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node30" class="node">
+<title>module~m_monitoring</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node30"><a xlink:href="../module/m_monitoring.html" xlink:title="m_monitoring">
+<polygon fill="#337ab7" stroke="#337ab7" points="1639.5,-702.16 1552.5,-702.16 1552.5,-678.16 1639.5,-678.16 1639.5,-702.16"/>
+<text text-anchor="middle" x="1596" y="-687.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_monitoring</text>
+</a>
+</g>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_monitoring -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge97" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_monitoring</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1760.5,-690.16C1724.41,-680.87 1682.33,-681.11 1649.9,-683.55"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="1649.4,-680.08 1639.73,-684.41 1649.99,-687.05 1649.4,-680.08"/>
+</g>
+<!-- module~m_postprocess -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node31" class="node">
+<title>module~m_postprocess</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node31"><a xlink:href="../module/m_postprocess.html" xlink:title="m_postprocess">
+<polygon fill="#337ab7" stroke="#337ab7" points="1641.5,-2046.16 1550.5,-2046.16 1550.5,-2022.16 1641.5,-2022.16 1641.5,-2046.16"/>
+<text text-anchor="middle" x="1596" y="-2031.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_postprocess</text>
+</a>
+</g>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_postprocess -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge98" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_postprocess</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1760.5,-2034.16C1724.53,-2039.54 1683.61,-2039.54 1651.7,-2038.19"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="1651.83,-2034.69 1641.68,-2037.71 1651.5,-2041.68 1651.83,-2034.69"/>
+</g>
+<!-- module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node32" class="node">
+<title>module~m_solver</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node32"><a xlink:href="../module/m_solver.html" xlink:title="m_solver">
+<polygon fill="#337ab7" stroke="#337ab7" points="1501,-1180.16 1440,-1180.16 1440,-1156.16 1501,-1156.16 1501,-1180.16"/>
+<text text-anchor="middle" x="1470.5" y="-1165.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_solver</text>
+</a>
+</g>
+</g>
+<!-- module~m_base_case&#45;&gt;module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge99" class="edge">
+<title>module~m_base_case&#45;&gt;module~m_solver</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1760.5,-690.16C1729,-682.06 1553.88,-851.36 1537,-879.16 1483.37,-967.46 1473.57,-1095.06 1471.84,-1145.97"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="1468.34,-1146.06 1471.57,-1156.15 1475.34,-1146.25 1468.34,-1146.06"/>
+</g>
+<!-- module~m_mesh_content&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge100" class="edge">
+<title>module~m_mesh_content&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M367.12,-1182.03C360.31,-1178.17 353.76,-1173.28 349,-1167.16 308.21,-1114.77 333.43,-1085.34 313,-1022.16 303.81,-993.73 290.52,-961.93 281.59,-941.51"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="284.72,-939.93 277.48,-932.2 278.32,-942.77 284.72,-939.93"/>
+</g>
+<!-- module~m_mesh_content&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge101" class="edge">
+<title>module~m_mesh_content&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M379.59,-1206.27C354.47,-1221.56 309.97,-1248.7 272,-1272.16"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M270,-1272.16C229.46,-1297.2 194.49,-1341.6 176.16,-1367.6"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="173.18,-1365.75 170.39,-1375.97 178.95,-1369.72 173.18,-1365.75"/>
+</g>
+<!-- module~m_io_manager&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge102" class="edge">
+<title>module~m_io_manager&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1913.35,-1557.74C1914.7,-1487.86 1913.44,-1138.98 1762.5,-920.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1760.5,-920.16C1703.24,-837.15 1715.79,-801.91 1691,-704.16 1669.66,-620 1707.05,-581.65 1655,-512.16 1619.73,-465.07 1587.15,-482.93 1537,-452.16 1505.82,-433.03 1434.82,-374.86 1404,-355.16 1119.41,-173.3 1014.08,-56.62 682,-118.16"/>
+</g>
+<!-- module~m_io_manager&#45;&gt;module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge106" class="edge">
+<title>module~m_io_manager&#45;&gt;module~m_solver</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1760.5,-920.16C1723.15,-859.02 1541.9,-1079.15 1487.18,-1148.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1484.32,-1146.1 1480.87,-1156.11 1489.82,-1150.43 1484.32,-1146.1"/>
+</g>
+<!-- module~m_checkpoint_manager -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node33" class="node">
+<title>module~m_checkpoint_manager</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node33"><a xlink:href="../module/m_checkpoint_manager.html" xlink:title="m_checkpoint_manager">
+<polygon fill="#337ab7" stroke="#337ab7" points="1832,-1582.16 1691,-1582.16 1691,-1558.16 1832,-1558.16 1832,-1582.16"/>
+<text text-anchor="middle" x="1761.5" y="-1567.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_checkpoint_manager</text>
+</a>
+</g>
+</g>
+<!-- module~m_io_manager&#45;&gt;module~m_checkpoint_manager -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge103" class="edge">
+<title>module~m_io_manager&#45;&gt;module~m_checkpoint_manager</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1867.85,-1570.16C1859.75,-1570.16 1851.11,-1570.16 1842.38,-1570.16"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1842.12,-1566.66 1832.12,-1570.16 1842.12,-1573.66 1842.12,-1566.66"/>
+</g>
+<!-- module~m_checkpoint_state -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node34" class="node">
+<title>module~m_checkpoint_state</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node34"><a xlink:href="../module/m_checkpoint_state.html" xlink:title="m_checkpoint_state">
+<polygon fill="#337ab7" stroke="#337ab7" points="1655,-1622.16 1537,-1622.16 1537,-1598.16 1655,-1598.16 1655,-1622.16"/>
+<text text-anchor="middle" x="1596" y="-1607.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_checkpoint_state</text>
+</a>
+</g>
+</g>
+<!-- module~m_io_manager&#45;&gt;module~m_checkpoint_state -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge104" class="edge">
+<title>module~m_io_manager&#45;&gt;module~m_checkpoint_state</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1872.09,-1582.23C1859.35,-1585.6 1845.18,-1588.94 1832,-1591.16 1776.35,-1600.55 1712.47,-1605.34 1665.38,-1607.76"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1665.11,-1604.26 1655.29,-1608.25 1665.45,-1611.26 1665.11,-1604.26"/>
+</g>
+<!-- module~m_snapshot_manager -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node38" class="node">
+<title>module~m_snapshot_manager</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node38"><a xlink:href="../module/m_snapshot_manager.html" xlink:title="m_snapshot_manager">
+<polygon fill="#337ab7" stroke="#337ab7" points="1826.5,-1662.16 1696.5,-1662.16 1696.5,-1638.16 1826.5,-1638.16 1826.5,-1662.16"/>
+<text text-anchor="middle" x="1761.5" y="-1647.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_snapshot_manager</text>
+</a>
+</g>
+</g>
+<!-- module~m_io_manager&#45;&gt;module~m_snapshot_manager -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge105" class="edge">
+<title>module~m_io_manager&#45;&gt;module~m_snapshot_manager</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1897.23,-1582.27C1881.37,-1594.05 1855.92,-1611.92 1832,-1624.16 1824.74,-1627.87 1816.83,-1631.34 1809.02,-1634.45"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1807.69,-1631.22 1799.61,-1638.07 1810.2,-1637.75 1807.69,-1631.22"/>
+</g>
+<!-- module~m_stats -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node39" class="node">
+<title>module~m_stats</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node39"><a xlink:href="../module/m_stats.html" xlink:title="m_stats">
+<polygon fill="#337ab7" stroke="#337ab7" points="1623,-912.16 1569,-912.16 1569,-888.16 1623,-888.16 1623,-912.16"/>
+<text text-anchor="middle" x="1596" y="-897.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_stats</text>
+</a>
+</g>
+</g>
+<!-- module~m_io_manager&#45;&gt;module~m_stats -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge107" class="edge">
+<title>module~m_io_manager&#45;&gt;module~m_stats</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1760.5,-920.16C1735.54,-879.3 1673.3,-883.33 1633.21,-891.01"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1632.36,-887.61 1623.29,-893.07 1633.79,-894.47 1632.36,-887.61"/>
+</g>
+<!-- module~m_monitoring&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge108" class="edge">
+<title>module~m_monitoring&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1572.14,-678.1C1525.29,-654.08 1414.31,-600.84 1314,-580.16 1294.46,-576.13 1152.19,-583.39 1134.5,-574.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1132.5,-574.16C1097.96,-550.11 1096.1,-535.94 1071,-502.16 1053.35,-478.41 1060.32,-461.46 1035,-446.16 956.91,-398.97 920.98,-416.39 830.5,-428.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M828.5,-428.16C755.67,-436.93 754.78,-495 682,-504.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M680,-504.16C533.05,-522.66 502.23,-578.58 401.5,-687.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M399.5,-687.16C381.94,-703.49 365.83,-689.08 349,-706.16 295.31,-760.63 278.79,-855.18 273.92,-897.98"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="270.42,-897.84 272.88,-908.15 277.38,-898.56 270.42,-897.84"/>
+</g>
+<!-- module~m_monitoring&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge110" class="edge">
+<title>module~m_monitoring&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M978.5,-618.16C830.67,-578.32 441.78,-776.37 349,-898.16 316.8,-940.42 346.14,-970.63 313,-1012.16 299.83,-1028.66 284.32,-1019.01 272,-1036.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M270,-1036.16C231.84,-1092.19 183.09,-1297.16 167.52,-1365.68"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="164.02,-1365.28 165.23,-1375.81 170.85,-1366.82 164.02,-1365.28"/>
+</g>
+<!-- module~m_monitoring&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge109" class="edge">
+<title>module~m_monitoring&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1590.41,-702.34C1579.39,-732.08 1551.3,-810.97 1537,-879.16 1506.26,-1025.75 1527.78,-1534.16 1378,-1534.16 1378,-1534.16 1378,-1534.16 1132.5,-1534.16 1035.7,-1534.16 1015.11,-1564.45 924,-1597.16 902.58,-1604.85 756.55,-1668.85 735,-1676.16 711.93,-1683.99 706.27,-1687.97 682,-1690.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M680,-1690.16C589.7,-1699.93 558.05,-1677.97 488,-1620.16 464.02,-1600.36 475.71,-1580.28 452,-1560.16 447.64,-1556.46 442.51,-1553.39 437.23,-1550.86"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="438.25,-1547.5 427.67,-1546.87 435.55,-1553.95 438.25,-1547.5"/>
+</g>
+<!-- module~m_monitoring&#45;&gt;module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge112" class="edge">
+<title>module~m_monitoring&#45;&gt;module~m_solver</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1586.19,-702.36C1573.3,-720.84 1549.46,-757.46 1537,-792.16 1490.72,-921.05 1476.47,-1086.9 1472.7,-1146.02"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="1469.2,-1145.89 1472.1,-1156.08 1476.19,-1146.31 1469.2,-1145.89"/>
+</g>
+<!-- module~m_scalar_series -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node37" class="node">
+<title>module~m_scalar_series</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node37"><a xlink:href="../module/m_scalar_series.html" xlink:title="m_scalar_series">
+<polygon fill="#337ab7" stroke="#337ab7" points="449,-739.16 352,-739.16 352,-715.16 449,-715.16 449,-739.16"/>
+<text text-anchor="middle" x="400.5" y="-724.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_scalar_series</text>
+</a>
+</g>
+</g>
+<!-- module~m_monitoring&#45;&gt;module~m_scalar_series -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge111" class="edge">
+<title>module~m_monitoring&#45;&gt;module~m_scalar_series</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M1552.29,-695.7C1461.27,-705.95 1242.52,-722.2 1071,-668.16 1052.89,-662.45 1051.53,-654.5 1035,-645.16 1011.46,-631.86 1004.74,-630.12 980.5,-618.16"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M978.5,-618.16C836.48,-552.78 778.37,-565.01 627,-604.16 540.91,-626.42 530.43,-659.25 452,-701.16 446.29,-704.21 440.19,-707.4 434.28,-710.47"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="432.5,-707.45 425.21,-715.14 435.71,-713.67 432.5,-707.45"/>
+</g>
+<!-- module~m_postprocess&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge113" class="edge">
+<title>module~m_postprocess&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1578.9,-2021.95C1564.98,-2010.34 1545.78,-1991.52 1537,-1970.16 1467.4,-1800.84 1553.63,-1322.49 1501,-1147.16 1476.87,-1066.78 1460.37,-1047.33 1404,-985.16 1331.27,-904.95 702.13,-497.76 682,-504.16"/>
+</g>
+<!-- module~m_postprocess&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge115" class="edge">
+<title>module~m_postprocess&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1582.1,-2046.3C1564.42,-2062.7 1531.39,-2092.48 1501,-2115.16 1437.07,-2162.87 1412.61,-2162.73 1350,-2212.16 1275.49,-2270.98 1278.04,-2312.41 1196,-2360.16 1109.65,-2410.42 1071.81,-2383.6 980.5,-2424.16"/>
+</g>
+<!-- module~m_postprocess&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge114" class="edge">
+<title>module~m_postprocess&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1571.37,-2046.22C1526.89,-2069.24 1428.15,-2121.82 1350,-2174.16 1333.16,-2185.44 1331.92,-2192.69 1314,-2202.16 1265.29,-2227.91 1250.43,-2231.61 1196,-2240.16 1141.12,-2248.78 1116.45,-2272.1 1071,-2240.16 1032.35,-2213 1067.34,-2174.59 1035,-2140.16 998.2,-2100.98 967.85,-2123.25 924,-2092.16 904.76,-2078.52 907.62,-2066.26 888,-2053.16 841.93,-2022.39 818.1,-2039.33 771,-2010.16 752.29,-1998.57 754.04,-1987.2 735,-1976.16 656.86,-1930.83 607.01,-1978.29 540.5,-1917.16"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M538.5,-1917.16C438.5,-1811 410.43,-1626.23 403.52,-1562.51"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="406.99,-1561.98 402.5,-1552.39 400.02,-1562.69 406.99,-1561.98"/>
+</g>
+<!-- module~m_postprocess&#45;&gt;module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge116" class="edge">
+<title>module~m_postprocess&#45;&gt;module~m_solver</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1579.35,-2022.09C1565.55,-2010.45 1546.24,-1991.49 1537,-1970.16 1529.01,-1951.73 1482.48,-1318.74 1473.14,-1190.63"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="1476.61,-1190.16 1472.39,-1180.44 1469.63,-1190.67 1476.61,-1190.16"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge119" class="edge">
+<title>module~m_solver&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1465.81,-1155.93C1456.7,-1126.15 1431.79,-1047.77 1404,-985.16 1338.33,-837.23 1306.83,-807.68 1232,-664.16 1215.64,-632.79 1223.05,-615.97 1196,-593.16 1174.13,-574.72 1160.17,-586.79 1134.5,-574.16"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge124" class="edge">
+<title>module~m_solver&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1469.01,-1180.48C1466.6,-1234.42 1454.02,-1454.77 1404,-1627.16 1341.25,-1843.42 1332.34,-1909.94 1196,-2089.16 1120.61,-2188.25 1068.47,-2180.05 980.5,-2268.16"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge117" class="edge">
+<title>module~m_solver&#45;&gt;module~m_allocator</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1439.63,-1162.49C1421.65,-1158.86 1398.37,-1153.79 1378,-1148.16"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1376,-1148.16C1323.56,-1133.65 1242.14,-1010.99 1196,-982.16 1171.12,-966.61 1163.79,-959.9 1134.5,-958.16"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1132.5,-958.16C1105.15,-947.54 1097.54,-946.66 1071,-934.16 1060.47,-929.2 899.27,-835.09 888,-832.16 837.67,-819.08 822.84,-828.11 771,-832.16 731.08,-835.28 722.01,-847.75 682,-846.16"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M680,-846.16C643.93,-843.97 604.15,-855.72 576.33,-866.37"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="575.01,-863.12 567.01,-870.06 577.6,-869.63 575.01,-863.12"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge120" class="edge">
+<title>module~m_solver&#45;&gt;module~m_config</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1462.77,-1156.14C1442.85,-1121.17 1381.36,-1017.27 1314,-944.16 1219.22,-841.29 1146.12,-862.15 1071,-744.16 1036.5,-689.96 1058.06,-664.12 1035,-604.16 1023.44,-574.1 1005.39,-541.54 993.27,-521"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="996.14,-518.99 988,-512.21 990.14,-522.59 996.14,-518.99"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge121" class="edge">
+<title>module~m_solver&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1376,-1458.16C1338.24,-1483.24 1313.88,-1436.6 1274,-1458.16"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge125" class="edge">
+<title>module~m_solver&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1467.8,-1180.21C1460.31,-1231.2 1428.4,-1428.01 1378,-1458.16"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1376,-1458.16C1351.76,-1472.66 1341.99,-1447.98 1314,-1444.16 1100.83,-1415.02 1041.76,-1460.93 830.5,-1420.16"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_tdsops -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge126" class="edge">
+<title>module~m_solver&#45;&gt;module~m_tdsops</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1132.5,-958.16C1088.21,-956.25 1078.94,-973.28 1035,-979.16 879.27,-999.99 834.64,-960.92 682,-998.16"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M680,-998.16C613.71,-1015.94 568.7,-1092.31 550.11,-1129.98"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="546.91,-1128.55 545.76,-1139.08 553.23,-1131.57 546.91,-1128.55"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_time_integrator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge128" class="edge">
+<title>module~m_solver&#45;&gt;module~m_time_integrator</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1132.5,-958.16C1103.86,-956.92 1072.16,-956.73 1045.15,-956.93"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="1045.01,-953.43 1035.05,-957.02 1045.08,-960.43 1045.01,-953.43"/>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge118" class="edge">
+<title>module~m_solver&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1376,-1148.16C1321.51,-1133.09 1328.76,-1210.1 1274,-1224.16"/>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1272,-1224.16C1238.28,-1232.82 1230.56,-1209.41 1196,-1205.16 1140.86,-1198.37 1121.2,-1181.37 1071,-1205.16 1048.17,-1215.98 1055.71,-1234.68 1035,-1249.16 1013.98,-1263.86 1003.67,-1257.14 980.5,-1268.16"/>
+</g>
+<!-- module~m_ibm -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node35" class="node">
+<title>module~m_ibm</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node35"><a xlink:href="../module/m_ibm.html" xlink:title="m_ibm">
+<polygon fill="#337ab7" stroke="#337ab7" points="1404,-1278.16 1350,-1278.16 1350,-1254.16 1404,-1254.16 1404,-1278.16"/>
+<text text-anchor="middle" x="1377" y="-1263.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_ibm</text>
+</a>
+</g>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_ibm -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge122" class="edge">
+<title>module~m_solver&#45;&gt;module~m_ibm</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1458.28,-1180.18C1442.85,-1196.71 1414.87,-1226.67 1396.37,-1246.49"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="1393.58,-1244.35 1389.31,-1254.04 1398.69,-1249.12 1393.58,-1244.35"/>
+</g>
+<!-- module~m_les -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node36" class="node">
+<title>module~m_les</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node36"><a xlink:href="../module/m_les.html" xlink:title="m_les">
+<polygon fill="#337ab7" stroke="#337ab7" points="1160.5,-1238.16 1106.5,-1238.16 1106.5,-1214.16 1160.5,-1214.16 1160.5,-1238.16"/>
+<text text-anchor="middle" x="1133.5" y="-1223.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_les</text>
+</a>
+</g>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_les -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge123" class="edge">
+<title>module~m_solver&#45;&gt;module~m_les</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1272,-1224.16C1238.48,-1232.77 1198.82,-1232.27 1170.74,-1230.21"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="1170.83,-1226.71 1160.57,-1229.37 1170.25,-1233.69 1170.83,-1226.71"/>
+</g>
+<!-- module~m_tdsops_setup -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node40" class="node">
+<title>module~m_tdsops_setup</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node40"><a xlink:href="../module/m_tdsops_setup.html" xlink:title="m_tdsops_setup">
+<polygon fill="#337ab7" stroke="#337ab7" points="1028,-1240.16 931,-1240.16 931,-1216.16 1028,-1216.16 1028,-1240.16"/>
+<text text-anchor="middle" x="979.5" y="-1225.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_tdsops_setup</text>
+</a>
+</g>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_tdsops_setup -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge127" class="edge">
+<title>module~m_solver&#45;&gt;module~m_tdsops_setup</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1376,-1148.16C1310.38,-1130.39 1135.61,-1151.01 1071,-1172.16 1046.03,-1180.33 1020.87,-1196.71 1003.44,-1209.65"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="1000.9,-1207.19 995.08,-1216.04 1005.15,-1212.75 1000.9,-1207.19"/>
+</g>
+<!-- module~m_vector_calculus -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node41" class="node">
+<title>module~m_vector_calculus</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node41"><a xlink:href="../module/m_vector_calculus.html" xlink:title="m_vector_calculus">
+<polygon fill="#337ab7" stroke="#337ab7" points="1035,-1126.16 924,-1126.16 924,-1102.16 1035,-1102.16 1035,-1126.16"/>
+<text text-anchor="middle" x="979.5" y="-1111.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_vector_calculus</text>
+</a>
+</g>
+</g>
+<!-- module~m_solver&#45;&gt;module~m_vector_calculus -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge129" class="edge">
+<title>module~m_solver&#45;&gt;module~m_vector_calculus</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M1376,-1148.16C1264.23,-1111.17 1125.52,-1108.41 1045.59,-1110.66"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="1045.07,-1107.18 1035.18,-1110.99 1045.29,-1114.17 1045.07,-1107.18"/>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge132" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1759.12,-1558.04C1751.79,-1493.75 1716.89,-1186.08 1691,-934.16 1682.46,-851.1 1704.88,-627.12 1655,-560.16 1621.18,-514.75 1586.03,-540.47 1537,-512.16 1519.45,-502.02 1517.11,-496.46 1501,-484.16 1418.46,-421.18 1412.51,-376.95 1314,-344.16 1266.12,-328.22 1433.39,-270.98 830.5,-346.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M828.5,-346.16C763.41,-348 746.48,-337.11 682,-346.16"/>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge137" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1738.56,-1582.31C1722.41,-1592.54 1701.51,-1608.76 1691,-1629.16 1604,-1798.08 1750.53,-1890.91 1655,-2055.16 1623.02,-2110.15 1588.63,-2099.01 1537,-2136.16 1229.26,-2357.58 1206.01,-2561.99 830.5,-2614.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M828.5,-2614.16C816.48,-2614.9 413.49,-2537.02 401.5,-2538.16"/>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge130" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1759.18,-1558.02C1747.28,-1448.65 1658.82,-636.93 1655,-632.16 1614.31,-581.28 1442.88,-530.28 1378,-536.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1376,-536.16C1307.83,-537.97 1295.25,-508.65 1232,-483.16 1077.14,-420.74 1049.15,-375.86 888,-332.16 799.04,-308.04 774.17,-308.16 682,-308.16 682,-308.16 682,-308.16 538.5,-308.16 418.86,-308.16 358.19,-263.18 272,-346.16"/>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge133" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_config</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1376,-536.16C1319.7,-541.26 1328.96,-598.91 1274,-612.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1272,-612.16C1209.88,-627.14 1198.37,-652.38 1134.5,-654.16"/>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge134" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1741.92,-1582.34C1726.61,-1593.14 1705.18,-1610.12 1691,-1629.16 1667.22,-1661.08 1674.47,-1676.44 1655,-1711.16 1588.45,-1829.82 1593.67,-1896.31 1471.5,-1956.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1469.5,-1956.16C1357.85,-2039.43 1330.78,-2074.02 1196,-2109.16 1142.24,-2123.17 1125.21,-2121.32 1071,-2109.16 1053.73,-2105.29 1051.53,-2098.48 1035,-2092.16 986.92,-2073.78 966.09,-2088.77 924,-2059.16 901.9,-2043.61 910.49,-2025.15 888,-2010.16 866.12,-1995.57 854.74,-2006.38 830.5,-1996.16"/>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge138" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_solver</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1707.45,-1582.18C1673.92,-1586.97 1630.7,-1587.8 1597,-1570.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1595,-1570.16C1524.87,-1533.45 1484.94,-1270.52 1474.36,-1190.93"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1477.78,-1190.03 1473.02,-1180.56 1470.83,-1190.93 1477.78,-1190.03"/>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_checkpoint_state -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge131" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_checkpoint_state</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1711.44,-1582.16C1694.06,-1586.41 1674.32,-1591.24 1656.19,-1595.68"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1655.18,-1592.32 1646.3,-1598.1 1656.85,-1599.12 1655.18,-1592.32"/>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_stats -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge139" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_stats</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1757.52,-1557.96C1737.98,-1477.88 1628.07,-1027.46 1602.37,-922.17"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1605.74,-921.21 1599.97,-912.32 1598.94,-922.87 1605.74,-921.21"/>
+</g>
+<!-- module~m_io_field_utils -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node42" class="node">
+<title>module~m_io_field_utils</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node42"><a xlink:href="../module/m_io_field_utils.html" xlink:title="m_io_field_utils">
+<polygon fill="#337ab7" stroke="#337ab7" points="1643,-1702.16 1549,-1702.16 1549,-1678.16 1643,-1678.16 1643,-1702.16"/>
+<text text-anchor="middle" x="1596" y="-1687.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_io_field_utils</text>
+</a>
+</g>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_io_field_utils -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge135" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_io_field_utils</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1743.92,-1582.33C1715.16,-1603.44 1655.84,-1646.98 1622.03,-1671.79"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1619.61,-1669.22 1613.62,-1677.96 1623.75,-1674.87 1619.61,-1669.22"/>
+</g>
+<!-- module~m_io_session -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node43" class="node">
+<title>module~m_io_session</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node43"><a xlink:href="../module/m_io_session.html" xlink:title="m_io_session">
+<polygon fill="#337ab7" stroke="#337ab7" points="1314,-1624.16 1232,-1624.16 1232,-1600.16 1314,-1600.16 1314,-1624.16"/>
+<text text-anchor="middle" x="1273" y="-1609.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_io_session</text>
+</a>
+</g>
+</g>
+<!-- module~m_checkpoint_manager&#45;&gt;module~m_io_session -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge136" class="edge">
+<title>module~m_checkpoint_manager&#45;&gt;module~m_io_session</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1595,-1570.16C1543.88,-1543.4 1528.94,-1604.68 1471.5,-1610.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1469.5,-1610.16C1429,-1614.02 1417.16,-1624.19 1378,-1613.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1376,-1613.16C1359.63,-1608.55 1341.18,-1607.25 1324.52,-1607.44"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1324.31,-1603.95 1314.41,-1607.73 1324.51,-1610.94 1324.31,-1603.95"/>
+</g>
+<!-- module~m_checkpoint_state&#45;&gt;module~m_io_session -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge140" class="edge">
+<title>module~m_checkpoint_state&#45;&gt;module~m_io_session</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M1536.78,-1607.89C1516.12,-1607.68 1492.74,-1608.13 1471.5,-1610.16"/>
+</g>
+<!-- module~m_ibm&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge144" class="edge">
+<title>module~m_ibm&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1369.64,-1253.88C1358.58,-1232.62 1334.97,-1187.62 1314,-1150.16 1278.78,-1087.24 1267.49,-1072.93 1232,-1010.16 1215.55,-981.07 1218.05,-969.26 1196,-944.16 1115.18,-852.14 854.08,-670.76 735,-642.16 688.33,-630.95 673.63,-630.76 627,-642.16 584.9,-652.45 583.21,-679.83 540.5,-687.16"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M538.5,-687.16C477.78,-691.64 442.91,-642.52 401.5,-687.16"/>
+</g>
+<!-- module~m_ibm&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge147" class="edge">
+<title>module~m_ibm&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1374.33,-1278.3C1366.66,-1333.78 1334.23,-1563.5 1314,-1633.16 1287.77,-1723.44 1259.3,-1738.19 1232,-1828.16 1207.55,-1908.73 1235.95,-1940.04 1196,-2014.16 1159.17,-2082.5 1115.48,-2072.54 1071,-2136.16 1048.66,-2168.11 1057.52,-2184.33 1035,-2216.16 1015.66,-2243.49 1003.17,-2243.52 980.5,-2268.16"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M978.5,-2268.16C961.03,-2286.06 942.92,-2265.8 924,-2282.16 892.65,-2309.26 912.7,-2334.89 888,-2368.16 879.15,-2380.07 696.59,-2535.46 682,-2538.16"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M680,-2538.16C619.16,-2550.08 601.2,-2525.54 540.5,-2538.16"/>
+</g>
+<!-- module~m_ibm&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge141" class="edge">
+<title>module~m_ibm&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1372.91,-1254C1367.99,-1234.6 1358.1,-1195.43 1350,-1162.16 1284.68,-893.82 1336.87,-797.7 1196,-560.16 1145.8,-475.52 1109.75,-472.17 1035,-408.16 809.27,-214.86 652.34,-34.79 401.5,-194.16"/>
+</g>
+<!-- module~m_ibm&#45;&gt;module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge142" class="edge">
+<title>module~m_ibm&#45;&gt;module~m_allocator</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1364.39,-1254.08C1352.45,-1242.06 1332.97,-1223.53 1314,-1210.16 1198.93,-1129.05 1169.28,-1102.44 1035,-1060.16 947.71,-1032.67 907,-1086.38 830.5,-1036.16"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M828.5,-1036.16C741.2,-974.94 788.55,-850.41 682,-846.16"/>
+</g>
+<!-- module~m_ibm&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge145" class="edge">
+<title>module~m_ibm&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1374.41,-1278.2C1368.83,-1314.76 1346.38,-1424.05 1274,-1458.16"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1272,-1458.16C1129.89,-1525.13 1075.27,-1477.74 924,-1520.16 812.9,-1551.31 794.92,-1590.45 682,-1614.16"/>
+</g>
+<!-- module~m_ibm&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge148" class="edge">
+<title>module~m_ibm&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1132.5,-1344.16C1063.33,-1342.16 899.18,-1428.65 830.5,-1420.16"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M828.5,-1420.16C779.78,-1410.76 778.9,-1382.28 735,-1359.16 712.86,-1347.5 697.63,-1359.7 682,-1340.16"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M680,-1340.16C662.87,-1318.75 601.88,-1274.26 566.47,-1249.24"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="568.26,-1246.22 558.06,-1243.33 564.23,-1251.94 568.26,-1246.22"/>
+</g>
+<!-- module~m_ibm&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge143" class="edge">
+<title>module~m_ibm&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1357.46,-1278.16C1317.72,-1302.53 1220.88,-1354.66 1134.5,-1344.16"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1132.5,-1344.16C1057,-1341.98 1048.71,-1235.73 980.5,-1268.16"/>
+</g>
+<!-- module~m_ibm&#45;&gt;module~m_io_session -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge146" class="edge">
+<title>module~m_ibm&#45;&gt;module~m_io_session</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M1372.37,-1278.47C1357.34,-1329.45 1299.89,-1524.33 1280.46,-1590.23"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="1277.06,-1589.41 1277.59,-1599.99 1283.77,-1591.39 1277.06,-1589.41"/>
+</g>
+<!-- module~m_les&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge150" class="edge">
+<title>module~m_les&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1129.09,-1214.04C1114.34,-1161.86 1055.77,-958.14 1035,-937.16 1016.95,-918.93 995.65,-938.86 980.5,-918.16"/>
+</g>
+<!-- module~m_les&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge153" class="edge">
+<title>module~m_les&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1124.8,-1238.47C1112.84,-1257.76 1089.25,-1296.39 1071,-1330.16 1000.59,-1460.43 962.69,-1486.22 924,-1629.16 894.84,-1736.9 942.25,-2032.61 888,-2130.16 886.55,-2132.76 543.04,-2380.59 540.5,-2382.16"/>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M538.5,-2382.16C462.05,-2433.84 493.36,-2529.43 401.5,-2538.16"/>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M399.5,-2538.16C343.09,-2543.52 315.46,-2574.53 272,-2538.16"/>
+</g>
+<!-- module~m_les&#45;&gt;module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge151" class="edge">
+<title>module~m_les&#45;&gt;module~m_config</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1128.95,-1214.12C1118.39,-1177.9 1086.96,-1066.55 1071,-972.16 1043.6,-810.12 1082.01,-761.63 1035,-604.16 1025.8,-573.33 1007.23,-540.99 994.34,-520.71"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="997.25,-518.77 988.87,-512.29 991.38,-522.59 997.25,-518.77"/>
+</g>
+<!-- module~m_les&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge152" class="edge">
+<title>module~m_les&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1120.34,-1238.2C1102.05,-1256.24 1066.25,-1291.27 1035,-1320.16 1002.29,-1350.4 771.62,-1560.8 735,-1586.16 713.1,-1601.33 707.5,-1606.44 682,-1614.16"/>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M680,-1614.16C596.37,-1634.2 568.6,-1620.15 488,-1590.16 469.98,-1583.45 468.57,-1575.91 452,-1566.16 446.72,-1563.05 441.03,-1559.92 435.43,-1556.96"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="436.69,-1553.67 426.2,-1552.18 433.47,-1559.89 436.69,-1553.67"/>
+</g>
+<!-- module~m_les&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge154" class="edge">
+<title>module~m_les&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1113.06,-1238.19C1093.64,-1250.01 1062.75,-1268.25 1035,-1282.16 986.95,-1306.25 969.1,-1300.93 924,-1330.16 905.79,-1341.96 908.23,-1355.29 888,-1363.16 839.54,-1382.01 818.9,-1383.39 771,-1363.16 749.86,-1354.23 753.58,-1339.62 735,-1326.16 684.95,-1289.92 618.94,-1261.04 578.13,-1245.01"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="579.17,-1241.66 568.58,-1241.32 576.64,-1248.19 579.17,-1241.66"/>
+</g>
+<!-- module~m_les&#45;&gt;module~m_tdsops -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge155" class="edge">
+<title>module~m_les&#45;&gt;module~m_tdsops</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1106.33,-1218.1C1043.24,-1199.13 877.4,-1152.08 735,-1136.16 687.3,-1130.83 674.82,-1132.04 627,-1136.16 611.97,-1137.45 595.63,-1139.99 581.24,-1142.61"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="580.33,-1139.22 571.16,-1144.52 581.64,-1146.1 580.33,-1139.22"/>
+</g>
+<!-- module~m_les&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge149" class="edge">
+<title>module~m_les&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M1106.46,-1232.2C1069.23,-1241.02 1002.81,-1257.55 980.5,-1268.16"/>
+</g>
+<!-- module~m_scalar_series&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge156" class="edge">
+<title>module~m_scalar_series&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M368.19,-739.19C361.26,-742.9 354.39,-747.53 349,-753.16 308.36,-795.61 286.35,-863.36 277.19,-898.07"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="273.71,-897.56 274.66,-908.11 280.5,-899.27 273.71,-897.56"/>
+</g>
+<!-- module~m_scalar_series&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge157" class="edge">
+<title>module~m_scalar_series&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M395.31,-739.4C381.53,-779.37 337.05,-905.54 313,-941.16 283.98,-984.14 252.98,-976.18 229,-1022.16 181.96,-1112.34 211.83,-1148.21 193,-1248.16 185.11,-1290.03 174.13,-1338.53 167.72,-1366.06"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="164.3,-1365.31 165.43,-1375.85 171.12,-1366.91 164.3,-1365.31"/>
+</g>
+<!-- module~m_snapshot_manager&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge159" class="edge">
+<title>module~m_snapshot_manager&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1738.29,-1638.14C1721.99,-1627.99 1701.03,-1611.8 1691,-1591.16 1644.41,-1495.25 1715,-720.31 1655,-632.16 1609.87,-565.86 924.74,-343.49 830.5,-346.16"/>
+</g>
+<!-- module~m_snapshot_manager&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge164" class="edge">
+<title>module~m_snapshot_manager&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1758.26,-1662.28C1744.3,-1737.83 1669.13,-2141.84 1655,-2164.16 1431.71,-2516.9 1247.84,-2624.72 830.5,-2614.16"/>
+</g>
+<!-- module~m_snapshot_manager&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge158" class="edge">
+<title>module~m_snapshot_manager&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1738.36,-1638.11C1722.11,-1627.93 1701.16,-1611.74 1691,-1591.16 1655.92,-1520.14 1707.47,-938.5 1655,-879.16 1578.42,-792.55 738.04,-685.96 627,-718.16 486.55,-758.88 456.91,-795.47 349,-894.16 329.58,-911.92 330.52,-921.53 313,-941.16 278.47,-979.85 256.27,-978.05 229,-1022.16 177.07,-1106.15 226.61,-1159.05 162.5,-1234.16"/>
+</g>
+<!-- module~m_snapshot_manager&#45;&gt;module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge160" class="edge">
+<title>module~m_snapshot_manager&#45;&gt;module~m_config</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1738.3,-1638.14C1722.01,-1627.98 1701.04,-1611.79 1691,-1591.16 1646.13,-1498.98 1723.42,-745.51 1655,-669.16 1626.43,-637.28 1315.61,-602.13 1274,-612.16"/>
+</g>
+<!-- module~m_snapshot_manager&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge161" class="edge">
+<title>module~m_snapshot_manager&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1595,-1956.16C1540.89,-1965.38 1517.46,-1926.16 1471.5,-1956.16"/>
+</g>
+<!-- module~m_snapshot_manager&#45;&gt;module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge165" class="edge">
+<title>module~m_snapshot_manager&#45;&gt;module~m_solver</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1708.88,-1662.21C1658.26,-1670.69 1582.27,-1673.97 1537,-1631.16 1472.43,-1570.09 1470.4,-1274.84 1471.16,-1190.62"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="1474.66,-1190.43 1471.28,-1180.39 1467.66,-1190.35 1474.66,-1190.43"/>
+</g>
+<!-- module~m_snapshot_manager&#45;&gt;module~m_io_field_utils -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge162" class="edge">
+<title>module~m_snapshot_manager&#45;&gt;module~m_io_field_utils</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1711.44,-1662.16C1693.02,-1666.67 1671.95,-1671.82 1652.94,-1676.47"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="1652.1,-1673.08 1643.22,-1678.85 1653.77,-1679.87 1652.1,-1673.08"/>
+</g>
+<!-- module~m_snapshot_manager&#45;&gt;module~m_io_session -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge163" class="edge">
+<title>module~m_snapshot_manager&#45;&gt;module~m_io_session</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1759.36,-1662.42C1754.72,-1705.35 1733.64,-1850.77 1655,-1932.16 1635.62,-1952.22 1624.5,-1951.47 1597,-1956.16"/>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M1595,-1956.16C1496.59,-1972.93 1562.83,-1830.53 1501,-1752.16 1479.63,-1725.07 1463.54,-1729.38 1440,-1704.16 1406.6,-1668.39 1425.11,-1626.43 1378,-1613.16"/>
+</g>
+<!-- module~m_stats&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge166" class="edge">
+<title>module~m_stats&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M1588.01,-887.9C1560.4,-840.77 1453.64,-670.35 1314,-598.16 1242.5,-561.19 1206.41,-610.32 1134.5,-574.16"/>
+</g>
+<!-- module~m_stats&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge170" class="edge">
+<title>module~m_stats&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M1568.75,-895.19C1466.67,-876.39 1086.22,-811.23 771,-822.16 706.88,-824.38 690.55,-823.37 627,-832.16 564.49,-840.81 543.31,-830.77 488,-861.16 467.89,-872.21 468.9,-882.64 452,-898.16 393.16,-952.21 378.57,-966.5 313,-1012.16 295.67,-1024.22 284.57,-1019.2 272,-1036.16"/>
+</g>
+<!-- module~m_stats&#45;&gt;module~m_config -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge167" class="edge">
+<title>module~m_stats&#45;&gt;module~m_config</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M1568.73,-891.1C1473.87,-858 1150.5,-741.74 1071,-668.16 1067.98,-665.37 1015.24,-565.91 991.69,-521.36"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="994.65,-519.47 986.89,-512.26 988.46,-522.74 994.65,-519.47"/>
+</g>
+<!-- module~m_stats&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge168" class="edge">
+<title>module~m_stats&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M1595.07,-912.33C1595.29,-993.15 1592.44,-1452.16 1501,-1548.16 1462.59,-1588.49 1433.45,-1566.88 1378,-1572.16"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M1376,-1572.16C1241.63,-1592.96 1205.45,-1575.88 1071,-1596.16 1004.79,-1606.14 983.35,-1598.16 924,-1629.16 904.76,-1639.21 907.65,-1652.94 888,-1662.16 804.35,-1701.39 774.28,-1694.81 682,-1690.16"/>
+</g>
+<!-- module~m_stats&#45;&gt;module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge171" class="edge">
+<title>module~m_stats&#45;&gt;module~m_solver</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M1568.8,-906.45C1557.57,-910.39 1545.17,-916.59 1537,-926.16 1481.38,-991.29 1472.56,-1099.27 1471.46,-1145.75"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="1467.96,-1145.89 1471.33,-1155.94 1474.96,-1145.98 1467.96,-1145.89"/>
+</g>
+<!-- module~m_stats&#45;&gt;module~m_io_session -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge169" class="edge">
+<title>module~m_stats&#45;&gt;module~m_io_session</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M1376,-1572.16C1350.45,-1574.59 1323.5,-1585.57 1303.72,-1595.41"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="1301.91,-1592.41 1294.63,-1600.11 1305.12,-1598.63 1301.91,-1592.41"/>
+</g>
+<!-- module~m_tdsops_setup&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge173" class="edge">
+<title>module~m_tdsops_setup&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M949.69,-1216.05C905.14,-1195.9 819.59,-1151.39 771,-1088.16 741.19,-1049.38 773.01,-1014.94 735,-984.16 667.82,-929.76 434.27,-950.3 349,-936.16 339.3,-934.55 328.97,-932.58 319.13,-930.58"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="319.59,-927.11 309.09,-928.5 318.17,-933.96 319.59,-927.11"/>
+</g>
+<!-- module~m_tdsops_setup&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge174" class="edge">
+<title>module~m_tdsops_setup&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M976.38,-1240.19C968.35,-1286.21 939.46,-1455.56 924,-1596.16 917.92,-1651.41 921.43,-2050.75 888,-2095.16 854.68,-2139.42 817.89,-2108.65 771,-2138.16 752.11,-2150.05 753.27,-2160.34 735,-2173.16 676.75,-2214.04 655.14,-2212.33 591,-2243.16 568.6,-2253.92 559.01,-2250.58 540.5,-2267.16"/>
+</g>
+<!-- module~m_tdsops_setup&#45;&gt;module~m_mesh -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge175" class="edge">
+<title>module~m_tdsops_setup&#45;&gt;module~m_mesh</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M680,-1150.16C630.62,-1140.85 581.93,-1184.39 557.22,-1211.26"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="554.38,-1209.19 550.35,-1218.99 559.61,-1213.84 554.38,-1209.19"/>
+</g>
+<!-- module~m_tdsops_setup&#45;&gt;module~m_tdsops -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge176" class="edge">
+<title>module~m_tdsops_setup&#45;&gt;module~m_tdsops</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M947.11,-1240.2C904.09,-1254.55 825.92,-1272.76 771,-1240.16 742.27,-1223.1 759.49,-1196.89 735,-1174.16 716.05,-1156.57 707.41,-1154.95 682,-1150.16"/>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M680,-1150.16C647.11,-1145.01 609.33,-1145.68 581.39,-1147.4"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="580.93,-1143.92 571.19,-1148.1 581.41,-1150.91 580.93,-1143.92"/>
+</g>
+<!-- module~m_tdsops_setup&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge172" class="edge">
+<title>module~m_tdsops_setup&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M945.1,-1240.21C937.61,-1243.92 930.09,-1248.54 924,-1254.16 900.58,-1275.76 911.64,-1294.8 888,-1316.16 884.19,-1319.61 879.84,-1322.66 875.28,-1325.36"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="873.54,-1322.32 866.34,-1330.1 876.82,-1328.5 873.54,-1322.32"/>
+</g>
+<!-- module~m_vector_calculus&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge179" class="edge">
+<title>module~m_vector_calculus&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M969.04,-1102.06C928.22,-1050.01 767.79,-847.17 735,-832.16 582.32,-762.27 376.89,-860.99 301.4,-902.9"/>
+<polygon fill="#ff00aa" stroke="#ff00aa" points="299.44,-899.99 292.44,-907.95 302.87,-906.09 299.44,-899.99"/>
+</g>
+<!-- module~m_vector_calculus&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge181" class="edge">
+<title>module~m_vector_calculus&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M969.32,-1126.35C956.94,-1143.45 935.16,-1175.97 924,-1207.16 889.58,-1303.34 921.72,-1337.74 888,-1434.16 816.78,-1637.82 794.78,-1747.26 591,-1818.16 547.76,-1833.2 527.63,-1841.07 488,-1818.16 420.52,-1779.14 373.18,-1563.7 313,-1514.16 298.13,-1501.92 290.61,-1505.12 272,-1500.16"/>
+</g>
+<!-- module~m_vector_calculus&#45;&gt;module~m_allocator -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge177" class="edge">
+<title>module~m_vector_calculus&#45;&gt;module~m_allocator</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M951.98,-1102.08C921.68,-1087.86 871.05,-1062.78 830.5,-1036.16"/>
+</g>
+<!-- module~m_vector_calculus&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge180" class="edge">
+<title>module~m_vector_calculus&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M966.05,-1126.38C921.75,-1169.9 774.21,-1315.03 771,-1321.16 729.44,-1400.36 792.84,-1450.94 735,-1519.16 718.82,-1538.25 703.32,-1525.06 682,-1538.16"/>
+</g>
+<!-- module~m_vector_calculus&#45;&gt;module~m_tdsops -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge182" class="edge">
+<title>module~m_vector_calculus&#45;&gt;module~m_tdsops</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M923.93,-1120.9C878.77,-1123.53 815.12,-1120.09 771,-1088.16 740.72,-1066.24 763.75,-1036.05 735,-1012.16 716.26,-996.59 705.99,-993.9 682,-998.16"/>
+</g>
+<!-- module~m_vector_calculus&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge178" class="edge">
+<title>module~m_vector_calculus&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M970.23,-1126.35C958.71,-1143.7 937.72,-1176.81 924,-1207.16 902.99,-1253.65 922.12,-1278.23 888,-1316.16 884.99,-1319.5 881.47,-1322.44 877.68,-1325.02"/>
+<polygon fill="#ff00aa" stroke="#ff00aa" points="875.88,-1322.02 869.03,-1330.11 879.43,-1328.05 875.88,-1322.02"/>
+</g>
+<!-- module~m_io_field_utils&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge183" class="edge">
+<title>module~m_io_field_utils&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1577.6,-1678.11C1563.88,-1667.51 1545.65,-1650.74 1537,-1631.16 1478.28,-1498.22 1543.41,-1117.17 1501,-978.16 1453.6,-822.8 1428.59,-779.27 1314,-664.16 1270.82,-620.78 1251.87,-618.15 1196,-593.16 1169.89,-581.48 1158.22,-590.15 1134.5,-574.16"/>
+</g>
+<!-- module~m_io_field_utils&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge186" class="edge">
+<title>module~m_io_field_utils&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1548.85,-1698.83C1544.48,-1701.02 1540.42,-1703.75 1537,-1707.16 1497.25,-1746.75 1521.62,-1775.98 1501,-1828.16 1432.69,-2000.99 1437.04,-2062.88 1314,-2202.16 1196.11,-2335.61 1140.2,-2345.42 980.5,-2424.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M978.5,-2424.16C927.4,-2448.78 939.1,-2489.52 888,-2514.16 804.97,-2554.19 772.46,-2520.44 682,-2538.16"/>
+</g>
+<!-- module~m_io_field_utils&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge184" class="edge">
+<title>module~m_io_field_utils&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1469.5,-1690.16C1296.34,-1726.05 1356.77,-1905.48 1196,-1979.16 1122.08,-2013.03 905.87,-2026.67 830.5,-1996.16"/>
+</g>
+<!-- module~m_io_field_utils&#45;&gt;module~m_solver -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge188" class="edge">
+<title>module~m_io_field_utils&#45;&gt;module~m_solver</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1553.77,-1678.1C1547.31,-1674.56 1541.35,-1670 1537,-1664.16 1479.95,-1587.59 1472.58,-1276.69 1471.64,-1190.44"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1475.14,-1190.4 1471.55,-1180.43 1468.14,-1190.47 1475.14,-1190.4"/>
+</g>
+<!-- module~m_io_base -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node45" class="node">
+<title>module~m_io_base</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node45"><a xlink:href="../module/m_io_base.html" xlink:title="m_io_base">
+<polygon fill="#337ab7" stroke="#337ab7" points="1014,-1662.16 945,-1662.16 945,-1638.16 1014,-1638.16 1014,-1662.16"/>
+<text text-anchor="middle" x="979.5" y="-1647.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_io_base</text>
+</a>
+</g>
+</g>
+<!-- module~m_io_field_utils&#45;&gt;module~m_io_base -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge185" class="edge">
+<title>module~m_io_field_utils&#45;&gt;module~m_io_base</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1548.85,-1687.97C1525.6,-1687.42 1496.99,-1687.6 1471.5,-1690.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1469.5,-1690.16C1305.19,-1706.68 1109.3,-1675.24 1023.89,-1659"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1024.52,-1655.56 1014.04,-1657.1 1023.19,-1662.43 1024.52,-1655.56"/>
+</g>
+<!-- module~m_nvtx -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node46" class="node">
+<title>module~m_nvtx</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node46"><a xlink:href="../module/m_nvtx.html" xlink:title="m_nvtx">
+<polygon fill="#337ab7" stroke="#337ab7" points="1006.5,-2050.16 952.5,-2050.16 952.5,-2026.16 1006.5,-2026.16 1006.5,-2050.16"/>
+<text text-anchor="middle" x="979.5" y="-2035.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_nvtx</text>
+</a>
+</g>
+</g>
+<!-- module~m_io_field_utils&#45;&gt;module~m_nvtx -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge187" class="edge">
+<title>module~m_io_field_utils&#45;&gt;module~m_nvtx</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1582.75,-1702.34C1546.93,-1737.97 1439.23,-1845.11 1350,-1934.16 1281.49,-2002.53 1285.43,-2051.12 1196,-2088.16 1144.67,-2109.42 1124.17,-2104.26 1071,-2088.16 1052.6,-2082.59 1051.72,-2073.66 1035,-2064.16 1028.94,-2060.72 1022.35,-2057.31 1015.91,-2054.15"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1017.2,-2050.88 1006.67,-2049.72 1014.18,-2057.2 1017.2,-2050.88"/>
+</g>
+<!-- module~m_io_session&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge190" class="edge">
+<title>module~m_io_session&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1271.31,-1600.09C1268.13,-1549.97 1252.5,-1354.01 1196,-1205.16 1171.34,-1140.21 1088.91,-980.99 1035,-937.16 1015.1,-920.98 995.65,-938.86 980.5,-918.16"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M978.5,-918.16C888.15,-779.91 841.55,-736.81 682,-694.16"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M680,-694.16C621.5,-673.38 601.68,-676.67 540.5,-687.16"/>
+</g>
+<!-- module~m_io_session&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge194" class="edge">
+<title>module~m_io_session&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1269.15,-1624.22C1262.39,-1652.9 1245,-1727.51 1232,-1790.16 1214.62,-1873.89 1251.99,-1914.53 1196,-1979.16 1157.53,-2023.57 1111.3,-1979.41 1071,-2022.16 1030.17,-2065.48 1065.98,-2100.33 1035,-2151.16 999.97,-2208.62 964.52,-2200.42 924,-2254.16 902.7,-2282.41 913.73,-2300.87 888,-2325.16 795.96,-2412.06 729.11,-2364.35 627,-2439.16 579.86,-2473.69 597.79,-2526.69 540.5,-2538.16"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M538.5,-2538.16C478.89,-2550.55 462.12,-2532.4 401.5,-2538.16"/>
+</g>
+<!-- module~m_io_session&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge191" class="edge">
+<title>module~m_io_session&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1256.97,-1624.33C1175.91,-1688.41 785.44,-1977.4 540.5,-1804.16"/>
+</g>
+<!-- module~m_io_session&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge189" class="edge">
+<title>module~m_io_session&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1231.77,-1617.08C1203.91,-1619.17 1166.27,-1619.33 1134.5,-1610.16"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1132.5,-1610.16C1061.27,-1589.58 901.53,-1420 848.21,-1361.73"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="850.74,-1359.31 841.41,-1354.28 845.56,-1364.02 850.74,-1359.31"/>
+</g>
+<!-- module~m_io_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node44" class="node">
+<title>module~m_io_backend</title>
+<g id="a_module~~m_memcheck_estimate~~UsesGraph_node44"><a xlink:href="../module/m_io_backend.html" xlink:title="m_io_backend">
+<polygon fill="#337ab7" stroke="#337ab7" points="1178,-1970.16 1089,-1970.16 1089,-1946.16 1178,-1946.16 1178,-1970.16"/>
+<text text-anchor="middle" x="1133.5" y="-1955.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_io_backend</text>
+</a>
+</g>
+</g>
+<!-- module~m_io_session&#45;&gt;module~m_io_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge192" class="edge">
+<title>module~m_io_session&#45;&gt;module~m_io_backend</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1269.54,-1624.44C1259.85,-1672.24 1223.44,-1845.6 1196,-1894.16 1186.21,-1911.49 1170.64,-1927.63 1157.61,-1939.36"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="1155.15,-1936.87 1149.91,-1946.07 1159.75,-1942.14 1155.15,-1936.87"/>
+</g>
+<!-- module~m_io_session&#45;&gt;module~m_io_base -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge193" class="edge">
+<title>module~m_io_session&#45;&gt;module~m_io_base</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M1132.5,-1610.16C1111.74,-1604.16 1058.51,-1620.89 1020.92,-1634.52"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="1019.42,-1631.34 1011.25,-1638.08 1021.84,-1637.91 1019.42,-1631.34"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge201" class="edge">
+<title>module~m_io_backend&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1129.76,-1946.11C1120.05,-1902.83 1086.94,-1751.11 1071,-1624.16 1063.63,-1565.48 1074.81,-1136.89 1035,-1093.16 994.99,-1049.21 816.6,-1088.29 771,-1050.16 734.12,-1019.32 773.39,-977.1 735,-948.16 670.65,-899.65 423.96,-909.87 319.34,-916.65"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="318.82,-913.17 309.08,-917.33 319.29,-920.16 318.82,-913.17"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;module~m_logger -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge204" class="edge">
+<title>module~m_io_backend&#45;&gt;module~m_logger</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1092.22,-1970.22C1084.55,-1973.82 1077.04,-1978.4 1071,-1984.16 1044.24,-2009.68 1053.74,-2027.28 1035,-2059.16 991.69,-2132.83 968.11,-2142.97 924,-2216.16 905.74,-2246.46 915.34,-2264.7 888,-2287.16 764.29,-2388.8 673.15,-2292.49 540.5,-2382.16"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;cudafor -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge196" class="edge">
+<title>module~m_io_backend&#45;&gt;cudafor</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M978.5,-1960.16C946.27,-1973.94 940.8,-1986.4 924,-2017.16 891.34,-2076.95 919.73,-2105.87 888,-2166.16 870.19,-2200 863.46,-2210.77 830.5,-2230.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M828.5,-2230.16C683.57,-2315.43 484.39,-2150.3 421.42,-2092.27"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="423.8,-2089.7 414.1,-2085.44 419.02,-2094.82 423.8,-2089.7"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;iso_c_binding -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge197" class="edge">
+<title>module~m_io_backend&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M828.5,-2230.16C807.05,-2245.37 796.45,-2237.53 771,-2244.16 754.93,-2248.35 751.45,-2251.92 735,-2254.16 687.44,-2260.64 674.53,-2260.89 627,-2254.16 587.38,-2248.55 580.01,-2222.8 540.5,-2229.16"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;iso_fortran_env -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge198" class="edge">
+<title>module~m_io_backend&#45;&gt;iso_fortran_env</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1130.89,-1970.43C1124.61,-2015.01 1098.93,-2171.54 1035,-2282.16 907.07,-2503.54 796.19,-2576.16 540.5,-2576.16 540.5,-2576.16 540.5,-2576.16 270,-2576.16 248.89,-2576.16 240.94,-2569.57 229,-2552.16 100.23,-2364.37 56.14,-1599.85 49.06,-1459.39"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="52.56,-1459.19 48.57,-1449.37 45.57,-1459.53 52.56,-1459.19"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;m_mpi -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge199" class="edge">
+<title>module~m_io_backend&#45;&gt;m_mpi</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1112.89,-1946.09C1067.45,-1917.95 956.31,-1848.09 924,-1818.16 843.44,-1743.54 819.16,-1722.85 771,-1624.16 741.5,-1563.71 779.19,-1527.87 735,-1477.16 674.38,-1407.6 433.49,-1361.23 349,-1324.16 327.93,-1314.91 177.56,-1216.77 162.5,-1234.16"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge202" class="edge">
+<title>module~m_io_backend&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1088.75,-1950.15C1057.35,-1946.41 1014.71,-1945.53 980.5,-1960.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M978.5,-1960.16C947.38,-1973.47 861.87,-2008.86 830.5,-1996.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M828.5,-1996.16C774.46,-1974.28 783.07,-1937.14 735,-1904.16 713.68,-1889.53 702.59,-1895.81 682,-1880.16"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M680,-1880.16C623.79,-1837.44 598.14,-1844.93 540.5,-1804.16"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge200" class="edge">
+<title>module~m_io_backend&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1120.19,-1946.12C1083.18,-1909.08 972.51,-1792.04 924,-1671.16 879.73,-1560.85 937.93,-1514.03 888,-1406.16 880.02,-1388.92 865.79,-1373.02 853.47,-1361.38"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="855.51,-1358.5 845.75,-1354.37 850.8,-1363.68 855.51,-1358.5"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;module~m_io_base -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge203" class="edge">
+<title>module~m_io_backend&#45;&gt;module~m_io_base</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1126.99,-1945.99C1112.45,-1913.99 1071.65,-1824.96 1035,-1752.16 1020.74,-1723.83 1003.32,-1691.62 992.08,-1671.11"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="995.12,-1669.38 987.24,-1662.31 988.99,-1672.75 995.12,-1669.38"/>
+</g>
+<!-- module~m_io_backend&#45;&gt;module~m_nvtx -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge205" class="edge">
+<title>module~m_io_backend&#45;&gt;module~m_nvtx</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1101.78,-1970.17C1091.83,-1974.32 1080.82,-1979.18 1071,-1984.16 1049.18,-1995.22 1025.47,-2009.45 1007.79,-2020.53"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1005.72,-2017.7 999.14,-2026 1009.46,-2023.62 1005.72,-2017.7"/>
+</g>
+<!-- adios2 -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_node47" class="node">
+<title>adios2</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="1006.5,-1932.16 952.5,-1932.16 952.5,-1908.16 1006.5,-1908.16 1006.5,-1932.16"/>
+<text text-anchor="middle" x="979.5" y="-1917.76" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">adios2</text>
+</g>
+<!-- module~m_io_backend&#45;&gt;adios2 -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge195" class="edge">
+<title>module~m_io_backend&#45;&gt;adios2</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M1088.94,-1947.27C1066.07,-1941.55 1038.37,-1934.63 1016.7,-1929.21"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="1017.44,-1925.79 1006.89,-1926.76 1015.75,-1932.58 1017.44,-1925.79"/>
+</g>
+<!-- module~m_io_base&#45;&gt;module~m_common -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge207" class="edge">
+<title>module~m_io_base&#45;&gt;module~m_common</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M970.26,-1637.8C954.63,-1614.49 919.45,-1562.57 888,-1520.16 822.6,-1431.95 812.25,-1404.21 735,-1326.16 677.19,-1267.75 663.7,-1248.48 591,-1210.16 552.1,-1189.65 437.69,-1178.14 401.5,-1153.16"/>
+</g>
+<!-- module~m_io_base&#45;&gt;module~m_field -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge208" class="edge">
+<title>module~m_io_base&#45;&gt;module~m_field</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M944.9,-1661.17C937.25,-1664.95 929.7,-1669.86 924,-1676.16 892.3,-1711.18 925.9,-1747.97 888,-1776.16 864.7,-1793.49 655.88,-1787.06 627,-1790.16 588.28,-1794.32 573.84,-1824.29 540.5,-1804.16"/>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M538.5,-1804.16C514.43,-1787.14 502.75,-1786.68 488,-1761.16 443.9,-1684.85 504.56,-1636.9 452,-1566.16 448.03,-1560.81 442.63,-1556.47 436.84,-1552.98"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="438.05,-1549.67 427.56,-1548.18 434.83,-1555.89 438.05,-1549.67"/>
+</g>
+<!-- module~m_io_base&#45;&gt;module~m_base_backend -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge206" class="edge">
+<title>module~m_io_base&#45;&gt;module~m_base_backend</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M975.73,-1638.02C966.95,-1601.14 937.42,-1487.94 888,-1406.16 877.99,-1389.59 863.37,-1373.39 851.39,-1361.44"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="853.58,-1358.69 843.96,-1354.24 848.7,-1363.71 853.58,-1358.69"/>
+</g>
+<!-- module~m_nvtx&#45;&gt;iso_c_binding -->
+<g id="module~~m_memcheck_estimate~~UsesGraph_edge209" class="edge">
+<title>module~m_nvtx&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M973.86,-2050.39C957.72,-2092.62 904.17,-2230.54 888,-2244.16 717.22,-2388.05 415.32,-2288.61 309.73,-2247.02"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="310.72,-2243.65 300.14,-2243.18 308.12,-2250.15 310.72,-2243.65"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panmodulem_memcheck_estimateUsesGraph = svgPanZoom('#modulem_memcheck_estimateUsesGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="518pt" height="32pt"
+ viewBox="0.00 0.00 517.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 513.5,-28 513.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-24 164,-24 164,0 234,0 234,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="310,-24 252,-24 252,0 310,0 310,-24"/>
+<text text-anchor="middle" x="281" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="386,-24 328,-24 328,0 386,0 386,-24"/>
+<text text-anchor="middle" x="357" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="509.5,-24 404.5,-24 404.5,0 509.5,0 509.5,-24"/>
+<text text-anchor="middle" x="457" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+          <div class="card">
+      <h3 class="card-header card-title bg-light">Used by</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: module~~m_memcheck_estimate~~UsedByGraph Pages: 1 -->
+<svg id="modulem_memcheck_estimateUsedByGraph" width="602pt" height="74pt"
+ viewBox="0.00 0.00 602.00 73.60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~m_memcheck_estimate~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 69.6)">
+<title>module~~m_memcheck_estimate~~UsedByGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-69.6 598,-69.6 598,4 -4,4"/>
+<!-- module~m_memcheck_estimate -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_node1" class="node">
+<title>module~m_memcheck_estimate</title>
+<polygon fill="none" stroke="black" points="139,-57.54 0,-57.54 0,-33.54 139,-33.54 139,-57.54"/>
+<text text-anchor="middle" x="69.5" y="-43.14" font-family="Helvetica,sans-Serif" font-size="10.50">m_memcheck_estimate</text>
+</g>
+<!-- module~m_memcheck_build -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_node2" class="node">
+<title>module~m_memcheck_build</title>
+<g id="a_module~~m_memcheck_estimate~~UsedByGraph_node2"><a xlink:href="../module/m_memcheck_build.html" xlink:title="m_memcheck_build">
+<polygon fill="#337ab7" stroke="#337ab7" points="455,-37.54 336,-37.54 336,-13.54 455,-13.54 455,-37.54"/>
+<text text-anchor="middle" x="395.5" y="-23.14" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_memcheck_build</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_build&#45;&gt;module~m_memcheck_estimate -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_edge1" class="edge">
+<title>module~m_memcheck_build&#45;&gt;module~m_memcheck_estimate</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M365.45,-37.58C334.54,-49.3 283.93,-65.37 238.5,-65.54"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M236.5,-65.54C207.67,-65.65 176.23,-62.66 148.54,-58.97"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="148.91,-55.49 138.52,-57.58 147.95,-62.42 148.91,-55.49"/>
+</g>
+<!-- module~m_memcheck_report -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_node3" class="node">
+<title>module~m_memcheck_report</title>
+<g id="a_module~~m_memcheck_estimate~~UsedByGraph_node3"><a xlink:href="../module/m_memcheck_report.html" xlink:title="m_memcheck_report">
+<polygon fill="#337ab7" stroke="#337ab7" points="300,-37.54 175,-37.54 175,-13.54 300,-13.54 300,-37.54"/>
+<text text-anchor="middle" x="237.5" y="-23.14" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">m_memcheck_report</text>
+</a>
+</g>
+</g>
+<!-- module~m_memcheck_build&#45;&gt;module~m_memcheck_report -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_edge5" class="edge">
+<title>module~m_memcheck_build&#45;&gt;module~m_memcheck_report</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M335.97,-25.54C327.58,-25.54 318.87,-25.54 310.26,-25.54"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="310.23,-22.04 300.23,-25.54 310.23,-29.04 310.23,-22.04"/>
+</g>
+<!-- module~m_memcheck_report&#45;&gt;module~m_memcheck_estimate -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_edge2" class="edge">
+<title>module~m_memcheck_report&#45;&gt;module~m_memcheck_estimate</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M174.69,-32.99C166.34,-33.99 157.69,-35.04 149.09,-36.07"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="148.57,-32.61 139.06,-37.28 149.41,-39.56 148.57,-32.61"/>
+</g>
+<!-- program~x3d2_memcheck -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_node4" class="node">
+<title>program~x3d2_memcheck</title>
+<g id="a_module~~m_memcheck_estimate~~UsedByGraph_node4"><a xlink:href="../program/x3d2_memcheck.html" xlink:title="x3d2_memcheck">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="594,-37.54 491,-37.54 491,-13.54 594,-13.54 594,-37.54"/>
+<text text-anchor="middle" x="542.5" y="-23.14" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">x3d2_memcheck</text>
+</a>
+</g>
+</g>
+<!-- program~x3d2_memcheck&#45;&gt;module~m_memcheck_estimate -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_edge3" class="edge">
+<title>program~x3d2_memcheck&#45;&gt;module~m_memcheck_estimate</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M497.31,-37.63C483.82,-40.95 468.88,-44.26 455,-46.54 359.69,-62.2 335.09,-65.18 238.5,-65.54"/>
+</g>
+<!-- program~x3d2_memcheck&#45;&gt;module~m_memcheck_build -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_edge4" class="edge">
+<title>program~x3d2_memcheck&#45;&gt;module~m_memcheck_build</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M490.79,-25.54C482.51,-25.54 473.82,-25.54 465.19,-25.54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="465.13,-22.04 455.13,-25.54 465.13,-29.04 465.13,-22.04"/>
+</g>
+<!-- program~x3d2_memcheck&#45;&gt;module~m_memcheck_report -->
+<g id="module~~m_memcheck_estimate~~UsedByGraph_edge6" class="edge">
+<title>program~x3d2_memcheck&#45;&gt;module~m_memcheck_report</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M500.51,-13.47C486.24,-9.84 470.04,-6.34 455,-4.54 402.49,1.74 388.59,1.06 336,-4.54 322.55,-5.97 308.24,-8.49 294.83,-11.29"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="293.82,-7.92 284.79,-13.47 295.31,-14.76 293.82,-7.92"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsedByGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsedByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="518pt" height="32pt"
+ viewBox="0.00 0.00 517.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 513.5,-28 513.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-24 164,-24 164,0 234,0 234,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="310,-24 252,-24 252,0 310,0 310,-24"/>
+<text text-anchor="middle" x="281" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="386,-24 328,-24 328,0 386,0 386,-24"/>
+<text text-anchor="middle" x="357" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="509.5,-24 404.5,-24 404.5,0 509.5,0 509.5,-24"/>
+<text text-anchor="middle" x="457" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      <br>
+
+
+        <section>
+          <h2>Variables</h2>
+            <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_halo"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>n_halo</strong></td>
+<td> =</td>
+                <td>4</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-basis_measured"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>basis_measured</strong></td>
+<td> =</td>
+                <td>1</td>
+            <td>
+                <p>How the overhead of an estimate was obtained: from the num_gpus=1 probe or
+measurement, that scaled to num_gpus&gt;1, from the formula alone, or from
+the formula with the heap predicted by the plan query (the full-grid
+probe did not fit).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-basis_extrapolated"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>basis_extrapolated</strong></td>
+<td> =</td>
+                <td>2</td>
+            <td>
+                <p>How the overhead of an estimate was obtained: from the num_gpus=1 probe or
+measurement, that scaled to num_gpus&gt;1, from the formula alone, or from
+the formula with the heap predicted by the plan query (the full-grid
+probe did not fit).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-basis_formula"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>basis_formula</strong></td>
+<td> =</td>
+                <td>3</td>
+            <td>
+                <p>How the overhead of an estimate was obtained: from the num_gpus=1 probe or
+measurement, that scaled to num_gpus&gt;1, from the formula alone, or from
+the formula with the heap predicted by the plan query (the full-grid
+probe did not fit).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-basis_predicted"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>basis_predicted</strong></td>
+<td> =</td>
+                <td>4</td>
+            <td>
+                <p>How the overhead of an estimate was obtained: from the num_gpus=1 probe or
+measurement, that scaled to num_gpus&gt;1, from the formula alone, or from
+the formula with the heap predicted by the plan query (the full-grid
+probe did not fit).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-basis_name"></span>
+              character(len=12),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>basis_name</strong>(4)</td>
+<td> =</td>
+                <td>[character(len=12)::&#39;measured&#39;, &#39;extrapolated&#39;, &#39;formula-only&#39;, &#39;predicted&#39;]</td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+        </section>
+        <br>
+
+
+
+
+
+        <section>
+          <h2>Functions</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-to_gib"></span> <h3>public pure function <a href='../proc/to_gib.html'>to_gib</a>(n_bytes) result(gib)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Bytes to GiB, the one conversion every printed figure goes through.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_bytes"></span>
+              integer(kind=i8),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_bytes</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=dp)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-classify"></span> <h3>public pure function <a href='../proc/classify.html'>classify</a>(per_gpu_gib, total_gib) result(verdict)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>The FITS, BORDERLINE or DOES_NOT_FIT verdict of every estimate.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-per_gpu_gib"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>per_gpu_gib</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-total_gib"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>total_gib</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=12)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-num_gpus_unsupported_reason"></span> <h3>public  function <a href='../proc/num_gpus_unsupported_reason.html'>num_gpus_unsupported_reason</a>(ctx, num_gpus) result(reason)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>The reason GPU count num_gpus is not a supported decomposition, blank
+when it is.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ctx"></span>
+              type(<a href='../type/memcheck_ctx_t.html'>memcheck_ctx_t</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ctx</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-num_gpus"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>num_gpus</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=96)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-requested_unsupported_reason"></span> <h3>public  function <a href='../proc/requested_unsupported_reason.html'>requested_unsupported_reason</a>(ctx) result(reason)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>The reason the nproc_dir of the input file is not supported, blank
+when it is. The CUDA backend only supports nproc_dir = [1,1,num_gpus].</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ctx~2"></span>
+              type(<a href='../type/memcheck_ctx_t.html'>memcheck_ctx_t</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ctx</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=96)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-fields_plus_halo_bytes_n"></span> <h3>public  function <a href='../proc/fields_plus_halo_bytes_n.html'>fields_plus_halo_bytes_n</a>(ctx, num_gpus, npeak) result(nbytes8)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>The fields and halo term at num_gpus GPUs for npeak fields.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ctx~3"></span>
+              type(<a href='../type/memcheck_ctx_t.html'>memcheck_ctx_t</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ctx</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-num_gpus~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>num_gpus</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-npeak"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>npeak</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer(kind=i8)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+        <section>
+          <h2>Subroutines</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-prepare_probe"></span> <h3>public  subroutine <a href='../proc/prepare_probe.html'>prepare_probe</a>(ctx)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Decides the FFT probe once per run and runs it. The small-grid probe
+gives the context and the heap. The full-grid probe follows when the
+mode allows and the card has room for the memory the plans need. The
+decision is in ctx%probe_plan and ctx%probe_reason (see ensure_probe
+in the device).</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ctx~7"></span>
+              type(<a href='../type/memcheck_ctx_t.html'>memcheck_ctx_t</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ctx</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-estimate_for_num_gpus"></span> <h3>public  subroutine <a href='../proc/estimate_for_num_gpus.html'>estimate_for_num_gpus</a>(ctx, num_gpus, per_gpu_gib, basis, verdict, workspace_gib, overhead_gib, io_gib, used_gib, npeak)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>The per-GPU estimate at num_gpus GPUs. The formula floor stands unless
+the full-grid probe gave a result and the floor is not over the limit.
+workspace_gib, overhead_gib and io_gib (optional) split the result.
+used_gib and npeak (optional) are the num_gpus=1 measurement of the real
+build and its peak_fields: the estimate is then that measurement
+scaled to num_gpus, and workspace_gib holds the fields and halo alone.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ctx~8"></span>
+              type(<a href='../type/memcheck_ctx_t.html'>memcheck_ctx_t</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ctx</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-num_gpus~6"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>num_gpus</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-per_gpu_gib~2"></span>
+              real(kind=dp),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>per_gpu_gib</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-basis"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>basis</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-verdict~2"></span>
+              character(len=12),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>verdict</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-workspace_gib"></span>
+              real(kind=dp),
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>workspace_gib</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-overhead_gib"></span>
+              real(kind=dp),
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>overhead_gib</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-io_gib"></span>
+              real(kind=dp),
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>io_gib</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-used_gib"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>used_gib</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-npeak~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>npeak</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              x3d2
+ was developed by Xcompact3d Team<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
